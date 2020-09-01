@@ -19,7 +19,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
     const [ deleteFormVisible, showDeleteForm ] = React.useState(false);
     const [ progressBarVisible, showProgressBar ] = React.useState(false);
      
-    const gcotd = 'http://localhost/grldservice-dev';
+    const gcotd = process.env.REACT_APP_GRLDSERVICE_URL;
     if(media.is_image){
         const full = gcotd+"/media/"
             + media.user_name+ "/" 

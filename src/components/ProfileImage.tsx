@@ -13,7 +13,7 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
     }
     const renderImage = () => {
         if(comment.img_file){
-            const img_file = 'http://localhost/grldservice-dev/media/'+comment.user_name+'/'+comment.img_file;
+            const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+comment.user_name+'/'+comment.img_file;
             return (
                 <div>
                 <img className="profile-img" src={img_file} alt={comment.img_file} onClick={openProfileDisplay}/>

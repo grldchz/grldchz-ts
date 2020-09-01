@@ -8,7 +8,7 @@ const useProfileService = (setProfile: any, appState: AppState) => {
     status: 'loading'
   }); 
   useEffect(() => {
-    fetch('http://localhost/grldservice-dev/service.php?get=profile', {
+    fetch(process.env.REACT_APP_GRLDSERVICE_URL+'service.php?get=profile', {
       method: "GET", // POST, PUT, DELETE, etc.
       headers: {
         // the content type header value is usually auto-set

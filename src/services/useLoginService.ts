@@ -19,7 +19,7 @@ const useLoginService = () => {
     headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
     headers.append('Accept', 'application/json; charset=utf-8');
     return new Promise((resolve, reject) => {
-      fetch('http://localhost/grldservice-dev/auth/service.php', {
+      fetch(process.env.REACT_APP_GRLDSERVICE_URL+'auth/service.php', {
         method: 'POST',
         body: qs.stringify(login),
         headers

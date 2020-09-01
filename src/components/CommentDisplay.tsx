@@ -27,7 +27,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     if(comment.image === null || comment.num_photos === 0){
       style.display = 'none';
     }
-    var src = 'http://localhost/grldservice-dev/getfile.php?media=media/'
+    var src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?media=media/'
       + comment.user_name+ "/" 
       + comment.image;
     return (
@@ -77,7 +77,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
             <Button type="button" icon="pi pi-reply" onClick={() => showReplyForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-share-alt" onClick={() => showShareForm(true)} style={{margin: '3px'}} />
             <div style={{paddingTop:'3px',float:'right',paddingLeft:'3px'}}>
-            <FileUpload name="upl[]" url={'http://localhost/grldservice-dev/upload.php?id=' + comment.id} 
+            <FileUpload name="upl[]" url={process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id} 
               multiple={true} withCredentials={true} mode="basic" auto={true} chooseLabel="Upload"
               accept="image/*,video/mp4" 
               onUpload={() => {loadComments();showProgressBar(false);}} 

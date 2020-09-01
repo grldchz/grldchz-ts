@@ -44,7 +44,7 @@ const useCommentScroller = (appState: AppState) => {
       queryString += '&toDate='+query.toDate;
     }
       //setResult({status: 'loading'});
-    fetch('http://localhost/grldservice-dev/service.php?get=posts&'+queryString, {
+    fetch(process.env.REACT_APP_GRLDSERVICE_URL+'service.php?get=posts&'+queryString, {
       method: "GET", // POST, PUT, DELETE, etc.
       headers: {
         // the content type header value is usually auto-set
