@@ -2,7 +2,7 @@
   "name": "grldchz-ts",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://192.168.1.178/grldchz-ts/build",
+  "homepage": "http://localhost/grldchz-ts/",
   "dependencies": {
     "classnames": "^2.2.6",
     "primeflex": "^1.0.0",

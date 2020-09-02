@@ -20,25 +20,26 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
     const [ progressBarVisible, showProgressBar ] = React.useState(false);
      
     const gcotd = process.env.REACT_APP_GRLDSERVICE_URL;
+
     if(media.is_image){
-        const full = gcotd+"/media/"
+        const full = gcotd+"getfile.php?media=media/"
             + media.user_name+ "/" 
             + media.content_id + "/img_full_" 
             + media.file + ".jpeg";
         media.full = full;
-        const slide = gcotd+"/getfile.php?media=media/"
+        const slide = gcotd+"getfile.php?media=media/"
             + media.user_name+ "/" 
             + media.content_id + "/img_slide_" 
             + media.file + ".jpeg";
         media.slide = slide;
-        var original = gcotd+"/getfile.php?media=media/"
+        var original = gcotd+"getfile.php?media=media/"
             + media.user_name+ "/" 
             + media.content_id + "/src/" 
             + media.file;
         media.original = original + "&original=true";
     }
     else{
-        var mp4 = gcotd+"/getfile.php?media=media/"
+        var mp4 = gcotd+"getfile.php?media=media/"
             + media.user_name+ "/" 
             + media.content_id + "/proxy_mp4_" 
             + media.file + ".mp4";
@@ -71,7 +72,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                     <ProgressSpinner/>
                 </div>
                 <div style={{display: loading ? "none" : "block"}}>
-                    <img src={media.slide} alt={media.title} style={{ width: '100%', maxWidth: '600px' }} 
+                    <img src={media.slide} title={media.title} style={{ width: '100%', maxWidth: '600px' }} 
                         onLoad={() => setLoading(false)}
                         onClick={() => setOpenImageViewer(true)}/>
                 </div>

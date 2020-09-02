@@ -14,28 +14,20 @@ import { Profile } from './types/Profile';
 import { AppState } from './types/AppState';
 import CommentScroller from './components/CommentScroller';
 import CommentForm from './components/CommentForm';
-//const logo = require('./primereact-logo.png');
-
-import useCommentScroller from './services/useCommentScroller';
 
 const App: React.FC<{}> = () => {
   const [profile, setProfile] = React.useState<Profile>();
   const [ profileFormVisible, showProfileForm ] = React.useState(false);
   const [ commentFormVisible, showCommentForm ] = React.useState(false);
-  const [ appState, setAppState ] = React.useState<AppState>({
-    commentQuery: { start: 0, limit: 5 },
-    comments: [], commentsTotal: 0, loading: false
-  });
-  const scrollerService = useCommentScroller(appState);
-  const profileService = useProfileService(setProfile, appState);
+  const [ appState, setAppState ] = React.useState<AppState>();
+  const profileService = useProfileService(setProfile);
   const loadComments = () => {
     setAppState({
-      commentQuery: { start: 0, limit: 5 },
+      commentQuery: { start: 0, limit: 10 },
       comments: [], commentsTotal: 0, loading: true
     });
   };
   const handleProfileFormSubmit = (profile: Profile) => {
-    console.log("handleProfileFormSubmit", profile);
     setProfile(profile);
     loadComments();
   };
@@ -55,15 +47,8 @@ const App: React.FC<{}> = () => {
           </div>
         )}
       </div>
-        {(appState.loading || scrollerService.status === 'loading') && (
-          <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
-            <ProgressBar mode="indeterminate" style={{backgroundColor: 'black', height: '3px'}} /></div>
-        )}
-        {scrollerService.status === 'error' && (
-          <div>CommentScroller Component: {scrollerService.error.message}</div>
-        )}
-        {profile && scrollerService.status === 'loaded' && scrollerService.payload &&
-           <CommentScroller appState={appState} setAppState={setAppState} profile={profile} loadComments={loadComments}/>
+        {profile &&
+           <CommentScroller appStateIn={appState} profile={profile} loadComments={loadComments}/>
         }
       {profileService.status === 'loading' && (
           <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Service } from '../types/Service';
 import { Profile } from '../types/Profile';
-import { AppState } from '../types/AppState';
 
-const useProfileService = (setProfile: any, appState: AppState) => {
+const useProfileService = (setProfile: any) => {
   const [service, setService] = useState<Service<Profile>>({
     status: 'loading'
   }); 
@@ -38,12 +37,11 @@ const useProfileService = (setProfile: any, appState: AppState) => {
         }
         else {
           setProfile(response);
-          appState.loading = true;
           setService({ status: 'loaded', payload: response });
         }
       })
       .catch(error => setService({ status: 'error', error }));
-  }, [setProfile, appState]);
+  }, [setProfile]);
 
   return service;
 

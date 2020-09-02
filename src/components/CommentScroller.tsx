@@ -9,14 +9,17 @@ import { Comment } from "../types/Comment";
 import { Profile } from '../types/Profile';
 
 export interface Props{
-  appState: AppState;
-  setAppState(commentQuery: any): void;
+  appStateIn?: AppState;
   profile: Profile;
   loadComments(): void;
 }
 
-const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, loadComments }) => {
-  const service = useCommentScroller(appState);
+const CommentScroller: React.FC<Props> = ({ appStateIn, profile, loadComments }) => {
+  const [ appState, setAppState ] = React.useState<AppState>({
+    commentQuery: { start: 0, limit: 10 },
+    comments: [], commentsTotal: 0, loading: false
+  });
+  const service = useCommentScroller(appStateIn?appStateIn:appState);
   const itemTemplate = (comment: Comment) => {
     if (!comment) {
       return (<div></div>);
@@ -41,7 +44,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
   return (
     <>
       <div>
-        {(appState.loading || service.status === 'loading') && (
+        {((appStateIn && appStateIn.loading) || appState.loading || service.status === 'loading') && (
           <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
             <ProgressBar mode="indeterminate" style={{backgroundColor: 'black', height: '3px'}} /></div>
         )}
@@ -51,7 +54,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
         {service.status === 'loaded' && service.payload &&
             <div>
               <DataScroller value={service.payload}
-                  itemTemplate={itemTemplate} rows={5}
+                  itemTemplate={itemTemplate} rows={10}
                   lazy={true} onLazyLoad={onScroll} loader={moreButtonRef.current}/>
               <Button ref={moreButtonRef} type="button" label="more"/>
             </div>

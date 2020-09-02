@@ -32,7 +32,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       + comment.image;
     return (
       <div>
-        <img src={src} alt={comment.image} style={style} onClick={() => setMediaScroller(true)}/>
+        <span title={comment.image}><img src={src} style={style} onClick={() => setMediaScroller(true)}/></span>
       </div>
     );
   };

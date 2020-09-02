@@ -74,7 +74,6 @@ const useCommentScroller = (appState: AppState) => {
             appState.comments = appState.comments.concat(response.results);
             appState.commentsTotal = response.total;
             appState.loading = false;
-            //console.log("posts", appState.comments);
             setResult({ status: 'loaded', payload: appState.comments });
         }
       })
