@@ -10,9 +10,11 @@ export interface Props{
   }
 const ListItem: React.FC<Props> = ({ comment, profile, loadComments }) => {
   return (
-    <div>
+    <div style={{marginBottom:'20px'}}>
       <CommentDisplay comment={comment} profile={profile} loadComments={loadComments}/>
+      {(comment.replies.length>0 &&
       <ReplyList comment={comment} profile={profile} loadComments={loadComments}/>
+      )}
     </div>
   );
 

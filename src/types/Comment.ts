@@ -12,6 +12,7 @@ export interface Comment {
   replies: Comment[];
   parent_id?: number;
   share_id?: string;
+  shared?: number;
   user_date_time: Date;
   user_name: string;
 }

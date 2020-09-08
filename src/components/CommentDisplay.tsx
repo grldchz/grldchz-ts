@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Comment } from '../types/Comment';
 import ProfileImage from './ProfileImage';
 import MediaScroller from './MediaScroller';
@@ -9,6 +9,7 @@ import CommentForm from './CommentForm';
 import { Profile } from '../types/Profile';
 import useCommentService from '../services/useCommentService';
 import { ProgressBar } from 'primereact/progressbar';
+import { Menu } from 'primereact/menu';
 export interface Props{
     comment: Comment;
     profile: Profile;
@@ -22,6 +23,20 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const [ deleteFormVisible, showDeleteForm ] = React.useState(false);
   const [ shareFormVisible, showShareForm ] = React.useState(false);
   const [ progressBarVisible, showProgressBar ] = React.useState(false);
+  const menuItems = [
+    {label: 'Reply', icon: 'pi pi-fw pi-plus',command:() => showReplyForm(true)}
+  ];
+  if(comment.user_name == profile.name){
+    menuItems.push(
+      {label: 'Edit', icon: 'pi pi-fw pi-pencil',command:() => showEditForm(true)},
+      {label: 'Delete', icon: 'pi pi-fw pi-trash',command:() => showDeleteForm(true)}
+    );
+  }
+  if(!comment.parent_id){
+    menuItems.push(
+      {label: 'Share', icon: 'pi pi-fw pi-share-alt',command:() => showShareForm(true)}
+      );
+  }
   const renderMainImage = () => {
     const style = {display:'block'};
     if(comment.image === null || comment.num_photos === 0){
@@ -56,34 +71,45 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     }
     return url + "?content_id=" + comment.id;
   };
+  const menuItemsRef = useRef<Menu>(new Menu({}));
   const renderComment = (comment: Comment) => {
     return (
     <div>
       {progressBarVisible && (
         <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
-        <ProgressBar mode="indeterminate" style={{backgroundColor: 'black', height: '3px'}} /></div>
+        <ProgressBar mode="indeterminate" style={{height: '3px'}} /></div>
       )}
       <div className="p-grid">
         <div className="p-col-12 p-md-8">
-        <div className="p-grid">
+          <div className="p-grid">
             <div className="p-col-12 p-md-2"><ProfileImage comment={comment} /></div>
             <div className="p-col-12 p-md-8">{comment.first_name} @ {comment.post_date_time}</div>
-            <div className="p-col-12 p-md-2"><a href='#' onClick={() => setMediaScroller(true)}>photos: {comment.num_photos}, videos: {comment.num_videos}</a></div>
+            <div className="p-col-12 p-md-2">
+              {comment.num_photos>0 && (
+              <a href='#' onClick={function(e){ setMediaScroller(true);e.preventDefault();}}>photos:{comment.num_photos}</a>
+              )}
+              &nbsp;
+              {comment.num_videos>0 && (
+              <a href='#' onClick={function(e){ setMediaScroller(true);e.preventDefault();}}>videos:{comment.num_videos}</a>
+              )}
+            </div>
           </div>
         </div>
+        {!comment.shared && (   
         <div className="p-col-12 p-md-4" style={{textAlign:'right'}}>
-            <Button type="button" icon="pi pi-pencil" onClick={() => showEditForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-reply" onClick={() => showReplyForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-share-alt" onClick={() => showShareForm(true)} style={{margin: '3px'}} />
-            <div style={{paddingTop:'3px',float:'right',paddingLeft:'3px'}}>
-            <FileUpload name="upl[]" url={process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id} 
-              multiple={true} withCredentials={true} mode="basic" auto={true} chooseLabel="Upload"
-              accept="image/*,video/mp4" 
-              onUpload={() => {loadComments();showProgressBar(false);}} 
-              onSelect={() => showProgressBar(true)} />
-            </div>
+          {!comment.parent_id && comment.user_name == profile.name && (
+          <div style={{paddingTop:'3px',float:'right',paddingLeft:'3px'}}>
+          <FileUpload name="upl[]" url={process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id} 
+            multiple={true} withCredentials={true} mode="basic" auto={true} chooseLabel="Upload"
+            accept="image/*,video/mp4" 
+            onUpload={() => {loadComments();showProgressBar(false);}} 
+            onSelect={() => showProgressBar(true)} />
+          </div>
+          )}
+          <Menu model={menuItems} popup ref={menuItemsRef} />
+          <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
         </div>
+        )}
       </div>
       <div className="p-grid">
       <div className="p-col-12 p-md-12">

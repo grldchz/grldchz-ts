@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'primereact/resources/primereact.min.css';
-import 'primereact/resources/themes/luna-green/theme.css';
+import 'primereact/resources/themes/nova-light/theme.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import { Button } from 'primereact/button';
@@ -32,19 +32,21 @@ const App: React.FC<{}> = () => {
     loadComments();
   };
   return (
-    <div className="App">
-      <div className="App-header">
+    <div>
+      <div className="menu-bar">
         {profile && (
+        <div>
           <div style={{textAlign: 'right'}}>
             <Button type="button" icon="pi pi-user-edit" onClick={() => showProfileForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-plus" onClick={() => showCommentForm(true)} style={{margin: '3px'}} />
+          </div>
             <Dialog header="Profile" visible={profileFormVisible} style={{width: '100vw'}} 
               onHide={() => showProfileForm(false)} blockScroll >
                 <ProfileForm profile={profile} onSubmit={handleProfileFormSubmit} />
             </Dialog>
-            <Button type="button" icon="pi pi-plus" onClick={() => showCommentForm(true)} style={{margin: '3px'}} />
             <CommentForm key="NEW" visible={commentFormVisible} onHide={() => showCommentForm(false)}
               profile={profile} onSubmit={loadComments} />
-          </div>
+        </div>
         )}
       </div>
         {profile &&
@@ -52,7 +54,7 @@ const App: React.FC<{}> = () => {
         }
       {profileService.status === 'loading' && (
           <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
-          <ProgressBar mode="indeterminate" style={{backgroundColor: 'black', height: '3px'}} /></div>
+          <ProgressBar mode="indeterminate" style={{height: '3px'}} /></div>
     )}
       {profileService.status === 'error' && !profile && (
         <Login setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />

@@ -12,12 +12,14 @@ const ReplyList: React.FC<Props> = ({ comment, profile, loadComments }) => {
       return (
         <li key={reply.id}>
         <CommentDisplay comment={reply} profile={profile} loadComments={loadComments}/>
-        <ul style={{borderLeft:'1px solid black',borderTop:'1px solid black',listStyle:'none',paddingLeft:'3px'}}>{reply.replies.map(rep => renderReply(rep))}</ul>          
+        {(reply.replies.length>0 &&
+        <ul style={{listStyle:'none',marginBottom:'20px'}} className="p-datascroller-content">{reply.replies.map(rep => renderReply(rep))}</ul> 
+        )}         
         </li>
       );
     };
     return (
-    <ul style={{borderLeft:'1px solid black',borderTop:'1px solid black',listStyle:'none',paddingLeft:'3px',backgroundColor:'#484848'}}>{comment.replies.map(reply => renderReply(reply))}</ul>
+    <ul style={{listStyle:'none',marginBottom:'20px'}} className="p-datascroller-content">{comment.replies.map(reply => renderReply(reply))}</ul>
     );
 
 };

@@ -31,21 +31,17 @@ const MediaScroller: React.FC<Props> = ({ profile, comment }) => {
   };
   
   const onScroll = (evnt?: any) => {
-    console.log("onScroll evnt", evnt);
-    console.log("onScroll scrollerState", scrollerState);
     let start = scrollerState.query.start + evnt.rows;
-    // if(start < scrollerState.total){
-      setScrollerState({
-        query: { 
-          start: start, 
-          limit: evnt.rows, 
-          content_id: comment.id 
-        },
-        results: scrollerState.results, 
-        total: scrollerState.total, 
-        loading: true
-      });
-    // }
+    setScrollerState({
+      query: { 
+        start: start, 
+        limit: scrollerState.total-evnt.rows, 
+        content_id: comment.id 
+      },
+      results: scrollerState.results, 
+      total: scrollerState.total, 
+      loading: true
+    });
   };
   
   return (
