@@ -10,13 +10,15 @@ import { Profile } from '../types/Profile';
 import useCommentService from '../services/useCommentService';
 import { ProgressBar } from 'primereact/progressbar';
 import { Menu } from 'primereact/menu';
+import AppUtils from '../AppUtils';
 export interface Props{
     comment: Comment;
     profile: Profile;
     loadComments(): void;
   }
 const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => {
-  const { deleteComment } = useCommentService();
+  const { getUnescapedText } = AppUtils();
+    const { deleteComment } = useCommentService();
   const [ mediaScroller, setMediaScroller ] = React.useState(false);
   const [ editFormVisible, showEditForm ] = React.useState(false);
   const [ replyFormVisible, showReplyForm ] = React.useState(false);
@@ -52,9 +54,18 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     );
   };
   const onDelete = () => {
+    showDeleteForm(false);
+    showProgressBar(true);
     deleteComment(comment.id).then(() => {
+      showProgressBar(false);
       loadComments();
     });
+  };
+  const onSubmit = () => {
+    showEditForm(false);
+    showShareForm(false);
+    showReplyForm(false);
+    loadComments();
   };
   const renderDeleteFooter = () => {
       return (
@@ -115,20 +126,20 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       <div className="p-col-12 p-md-12">
           <div className="p-grid">
             <div className="p-col-12 p-md-4">{renderMainImage()}</div>
-            <div className="p-col-12 p-md-8">{comment.comment}</div>
+            <div className="p-col-12 p-md-8">{getUnescapedText(comment.comment)}</div>
           </div>
         </div>
       </div>
       <CommentForm key={'EDIT'+comment.id} visible={editFormVisible} onHide={() => showEditForm(false)}
-        editComment={comment} profile={profile} onSubmit={loadComments} />
+        editComment={comment} profile={profile} onSubmit={onSubmit} />
       <Dialog visible={deleteFormVisible} style={{width: '100vw'}} 
         onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
           Are you sure you want to delete this comment?
       </Dialog>
       <CommentForm key={'REPLY'+comment.id} visible={replyFormVisible} onHide={() => showReplyForm(false)}
-        parentId={comment.id} profile={profile} onSubmit={loadComments} />
+        parentId={comment.id} profile={profile} onSubmit={onSubmit} />
       <CommentForm key={'SHARE'+comment.id} visible={shareFormVisible} onHide={() => showShareForm(false)}
-        shareId={comment.id} profile={profile} onSubmit={loadComments}>
+        shareId={comment.id} profile={profile} onSubmit={onSubmit}>
           <div><a href={getShareUrl()}>{getShareUrl()}</a></div>
       </CommentForm>
       <Dialog header="Media" visible={mediaScroller} style={{width: '100vw'}} 

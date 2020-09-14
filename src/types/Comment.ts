@@ -20,8 +20,8 @@ export interface CommentQuery {
   content_id?: string | null,
   start: number,
   searchTerm?: string | null,
-  fromDate?: Date | null,
-  toDate?: Date | null,
+  fromDate?: string | null,
+  toDate?: string | null,
   limit: number
 }
 
@@ -31,4 +31,10 @@ export interface PostComment {
   parentId?: number;
   shareId?: number;
   dateTime?: string;
+}
+
+export interface PostSearch {
+  searchTerm?: string,
+  fromDate?: string,
+  toDate?: string
 }
