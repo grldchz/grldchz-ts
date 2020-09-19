@@ -11,6 +11,7 @@ import useCommentService from '../services/useCommentService';
 import { ProgressBar } from 'primereact/progressbar';
 import { Menu } from 'primereact/menu';
 import AppUtils from '../AppUtils';
+import { Toolbar } from 'primereact/toolbar';
 export interface Props{
     comment: Comment;
     profile: Profile;
@@ -90,25 +91,11 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
         <ProgressBar mode="indeterminate" style={{height: '3px'}} /></div>
       )}
-      <div className="p-grid">
-        <div className="p-col-12 p-md-8">
-          <div className="p-grid">
-            <div className="p-col-12 p-md-2"><ProfileImage comment={comment} /></div>
-            <div className="p-col-12 p-md-8">{comment.first_name} @ {comment.post_date_time}</div>
-            <div className="p-col-12 p-md-2">
-              {comment.num_photos>0 && (
-              <a href='#' onClick={function(e){ setMediaScroller(true);e.preventDefault();}}>photos:{comment.num_photos}</a>
-              )}
-              &nbsp;
-              {comment.num_videos>0 && (
-              <a href='#' onClick={function(e){ setMediaScroller(true);e.preventDefault();}}>videos:{comment.num_videos}</a>
-              )}
-            </div>
-          </div>
+      <Toolbar>
+        <div style={{float:'left',paddingLeft:'3px'}}>
+          <ProfileImage comment={comment} />
         </div>
-        {!comment.shared && (   
-        <div className="p-col-12 p-md-4" style={{textAlign:'right'}}>
-          {!comment.parent_id && comment.user_name == profile.name && (
+        {!comment.shared && !comment.parent_id && comment.user_name == profile.name && (
           <div style={{paddingTop:'3px',float:'right',paddingLeft:'3px'}}>
           <FileUpload name="upl[]" url={process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id} 
             multiple={true} withCredentials={true} mode="basic" auto={true} chooseLabel="Upload"
@@ -117,11 +104,25 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
             onSelect={() => showProgressBar(true)} />
           </div>
           )}
+        {!comment.shared && (  
+          <div style={{float:'right',paddingLeft:'3px'}}>
           <Menu model={menuItems} popup ref={menuItemsRef} />
           <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
-        </div>
+          </div>
         )}
-      </div>
+        <div style={{float:'left',paddingLeft:'3px'}}>
+        {comment.first_name} @ {comment.post_date_time}
+        </div>
+        <div style={{float:'right',paddingLeft:'3px'}}>
+              {comment.num_photos>0 && (
+              <a href='#' onClick={function(e){ setMediaScroller(true);e.preventDefault();}}>photos:{comment.num_photos}</a>
+              )}
+              &nbsp;
+              {comment.num_videos>0 && (
+              <a href='#' onClick={function(e){ setMediaScroller(true);e.preventDefault();}}>videos:{comment.num_videos}</a>
+              )}
+            </div>
+        </Toolbar>
       <div className="p-grid">
       <div className="p-col-12 p-md-12">
           <div className="p-grid">

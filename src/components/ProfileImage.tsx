@@ -16,7 +16,7 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
             const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+comment.user_name+'/'+comment.img_file;
             return (
                 <div>
-                <img className="profile-img" src={img_file} alt={comment.img_file} onClick={openProfileDisplay}/>
+                <img width='64px' className="profile-img" src={img_file} alt={comment.img_file} onClick={openProfileDisplay}/>
                 </div>
             );
         }
