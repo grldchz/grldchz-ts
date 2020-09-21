@@ -60,7 +60,7 @@ const Login: React.FC<Props> = ({ setProfile }) => {
                   <i className="pi pi-lock"></i>
                 </span>
                 <Password placeholder="Password"
-                  name="password"
+                  name="password" feedback={false}
                   value={login.password}
                   onChange={handleChange} />
               </div>
