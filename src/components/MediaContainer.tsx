@@ -1,5 +1,5 @@
 import React from 'react';
-import { Media } from '../types/Media';
+import { Media, PostCaption } from '../types/Media';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Dialog } from 'primereact/dialog';
 import ImageViewer from './ImageViewer';
@@ -7,20 +7,23 @@ import { Profile } from '../types/Profile';
 import { Button } from 'primereact/button';
 import useMediaService from '../services/useMediaService';
 import { ProgressBar } from 'primereact/progressbar';
+import AppUtils from '../AppUtils';
+import { InputTextarea } from 'primereact/inputtextarea';
 export interface Props{
     media: Media;
     profile: Profile;
     loadMedia(): void;
 }
 const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
-    const { deleteMedia } = useMediaService();
+    const { getUnescapedText } = AppUtils();
+    const { deleteMedia, submitCaption } = useMediaService();
     const [loading, setLoading] = React.useState(true);
     const [openImageViewer, setOpenImageViewer] = React.useState(false);
     const [ deleteFormVisible, showDeleteForm ] = React.useState(false);
     const [ progressBarVisible, showProgressBar ] = React.useState(false);
-     
+    const [ captionFormVisible, showCaptionForm ] = React.useState(false); 
     const gcotd = process.env.REACT_APP_GRLDSERVICE_URL;
-
+    const [ mediaVisible, showMedia ] = React.useState(true); 
     if(media.is_image){
         const full = gcotd+"getfile.php?media=media/"
             + media.user_name+ "/" 
@@ -48,8 +51,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
     const onDelete = () => {
         showProgressBar(true);
         deleteMedia(media).then(() => {
+            showMedia(false);
             showProgressBar(false);
-            loadMedia();
         });
       };
     const renderDeleteFooter = () => {
@@ -60,7 +63,37 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
             </div>
         );
     };
+    const getCaption = () => {
+        if(media.title != media.file){
+            return getUnescapedText(media.title);
+        }
+        else{
+            return "";
+        }
+    };
+    const initState: PostCaption = {
+        caption: getCaption(),
+        media_id:media.id
+      };
+    const [postCaption, setCaption] = React.useState<PostCaption>(initState);
+    const handleChange = (event: any) => {
+        event.persist();
+        setCaption((prevCaption: any) => ({
+          ...prevCaption,
+          [event.target.name]: event.target.value
+        }));
+      };
+      const sendCaption = () => {
+        showProgressBar(true);
+        submitCaption(postCaption).then(() => {
+            media.title = postCaption.caption;
+            showProgressBar(false);
+            showCaptionForm(false);
+        });
+      };
       return (
+          <div>
+          {mediaVisible && (
         <div>
         {progressBarVisible && (
             <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
@@ -76,6 +109,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                         onLoad={() => setLoading(false)}
                         onClick={() => setOpenImageViewer(true)}/>
                 </div>
+                <div>{getCaption()}</div>
+				<div>views: {media.num_hits}</div>
                 <Dialog header="Photo" visible={openImageViewer} style={{width: '100vw'}} 
                 onHide={() => setOpenImageViewer(false)} blockScroll >
                     <ImageViewer media={media} />
@@ -91,11 +126,30 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                 </div>					
             </div>
         )}
-        <Button type="button" icon="pi pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
+        {profile.name === media.user_name && (
+        <div>
+        <Button type="button" icon="pi pi-fw pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
+        <Button type="button" icon="pi pi-fw pi-pencil" onClick={() => showCaptionForm(true)} style={{margin: '3px'}} />
         <Dialog visible={deleteFormVisible} style={{width: '100vw'}} 
             onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
             Are you sure you want to delete this media?
         </Dialog>
+        <Dialog header="Caption" visible={captionFormVisible} style={{width: '100vw'}} 
+                onHide={() => showCaptionForm(false)} blockScroll footer={<Button onClick={() => sendCaption()} label="Send"/>} >
+            <div className="p-grid p-fluid">
+                <div className="p-col-12">
+                    <InputTextarea rows={2} cols={30} 
+                        name="caption"
+                        value={postCaption.caption} onChange={handleChange} 
+                        autoResize={true} />
+                </div>
+            </div>
+        </Dialog>
+        </div>
+        )}
+        </div>
+        )}
+        {!mediaVisible && (<div></div>)}
         </div>
     );
 }

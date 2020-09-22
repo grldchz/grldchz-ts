@@ -35,3 +35,8 @@ export interface MediaScrollerState {
   total: number;
   loading: boolean;
 }
+
+export interface PostCaption {
+  caption: string;
+  media_id?: number;
+}
