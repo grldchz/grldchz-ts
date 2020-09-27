@@ -130,18 +130,17 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         <div>
         <Button type="button" icon="pi pi-fw pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
         <Button type="button" icon="pi pi-fw pi-pencil" onClick={() => showCaptionForm(true)} style={{margin: '3px'}} />
-        <Dialog visible={deleteFormVisible} style={{width: '100vw'}} 
+        <Dialog visible={deleteFormVisible} 
             onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
             Are you sure you want to delete this media?
         </Dialog>
-        <Dialog header="Caption" visible={captionFormVisible} style={{width: '100vw'}} 
+        <Dialog header="Caption" visible={captionFormVisible} 
                 onHide={() => showCaptionForm(false)} blockScroll footer={<Button onClick={() => sendCaption()} label="Send"/>} >
             <div className="p-grid p-fluid">
                 <div className="p-col-12">
                     <InputTextarea rows={2} cols={30} 
                         name="caption"
-                        value={postCaption.caption} onChange={handleChange} 
-                        autoResize={true} />
+                        value={postCaption.caption} onChange={handleChange}/>
                 </div>
             </div>
         </Dialog>

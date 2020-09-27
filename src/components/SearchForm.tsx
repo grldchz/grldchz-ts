@@ -38,6 +38,8 @@ const SearchForm: React.FC<Props> = ({ onSubmit }) => {
                 onChange={handleChange}
               />
             </div>
+            </div>
+            <div className="p-grid p-fluid">
             <div className="p-col-12 p-md-6">
               <label>From</label>
             </div>
@@ -45,6 +47,8 @@ const SearchForm: React.FC<Props> = ({ onSubmit }) => {
               <InputText value={postSearch.fromDate} name="fromDate" onChange={handleChange}
               type="date" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD"/>
             </div>
+            </div>
+            <div className="p-grid p-fluid">
             <div className="p-col-12 p-md-6">
               <label>To</label>
             </div>
@@ -52,9 +56,9 @@ const SearchForm: React.FC<Props> = ({ onSubmit }) => {
             <InputText value={postSearch.toDate} name="toDate" onChange={handleChange}
               type="date" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD"/>
             </div>
+            </div>
           <div>
           <Button type="submit" label="Send"/>
-        </div>
         </div>
       </form>
     </div>

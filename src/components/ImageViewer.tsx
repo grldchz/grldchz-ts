@@ -10,7 +10,6 @@ const ImageViewer: React.FC<Props> = ({ media }) => {
     const [translate, setTranslate] = React.useState(50);
     const [zoomIn, setZoomIn] = React.useState(true);
     const handleDoubleCLick = () => {
-        console.log(scale);
         if(scale > .89){
             setZoomIn(false);
         }

@@ -16,8 +16,14 @@ interface ServiceError {
   error: Error;
 }
 
+interface ServiceTerms {
+  status: 'terms';
+  error: Error;
+}
+
 export type Service<T> =
   | ServiceInit
   | ServiceLoading
   | ServiceLoaded<T>
-  | ServiceError;
+  | ServiceError
+  | ServiceTerms;

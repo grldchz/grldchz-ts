@@ -66,7 +66,7 @@ const useCommentScroller = (appState: AppState) => {
     })
       .then(response => response.json())
       .then(response => {
-        if(response.status === 'FAIL'){
+        if(response.status){
           const error = new Error(response.msg);
           setResult({ status: 'error', error });
         }

@@ -44,52 +44,57 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
     <div>
       <form onSubmit={handleFormSubmit}>
           <div className="p-grid p-fluid">
-            <div className="p-col-12 p-md-6">
-          <label>First Name</label>
+            <div className="p-col-12 p-md-4">
+              <label>First Name</label>
+            </div>
+            <div className="p-col-12 p-md-8">
+              <InputText
+                type="text"
+                name="firstname"
+                value={postProfile.firstname}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-            <div className="p-col-12 p-md-6">
-          <InputText
-            type="text"
-            name="firstname"
-            value={postProfile.firstname}
-            onChange={handleChange}
-          />
+          <div className="p-grid p-fluid">
+            <div className="p-col-12 p-md-4">
+              <label>Last Name</label>
+            </div>
+            <div className="p-col-12 p-md-8">
+              <InputText
+                type="text"
+                name="lastname"
+                value={postProfile.lastname}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-            <div className="p-col-12 p-md-6">
-          <label>Last Name</label>
+          <div className="p-grid p-fluid">
+            <div className="p-col-12 p-md-4">
+              <label>Email</label>
+            </div>
+            <div className="p-col-12 p-md-8">
+              <InputText
+                type="text"
+                name="email"
+                value={postProfile.email}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-            <div className="p-col-12 p-md-6">
-          <InputText
-            type="text"
-            name="lastname"
-            value={postProfile.lastname}
-            onChange={handleChange}
-          />
+          <div className="p-grid p-fluid">
+            <div className="p-col-12 p-md-12">
+              <label>Description</label>
+            </div>
           </div>
-            <div className="p-col-12 p-md-6">
-          <label>Email</label>
+          <div className="p-grid p-fluid">
+            <div className="p-col-12 p-md-12">
+              <InputTextarea rows={5} cols={30} 
+                name="userdesc"
+                value={postProfile.userdesc} onChange={handleChange} />
+            </div>
           </div>
-            <div className="p-col-12 p-md-6">
-          <InputText
-            type="text"
-            name="email"
-            value={postProfile.email}
-            onChange={handleChange}
-          />
-          </div>
-            <div className="p-col-12 p-md-6">
-          <label>Description</label>
-          </div>
-            <div className="p-col-12 p-md-6">
-          <InputTextarea rows={5} cols={30} 
-            name="userdesc"
-            value={postProfile.userdesc} onChange={handleChange} 
-            autoResize={true} />
-        </div>
-        <div>
           <Button type="submit" label="Send"/>
-        </div>
-        </div>
       </form>
   
       {service.status === 'loading' && (

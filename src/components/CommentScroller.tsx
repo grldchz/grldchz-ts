@@ -27,17 +27,34 @@ const CommentScroller: React.FC<Props> = ({ appStateIn, profile, loadComments })
     return (<ListItem comment={comment} key={comment.id} profile={profile} loadComments={loadComments} />);
   };
   const onScroll = (evnt?: any) => {
-    let start = appState.commentQuery.start + evnt.rows;
-    if(start < appState.commentsTotal){
+      console.log("appstate", appState);
+      console.log("evnt", evnt);
+    let start = appState.commentQuery.start;
+    if(appState.commentQuery.limit > appState.commentsTotal){
+      start = 0;
       setAppState({
         commentQuery: {
           start: start,
-          limit: evnt.rows
+          limit: appState.commentQuery.limit
         },
-        comments: appState.comments, 
+        comments: [], 
         commentsTotal: appState.commentsTotal,
         loading: true
       });
+    }
+    else{
+      start = appState.commentQuery.start + evnt.rows;
+      if(start < appState.commentsTotal){
+        setAppState({
+          commentQuery: {
+            start: start,
+            limit: evnt.rows
+          },
+          comments: appState.comments, 
+          commentsTotal: appState.commentsTotal,
+          loading: true
+        });
+      }
     }
   };
   const moreButtonRef = useRef(null);
@@ -49,7 +66,7 @@ const CommentScroller: React.FC<Props> = ({ appStateIn, profile, loadComments })
             <ProgressBar mode="indeterminate" style={{height: '3px'}} /></div>
         )}
         {service.status === 'error' && (
-          <div>CommentScroller Component: {service.error.message}</div>
+          <div>Error: {service.error.message}</div>
         )}
         {service.status === 'loaded' && service.payload &&
             <div>

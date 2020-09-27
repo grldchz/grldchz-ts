@@ -3,6 +3,3 @@ export interface Form {
   username: string;
   password: string;
 }
-export interface Credentials {
-  cookie: string | null;
-}

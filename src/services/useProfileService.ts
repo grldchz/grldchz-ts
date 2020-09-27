@@ -35,6 +35,10 @@ const useProfileService = (setProfile: any) => {
           const error = new Error(response.msg);
           setService({ status: 'error', error });
         }
+        else if (response.status === 'TERMS') {
+          const error = new Error(response.msg);
+          setService({ status: 'terms', error });
+        }
         else {
           setProfile(response);
           setService({ status: 'loaded', payload: response });

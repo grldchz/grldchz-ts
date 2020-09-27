@@ -133,7 +133,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       </div>
       <CommentForm key={'EDIT'+comment.id} visible={editFormVisible} onHide={() => showEditForm(false)}
         editComment={comment} profile={profile} onSubmit={onSubmit} />
-      <Dialog visible={deleteFormVisible} style={{width: '100vw'}} 
+      <Dialog visible={deleteFormVisible} 
         onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
           Are you sure you want to delete this comment?
       </Dialog>
@@ -143,7 +143,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         shareId={comment.id} profile={profile} onSubmit={onSubmit}>
           <div><a href={getShareUrl()}>{getShareUrl()}</a></div>
       </CommentForm>
-      <Dialog header="Media" visible={mediaScroller} style={{width: '100vw'}} 
+      <Dialog header="Media" visible={mediaScroller} 
         onHide={() => setMediaScroller(false)} blockScroll >
           <MediaScroller profile={profile} comment={comment} />
       </Dialog>

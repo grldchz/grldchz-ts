@@ -95,20 +95,23 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
     });
   };
   return (
-    <Dialog visible={visible} style={{width: '100vw'}} 
-            onHide={onHide} blockScroll footer={<Button onClick={() => send()} label="Send"/>} >
-        <div className="p-grid p-fluid">
-            <div className="p-col-12">
-            {children}
-            <InputTextarea rows={5} cols={30} 
-                name="comment"
-                value={postComment.comment} onChange={handleChange} 
-                autoResize={true} />
-            </div>
+    <Dialog visible={visible} 
+      onHide={onHide} blockScroll footer={<Button onClick={() => send()} label="Send"/>} >
+      <div className="p-grid p-fluid">
+        <div className="p-col-12">
+          {children}
         </div>
+      </div>
+      <div className="p-grid p-fluid">
+        <div className="p-col-12">
+          <InputTextarea rows={5} cols={30} 
+            name="comment"
+            value={postComment.comment} onChange={handleChange}/>
+        </div>
+      </div>
   
       {service.status === 'loading' && (
-          <ProgressSpinner />
+        <ProgressSpinner />
       )}
       {service.status === 'loaded' && (
         <div>Response: {service.payload}</div>

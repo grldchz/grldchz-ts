@@ -7,6 +7,7 @@ import 'primeflex/primeflex.css';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import Login from './components/Login';
+import Terms from './components/Terms';
 import ProfileForm from './components/ProfileForm';
 import useProfileService from './services/useProfileService';
 import {ProgressBar} from 'primereact/progressbar';
@@ -74,7 +75,7 @@ const App: React.FC<{}> = () => {
             <Button type="button" icon="pi pi-plus" onClick={() => showCommentForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-sign-out" onClick={() => showLogoutDialog(true)} style={{margin: '3px'}} />
           </div>
-          <Dialog header="Profile" visible={profileFormVisible} style={{width: '100vw'}} 
+          <Dialog header="Profile" visible={profileFormVisible} 
             onHide={() => showProfileForm(false)} blockScroll >
             <ProfileForm profile={profile} onSubmit={handleProfileFormSubmit} />
           </Dialog>
@@ -83,7 +84,7 @@ const App: React.FC<{}> = () => {
           <Dialog key="Search" visible={searchFormVisible} onHide={() => showSearchForm(false)}>
             <SearchForm onSubmit={loadComments}/>
           </Dialog>
-          <Dialog visible={logoutDialogVisible} style={{width: '100vw'}} 
+          <Dialog visible={logoutDialogVisible} 
             onHide={() => showLogoutDialog(false)} blockScroll footer={renderLogoutFooter()}>
               Are you sure you want to logout?
           </Dialog>
@@ -100,8 +101,9 @@ const App: React.FC<{}> = () => {
       {profileService.status === 'error' && !profile && (
         <Login setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
       )}
-
-
+      {profileService.status === 'terms' && !profile && (
+        <Terms setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
+      )}
     </div>
   );
 };
