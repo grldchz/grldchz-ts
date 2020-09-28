@@ -1,8 +1,9 @@
 import React from 'react';
 import { Media } from '../types/Media';
 import { ProgressSpinner } from 'primereact/progressspinner';
+export type MediaImage = Pick<Media, 'full' | 'title'>;
 export interface Props{
-    media: Media;
+    media: MediaImage;
 }
 const ImageViewer: React.FC<Props> = ({ media }) => {
     const [loading, setLoading] = React.useState(true);
@@ -10,27 +11,16 @@ const ImageViewer: React.FC<Props> = ({ media }) => {
     const [translate, setTranslate] = React.useState(50);
     const [zoomIn, setZoomIn] = React.useState(true);
     const handleDoubleCLick = () => {
-        if(scale > .89){
-            setZoomIn(false);
-        }
-        if(scale < .5){
-            setZoomIn(true);
-        }
+        setZoomIn(!zoomIn);
         if (zoomIn){                        
-            setScale(scale+.1);
-            setTranslate(translate-10);
+            setScale(scale+.5);
+            setTranslate(translate-50);
         }
         else {
-            setScale(scale-.1);
-            setTranslate(translate+10);
+            setScale(scale-.5);
+            setTranslate(translate+50);
         }
     }
-    // const handlePinch = () => {
-    //     setScale(scale+.1);
-    // }
-    // const handleMouseScroll = () => {
-    //     setScale(scale+.1);
-    // }
     return (
         <div>
         <div style={{display: loading ? "block" : "none"}}>
