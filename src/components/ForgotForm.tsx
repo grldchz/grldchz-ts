@@ -67,14 +67,7 @@ const ForgotFormComponent: React.FC<{}> = () => {
               </div>
             </div>
           </div>
-          {
-          /*localhost
-            <Captcha siteKey="6LcqUjgUAAAAAEJyv0a9FvtD_zDwfhTNvSlZSYwo" onResponse={handleCaptchaResponse}></Captcha>
-            grilledcheeseoftheday
-            <Captcha siteKey="6Ld419wSAAAAAPPdhXrOTqiFfOdddEnaDBkRZCCz" onResponse={handleCaptchaResponse}></Captcha>
-          */
-          }
-            <Captcha siteKey="6Ld419wSAAAAAPPdhXrOTqiFfOdddEnaDBkRZCCz" onResponse={handleCaptchaResponse}></Captcha>
+          <Captcha siteKey={process.env.REACT_APP_CAPTCHA_KEY} onResponse={handleCaptchaResponse}></Captcha>
           <Button type="submit" label="Reset Password" icon="pi pi-check" />
         </div>
       </form>
