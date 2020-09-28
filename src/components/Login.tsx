@@ -8,6 +8,7 @@ import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import RegisterForm from './RegisterForm';
+import ForgotForm from './ForgotForm';
 import Terms from './Terms';
 import { Profile } from '../types/Profile';
 
@@ -17,6 +18,7 @@ export interface Props {
 
 const Login: React.FC<Props> = ({ setProfile }) => {
   const [ registerFormVisible, showRegisterForm ] = React.useState(false);
+  const [ forgotFormVisible, showForgotForm ] = React.useState(false);
   const initialLoginState: PostLogin = {
     login: 'Login',
     username: '',
@@ -40,10 +42,13 @@ const Login: React.FC<Props> = ({ setProfile }) => {
     submitLogin(login).then((response: any) => {
       if(response != null && response.terms_accepted == 1){
         service.status = 'terms';
-    }
-    else{
-      setProfile(response);
-    }
+      }
+      else if(response.status){
+        service.status = response.status;
+      }
+      else{
+        setProfile(response);
+      }
     });
   };
 
@@ -78,22 +83,26 @@ const Login: React.FC<Props> = ({ setProfile }) => {
           </div>
           <Button type="submit" label="Send" icon="pi pi-check" />
           <Button type="button" label="Register" icon="pi pi-user-plus" onClick={() => showRegisterForm(true)} style={{margin: '3px'}} />
+          <Button type="button" label="Forgot" icon="pi pi-question" onClick={() => showForgotForm(true)} style={{margin: '3px'}} />
         </div>
       </form>
       <Dialog key="Register" visible={registerFormVisible} onHide={() => showRegisterForm(false)}>
         <RegisterForm />
       </Dialog>
+      <Dialog key="Forgot" visible={forgotFormVisible} onHide={() => showForgotForm(false)}>
+        <ForgotForm />
+      </Dialog>
 
       {service.status === 'loading' && (
         <ProgressSpinner />
       )}
-      {service.status === 'loaded' && (
-        <Terms setProfile={(profile: Profile) => setProfile(profile)} />
-      )}
       {service.status === 'error' && (
         <div>
-         Login Component: {service.error.message}
+         {service.error.message}
         </div>
+      )}
+      {service.status === 'loaded' && (
+        <Terms setProfile={(profile: Profile) => setProfile(profile)} />
       )}
     </div>
   );
