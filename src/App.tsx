@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'primereact/resources/primereact.min.css';
-import 'primereact/resources/themes/nova-light/theme.css';
+import 'primereact/resources/themes/luna-green/theme.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import { Button } from 'primereact/button';
@@ -75,7 +75,7 @@ const App: React.FC<{}> = () => {
             <Button type="button" icon="pi pi-plus" onClick={() => showCommentForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-sign-out" onClick={() => showLogoutDialog(true)} style={{margin: '3px'}} />
           </div>
-          <Dialog header="Profile" visible={profileFormVisible} 
+          <Dialog visible={profileFormVisible} 
             onHide={() => showProfileForm(false)} blockScroll >
             <ProfileForm profile={profile} onSubmit={handleProfileFormSubmit} />
           </Dialog>

@@ -10,7 +10,7 @@ export interface Props{
 const ReplyList: React.FC<Props> = ({ comment, profile, loadComments }) => {
     const renderReply = (reply: Comment) => {
       return (
-        <li key={reply.id}>
+        <li key={reply.id} className="replyDisplay">
         <CommentDisplay comment={reply} profile={profile} loadComments={loadComments}/>
         {(reply.replies.length>0 &&
         <ul style={{listStyle:'none',marginBottom:'20px'}} className="p-datascroller-content">{reply.replies.map(rep => renderReply(rep))}</ul> 

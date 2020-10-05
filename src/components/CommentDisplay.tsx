@@ -11,7 +11,6 @@ import useCommentService from '../services/useCommentService';
 import { ProgressBar } from 'primereact/progressbar';
 import { Menu } from 'primereact/menu';
 import AppUtils from '../AppUtils';
-import { Toolbar } from 'primereact/toolbar';
 export interface Props{
     comment: Comment;
     profile: Profile;
@@ -19,7 +18,7 @@ export interface Props{
   }
 const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => {
   const { getUnescapedText } = AppUtils();
-    const { deleteComment } = useCommentService();
+  const { deleteComment } = useCommentService();
   const [ mediaScroller, setMediaScroller ] = React.useState(false);
   const [ editFormVisible, showEditForm ] = React.useState(false);
   const [ replyFormVisible, showReplyForm ] = React.useState(false);
@@ -29,7 +28,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const menuItems = [
     {label: 'Reply', icon: 'pi pi-fw pi-plus',command:() => showReplyForm(true)}
   ];
-  if(comment.user_name == profile.name){
+  if(comment.user_name === profile.name){
     menuItems.push(
       {label: 'Edit', icon: 'pi pi-fw pi-pencil',command:() => showEditForm(true)},
       {label: 'Delete', icon: 'pi pi-fw pi-trash',command:() => showDeleteForm(true)}
@@ -40,19 +39,47 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       {label: 'Share', icon: 'pi pi-fw pi-share-alt',command:() => showShareForm(true)}
       );
   }
-  const renderMainImage = () => {
-    const style = {display:'block'};
-    if(comment.image === null || comment.num_photos === 0){
-      style.display = 'none';
-    }
-    var src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?media=media/'
+  const renderMainImage = (comment: Comment) => {
+      const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?media=media/'
       + comment.user_name+ "/" 
       + comment.image;
-    return (
+      return (
       <div>
-        <span title={comment.image}><img src={src} style={style} onClick={() => setMediaScroller(true)}/></span>
+      {comment.num_photos > 0 && comment.image != null && !comment.image.endsWith(".mp4.jpeg") && (
+          <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
+              <img className="mainImage" alt={comment.image} src={src}/>
+              <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
+              {comment.num_videos > 0 && (
+              <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
+              )}
+          </div>
+      )}
+      {comment.num_photos == 0 && comment.num_videos > 0 && (
+        <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
+            <div className="mainNoImage">Main Photo not set
+            {comment.num_photos > 0 && (
+            <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
+            )}
+            {comment.num_videos > 0 && (
+            <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
+            )}
+            </div>
+        </div>
+      )}
+      {comment.num_photos > 0 && (comment.image == null||comment.image.endsWith(".mp4.jpeg")) && (
+        <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
+            <div className="mainNoImage">Main Photo not set
+            {comment.num_photos > 0 && (
+            <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
+            )}
+            {comment.num_videos > 0 && (
+            <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
+            )}
+            </div>
+        </div>
+      )}
       </div>
-    );
+      );
   };
   const onDelete = () => {
     showDeleteForm(false);
@@ -84,18 +111,24 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     return url + "?content_id=" + comment.id;
   };
   const menuItemsRef = useRef<Menu>(new Menu({}));
+  const cardTitle = () => {
+    return (
+      <div className="p-grid">
+        <div className="p-col-4">
+        <ProfileImage comment={comment} /></div>
+        <div className="p-col-8">{comment.first_name} @ {comment.post_date_time}</div>
+      </div>
+    );
+  }
   const renderComment = (comment: Comment) => {
     return (
     <div>
       {progressBarVisible && (
-        <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
-        <ProgressBar mode="indeterminate" style={{height: '3px'}} /></div>
+        <div className="prpgressBarContainer">
+        <ProgressBar mode="indeterminate" className="progressBar" style={{height: '3px'}} /></div>
       )}
-      <Toolbar>
-        <div style={{float:'left',paddingLeft:'3px'}}>
-          <ProfileImage comment={comment} />
-        </div>
-        {!comment.shared && !comment.parent_id && comment.user_name == profile.name && (
+      {renderMainImage(comment)}
+        {!comment.shared && !comment.parent_id && comment.user_name === profile.name && (
           <div style={{paddingTop:'3px',float:'right',paddingLeft:'3px'}}>
           <FileUpload name="upl[]" url={process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id} 
             multiple={true} withCredentials={true} mode="basic" auto={true} chooseLabel="Upload"
@@ -110,30 +143,11 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
           <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
           </div>
         )}
-        <div style={{float:'left',paddingLeft:'3px'}}>
-        {comment.first_name} @ {comment.post_date_time}
-        </div>
-        <div style={{float:'right',paddingLeft:'3px'}}>
-              {comment.num_photos>0 && (
-              <a href='#' onClick={function(e){ setMediaScroller(true);e.preventDefault();}}>photos:{comment.num_photos}</a>
-              )}
-              &nbsp;
-              {comment.num_videos>0 && (
-              <a href='#' onClick={function(e){ setMediaScroller(true);e.preventDefault();}}>videos:{comment.num_videos}</a>
-              )}
-            </div>
-        </Toolbar>
-      <div className="p-grid">
-      <div className="p-col-12 p-md-12">
-          <div className="p-grid">
-            <div className="p-col-12 p-md-4">{renderMainImage()}</div>
-            <div className="p-col-12 p-md-8">{getUnescapedText(comment.comment)}</div>
-          </div>
-        </div>
-      </div>
+      {cardTitle()}
+      {getUnescapedText(comment.comment)}
       <CommentForm key={'EDIT'+comment.id} visible={editFormVisible} onHide={() => showEditForm(false)}
         editComment={comment} profile={profile} onSubmit={onSubmit} />
-      <Dialog visible={deleteFormVisible} 
+      <Dialog key={'DELETE'+comment.id} visible={deleteFormVisible} 
         onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
           Are you sure you want to delete this comment?
       </Dialog>
@@ -143,7 +157,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         shareId={comment.id} profile={profile} onSubmit={onSubmit}>
           <div><a href={getShareUrl()}>{getShareUrl()}</a></div>
       </CommentForm>
-      <Dialog header="Media" visible={mediaScroller} 
+      <Dialog key={'MEDIA'+comment.id} visible={mediaScroller} 
         onHide={() => setMediaScroller(false)} blockScroll >
           <MediaScroller profile={profile} comment={comment} />
       </Dialog>

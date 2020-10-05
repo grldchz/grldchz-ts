@@ -27,7 +27,7 @@ const useMediaService = () => {
     if(scrollerState.query.content_id){
       queryString += '&content_id='+scrollerState.query.content_id;
       if(scrollerState.query.media_id){
-        queryString += "&" + "media_id=" + scrollerState.query.media_id;
+        queryString += "&media_id=" + scrollerState.query.media_id;
       }
     }
     return new Promise((resolve, reject) => {

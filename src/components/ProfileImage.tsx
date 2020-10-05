@@ -17,16 +17,12 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
         if(comment.img_file){
             const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+comment.user_name+'/'+comment.img_file;
             return (
-                <div>
                 <img width='64px' className="profile-img" src={img_file} alt={comment.img_file} onClick={openProfileDisplay}/>
-                </div>
             );
         }
         else{
             return (
-                <div>
                     <Button type="button" icon="pi pi-user" onClick={openProfileDisplay} />
-                </div>
             );				
         }
     }

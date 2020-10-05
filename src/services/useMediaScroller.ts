@@ -35,13 +35,13 @@ const useMediaScroller = (scrollerState: MediaScrollerState) => {
     if(scrollerState.query.content_id){
       queryString += '&content_id='+scrollerState.query.content_id;
       if(scrollerState.query.media_id){
-        queryString += "&" + "media_id=" + scrollerState.query.media_id;
+        queryString += "&media_id=" + scrollerState.query.media_id;
       }
     }
     else if(getParameterByName("content_id")){
       queryString += '&content_id='+getParameterByName("content_id");
       if(getParameterByName("media_id")){
-        queryString += "&" + "media_id=" + getParameterByName("media_id");
+        queryString += "&media_id=" + getParameterByName("media_id");
       }
     }
       //setResult({status: 'loading'});

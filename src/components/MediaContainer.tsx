@@ -64,7 +64,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         );
     };
     const getCaption = () => {
-        if(media.title != media.file){
+        if(media.title !== media.file){
             return getUnescapedText(media.title);
         }
         else{
@@ -105,13 +105,13 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                     <ProgressSpinner/>
                 </div>
                 <div style={{display: loading ? "none" : "block"}}>
-                    <img src={media.slide} title={media.title} style={{ width: '100%', maxWidth: '600px' }} 
+                    <img alt={media.file} src={media.slide} title={media.title} style={{ width: '100%', maxWidth: '600px' }} 
                         onLoad={() => setLoading(false)}
                         onClick={() => setOpenImageViewer(true)}/>
                 </div>
                 <div>{getCaption()}</div>
 				<div>views: {media.num_hits}</div>
-                <Dialog header="Photo" visible={openImageViewer} style={{width: '100vw'}} 
+                <Dialog key={'IMAGE'+media.id} visible={openImageViewer} style={{width: '100vw'}} 
                 onHide={() => setOpenImageViewer(false)} blockScroll >
                     <ImageViewer media={media} />
                 </Dialog>
@@ -130,11 +130,11 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         <div>
         <Button type="button" icon="pi pi-fw pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
         <Button type="button" icon="pi pi-fw pi-pencil" onClick={() => showCaptionForm(true)} style={{margin: '3px'}} />
-        <Dialog visible={deleteFormVisible} 
+        <Dialog key={'DELETE'+media.id} visible={deleteFormVisible} 
             onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
             Are you sure you want to delete this media?
         </Dialog>
-        <Dialog header="Caption" visible={captionFormVisible} 
+        <Dialog key={'EDIT'+media.id} header="Caption" visible={captionFormVisible} 
                 onHide={() => showCaptionForm(false)} blockScroll footer={<Button onClick={() => sendCaption()} label="Send"/>} >
             <div className="p-grid p-fluid">
                 <div className="p-col-12">
