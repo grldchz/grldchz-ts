@@ -101,7 +101,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         )}
         {media.is_image && (
             <div>
-                <div style={{display: loading ? "block" : "none"}}>
+                <div className="progressSpinner" style={{display: loading ? "block" : "none"}}>
                     <ProgressSpinner/>
                 </div>
                 <div style={{display: loading ? "none" : "block"}}>

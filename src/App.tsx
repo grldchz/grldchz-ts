@@ -24,7 +24,10 @@ const App: React.FC<{}> = () => {
   const [ searchFormVisible, showSearchForm ] = React.useState(false);
   const [ commentFormVisible, showCommentForm ] = React.useState(false);
   const [ logoutDialogVisible, showLogoutDialog ] = React.useState(false);
-  const [ appState, setAppState ] = React.useState<AppState>();
+  const [ appState, setAppState ] = React.useState<AppState>({
+    commentQuery: { start: 0, limit: 10 },
+    comments: [], commentsTotal: 0, loading: false
+  });
   const profileService = useProfileService(setProfile);
   const loadComments = (search?: PostSearch) => {
     showCommentForm(false);
@@ -92,7 +95,7 @@ const App: React.FC<{}> = () => {
         )}
       </div>
       {profile &&
-        <CommentScroller appStateIn={appState} profile={profile} loadComments={loadComments}/>
+        <CommentScroller appState={appState} setAppState={setAppState} profile={profile} loadComments={loadComments}/>
       }
       {(service.status === 'loading' || profileService.status === 'loading') && (
         <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>

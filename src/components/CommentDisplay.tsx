@@ -9,6 +9,7 @@ import CommentForm from './CommentForm';
 import { Profile } from '../types/Profile';
 import useCommentService from '../services/useCommentService';
 import { ProgressBar } from 'primereact/progressbar';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { Menu } from 'primereact/menu';
 import AppUtils from '../AppUtils';
 export interface Props{
@@ -25,6 +26,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const [ deleteFormVisible, showDeleteForm ] = React.useState(false);
   const [ shareFormVisible, showShareForm ] = React.useState(false);
   const [ progressBarVisible, showProgressBar ] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const menuItems = [
     {label: 'Reply', icon: 'pi pi-fw pi-plus',command:() => showReplyForm(true)}
   ];
@@ -39,15 +41,36 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       {label: 'Share', icon: 'pi pi-fw pi-share-alt',command:() => showShareForm(true)}
       );
   }
+  const onImgLoad = (evnt?: any) => {
+    console.log("onImgLoad", evnt.target.width+"x"+evnt.target.height);
+    if(evnt.target.width <= evnt.target.height){
+      evnt.target.classList.add("mainImagePortrait");
+      console.log("height more than width by ", (evnt.target.height-evnt.target.width)+"px")
+    }
+    else{
+      evnt.target.classList.add("mainImageLandscape");
+      console.log("width more than height by ", (evnt.target.width-evnt.target.height)+"px")
+    }
+    setLoading(false);
+  };
+
   const renderMainImage = (comment: Comment) => {
-      const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?media=media/'
+    let slide = null;
+    if(comment.image != null && comment.image != "" && !comment.image.endsWith(".mp4.jpeg")){
+      slide = comment.image.replace("profile", "slide");
+    }
+    const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?media=media/'
       + comment.user_name+ "/" 
-      + comment.image;
-      return (
-      <div>
-      {comment.num_photos > 0 && comment.image != null && !comment.image.endsWith(".mp4.jpeg") && (
+      + slide;
+    return (
+        <div className="centerDiv">
+      {comment.num_photos > 0 && slide != null && !comment.image.endsWith(".mp4.jpeg") && (
           <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
-              <img className="mainImage" alt={comment.image} src={src}/>
+                <div className="progressSpinner" style={{display: loading ? "block" : "none"}}>
+                  <ProgressSpinner/>
+                </div>
+              <img style={{display: loading ? "none" : "block"}} alt={slide} 
+                src={src} onLoad={onImgLoad}/>
               <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
               {comment.num_videos > 0 && (
               <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
@@ -66,7 +89,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
             </div>
         </div>
       )}
-      {comment.num_photos > 0 && (comment.image == null||comment.image.endsWith(".mp4.jpeg")) && (
+      {comment.num_photos > 0 && slide == null && (
         <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
             <div className="mainNoImage">Main Photo not set
             {comment.num_photos > 0 && (
@@ -114,9 +137,9 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const cardTitle = () => {
     return (
       <div className="p-grid">
-        <div className="p-col-4">
+        <div className="p-col-4 p-md-2 p-lg-1">
         <ProfileImage comment={comment} /></div>
-        <div className="p-col-8">{comment.first_name} @ {comment.post_date_time}</div>
+        <div className="p-col-8 p-md-6 p-lg-3"><b>{comment.first_name} @ {comment.post_date_time}</b></div>
       </div>
     );
   }

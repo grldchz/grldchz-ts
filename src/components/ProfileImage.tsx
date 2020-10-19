@@ -13,11 +13,23 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
     const openProfileDisplay = () => {
         setState({display: true});
     }
-    const renderImage = () => {
+    const onImgLoad = (evnt?: any) => {
+        if(evnt.target.width <= evnt.target.height){
+            evnt.target.style['width']='100%';
+            evnt.target.style['height']='unset';            
+        }
+        else{
+            evnt.target.style['left']='-15%'; 
+        }
+      };
+      const renderImage = () => {
         if(comment.img_file){
             const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+comment.user_name+'/'+comment.img_file;
             return (
-                <img width='64px' className="profile-img" src={img_file} alt={comment.img_file} onClick={openProfileDisplay}/>
+                <div className="profileImageContainer">
+                    <img className="profile-img" src={img_file} alt={comment.img_file} onClick={openProfileDisplay}
+                      onLoad={onImgLoad}/>
+                </div>
             );
         }
         else{
@@ -30,8 +42,9 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
         if(comment.img_file){
             const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+comment.user_name+'/'+comment.img_file;
             return (
-                <div>
-                <img width='64px' className="profile-img" src={img_file} alt={comment.img_file}onClick={() => setOpenImageViewer(true)}/>
+                <div className="profileImageContainer">
+                    <img className="profile-img" src={img_file} alt={comment.img_file} onClick={() => setOpenImageViewer(true)}
+                      onLoad={onImgLoad}/>
                 </div>
             );
         }

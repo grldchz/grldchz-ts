@@ -56,7 +56,6 @@ const Login: React.FC<Props> = ({ setProfile }) => {
     <div>
       <form onSubmit={handleFormSubmit}>
         <div className="content-section implementation">
-          <h3 className="first">Please Login</h3>
           <div className="p-grid p-fluid">
             <div className="p-col-12 p-md-6">
               <div className="p-inputgroup">
@@ -81,7 +80,7 @@ const Login: React.FC<Props> = ({ setProfile }) => {
               </div>
             </div>
           </div>
-          <Button type="submit" label="Send" icon="pi pi-check" />
+          <Button type="submit" label="Send" icon="pi pi-check" style={{margin: '3px'}} />
           <Button type="button" label="Register" icon="pi pi-user-plus" onClick={() => showRegisterForm(true)} style={{margin: '3px'}} />
           <Button type="button" label="Forgot" icon="pi pi-question" onClick={() => showForgotForm(true)} style={{margin: '3px'}} />
         </div>

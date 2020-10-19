@@ -9,17 +9,14 @@ import { Comment } from "../types/Comment";
 import { Profile } from '../types/Profile';
 
 export interface Props{
-  appStateIn?: AppState;
+  appState: AppState;
+  setAppState(appState: AppState): void;
   profile: Profile;
   loadComments(): void;
 }
 
-const CommentScroller: React.FC<Props> = ({ appStateIn, profile, loadComments }) => {
-  const [ appState, setAppState ] = React.useState<AppState>({
-    commentQuery: { start: 0, limit: 10 },
-    comments: [], commentsTotal: 0, loading: false
-  });
-  const service = useCommentScroller(appStateIn?appStateIn:appState);
+const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, loadComments }) => {
+  const service = useCommentScroller(appState);
   const itemTemplate = (comment: Comment) => {
     if (!comment) {
       return (<div></div>);
@@ -27,15 +24,16 @@ const CommentScroller: React.FC<Props> = ({ appStateIn, profile, loadComments })
     return (<ListItem comment={comment} key={comment.id} profile={profile} loadComments={loadComments} />);
   };
   const onScroll = (evnt?: any) => {
-      console.log("appstate", appState);
-      console.log("evnt", evnt);
     let start = appState.commentQuery.start;
     if(appState.commentQuery.limit > appState.commentsTotal){
       start = 0;
       setAppState({
         commentQuery: {
           start: start,
-          limit: appState.commentQuery.limit
+          limit: appState.commentQuery.limit,
+          searchTerm: appState.commentQuery.searchTerm,
+          fromDate: appState.commentQuery.fromDate,
+          toDate: appState.commentQuery.toDate
         },
         comments: [], 
         commentsTotal: appState.commentsTotal,
@@ -48,7 +46,10 @@ const CommentScroller: React.FC<Props> = ({ appStateIn, profile, loadComments })
         setAppState({
           commentQuery: {
             start: start,
-            limit: evnt.rows
+            limit: evnt.rows,
+            searchTerm: appState.commentQuery.searchTerm,
+            fromDate: appState.commentQuery.fromDate,
+            toDate: appState.commentQuery.toDate
           },
           comments: appState.comments, 
           commentsTotal: appState.commentsTotal,
@@ -61,7 +62,7 @@ const CommentScroller: React.FC<Props> = ({ appStateIn, profile, loadComments })
   return (
     <>
       <div>
-        {((appStateIn && appStateIn.loading) || appState.loading || service.status === 'loading') && (
+        {(appState.loading || service.status === 'loading') && (
           <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
             <ProgressBar mode="indeterminate" style={{height: '3px'}} /></div>
         )}

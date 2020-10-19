@@ -7,6 +7,10 @@ body {
 .show{
 	display:inline;
 }
+.centerDiv{
+	display: flex;
+	justify-content: center;
+}
 .progressBarContainer{
 	position: fixed;
 	top: 0px;
@@ -16,28 +20,34 @@ body {
 .progressBar{
 	height: 3px;
 }
+.profileImageContainer{
+	position: relative;
+	
+	width:50px;
+	height:50px;
+	overflow: hidden;
+	margin-top: 3px;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
 .profile-img { 
-	width: 64px;
-	border-radius: 6px;
 	cursor:pointer;
+	position: absolute;
+	height: 100%;
 }
 .media-img { 
-	border-radius: 8px;
+	
 	cursor:pointer;
 }
 
-.mainImage{
-	display:inline-block;
-	cursor:pointer;
-	border-radius: 8px;
-}
 
+.progressSpinner{
+	width: 100%;
+	text-align: center;
+}
 .mainNoImage{
-	width: 150px;
+	width: 100%;
 	height: 150px;
 	cursor:pointer;
-	border:1px solid;
-	border-radius: 8px;
     display: inline-block;
 	line-height: 150px;
 	text-align: center;
@@ -46,46 +56,88 @@ body {
     font-size: xx-small;
 }
 .mainNoImage > div{
-    top: 67px;
+    top: 135px;
 }
-.mainImageContainer{
-	position: relative;
-	display: inline;
-}
-.mainImageContainer > div{
-    top: 0px;
-}
+
 .imageCount{
 	background-color: #fff;
 	opacity: .8;
     border: 0px solid #000;
-    border-radius: 6px;
     color: #000;
     font-size: xx-small;
     line-height: 11px;
     padding: 2px;
     position: absolute;
     left: 1px;
-    -moz-border-radius: 6px;
-    -webkit-border-top-left-radius: 6px;
-    -webkit-border-top-right-radius: 6px;
 	cursor:pointer;
-    /*behavior:url(border-radius.htc);*/
 }
 .videoCount{
     background-color: #fff;
 	opacity: .8;
     border: 0px solid #000;
-    border-radius: 6px;
     color: #000;
     font-size: xx-small;
     line-height: 11px;
     padding: 2px;
     position: absolute;
     right: 1px;
-    -moz-border-radius: 6px;
-    -webkit-border-top-left-radius: 6px;
-    -webkit-border-top-right-radius: 6px;
 	cursor:pointer;
-    /*behavior:url(border-radius.htc);*/
+}
+.commentDisplay{
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid;
+}
+.mainImageContainer{
+	position: relative;
+	
+	width:100%;
+	height:150px;
+	overflow: hidden;
+	max-width: 400px;
+	
+	
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.mainImageContainer > div{
+    top: 135px;
+}
+.mainImageLandscape{
+	display:inline-block;
+	cursor:pointer;
+	position: absolute;
+	top: -100%;
+	width: 100%;
+	max-width: 400px;
+}	
+.mainImagePortrait{
+	display:inline-block;
+	cursor:pointer;
+	position: absolute;
+	top: -80%;
+	width: 50%;
+	max-width: 400px;
+	left: 25%;
+}	
+@media screen and (max-width: 600px) {
+	.mainImageLandscape{
+		top: -50%;
+		width: 100%;
+
+	}	
+	.mainImagePortrait{
+		top: -30%;
+		width: 50%;
+	}	
+}
+@media screen and (max-width: 400px) {
+	.mainImageLandscape{
+		top: -10%;
+		width: 100%;
+	}	
+	.mainImagePortrait{
+		top: -40%;
+		width: 80%;
+		left: 10%;
+	}	
 }
