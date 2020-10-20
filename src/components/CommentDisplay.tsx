@@ -42,14 +42,11 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       );
   }
   const onImgLoad = (evnt?: any) => {
-    console.log("onImgLoad", evnt.target.width+"x"+evnt.target.height);
     if(evnt.target.width <= evnt.target.height){
       evnt.target.classList.add("mainImagePortrait");
-      console.log("height more than width by ", (evnt.target.height-evnt.target.width)+"px")
     }
     else{
       evnt.target.classList.add("mainImageLandscape");
-      console.log("width more than height by ", (evnt.target.width-evnt.target.height)+"px")
     }
     setLoading(false);
   };
@@ -137,9 +134,9 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const cardTitle = () => {
     return (
       <div className="p-grid">
-        <div className="p-col-4 p-md-2 p-lg-1">
+        <div className="p-col-4">
         <ProfileImage comment={comment} /></div>
-        <div className="p-col-8 p-md-6 p-lg-3"><b>{comment.first_name} @ {comment.post_date_time}</b></div>
+        <div className="p-col-8"><b>{comment.first_name} @ {comment.post_date_time}</b></div>
       </div>
     );
   }

@@ -71,7 +71,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
         )}
         {service.status === 'loaded' && service.payload &&
             <div>
-              <DataScroller value={service.payload}
+              <DataScroller value={service.payload} className="centerDiv"
                   itemTemplate={itemTemplate} rows={10}
                   lazy={true} onLazyLoad={onScroll} loader={moreButtonRef.current}/>
               <Button ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
