@@ -124,6 +124,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                         <source src={media.mp4} type="video/mp4" />
                     </video>
                 </div>					
+                <div>{getCaption()}</div>
+				<div>views: {media.num_hits}</div>
             </div>
         )}
         {profile.name === media.user_name && (

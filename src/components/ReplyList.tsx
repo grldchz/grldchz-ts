@@ -6,12 +6,13 @@ export interface Props{
   comment: Comment;
   profile: Profile;
   loadComments(): void;
+  openMediaScroller(comment: Comment): void;
 }
-const ReplyList: React.FC<Props> = ({ comment, profile, loadComments }) => {
+const ReplyList: React.FC<Props> = ({ comment, profile, loadComments, openMediaScroller }) => {
     const renderReply = (reply: Comment) => {
       return (
-        <li key={reply.id} className="replyDisplay">
-        <CommentDisplay comment={reply} profile={profile} loadComments={loadComments}/>
+        <li key={reply.id}>
+        <CommentDisplay comment={reply} profile={profile} loadComments={loadComments} openMediaScroller={openMediaScroller}/>
         {(reply.replies.length>0 &&
         <ul style={{listStyle:'none',marginBottom:'20px'}} className="p-datascroller-content">{reply.replies.map(rep => renderReply(rep))}</ul> 
         )}         
@@ -19,7 +20,7 @@ const ReplyList: React.FC<Props> = ({ comment, profile, loadComments }) => {
       );
     };
     return (
-    <ul style={{listStyle:'none',marginBottom:'20px'}} className="p-datascroller-content">{comment.replies.map(reply => renderReply(reply))}</ul>
+    <ul className="replyDisplay p-datascroller-content">{comment.replies.map(reply => renderReply(reply))}</ul>
     );
 
 };

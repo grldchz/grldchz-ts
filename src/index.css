@@ -7,22 +7,20 @@ body{background-color:#191919}
 .profileImageContainer{position:relative;width:50px;height:50px;overflow:hidden;margin-top:3px;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}
 .profile-img{position:absolute;height:100%}
 .media-img,.profile-img{cursor:pointer}
-/* .mainImageLandscape{top:-100%;width:100%}
-.mainImageLandscape,.mainImagePortrait{display:inline-block;cursor:pointer;position:absolute;max-width:600px}
-.mainImagePortrait{top:-80%;width:50%;left:25%} */
 .mainImageLandscape{top:-50%;width:100%}
 .mainImageLandscape,.mainImagePortrait{display:inline-block;cursor:pointer;position:absolute;max-width:600px}
 .mainImagePortrait{top:-30%;width:50%;left:25%}
 .mainNoImage,.progressSpinner{width:100%;text-align:center}
-.mainNoImage{height:150px;cursor:pointer;display:inline-block;line-height:150px;vertical-align:middle;margin-bottom:3px;font-size:xx-small}
+.mainNoImage{height:150px;display:inline-block;line-height:150px;vertical-align:middle;margin-bottom:3px;}
 .mainNoImage>div{top:135px}
-.mainImageContainer{position:relative;width:100%;height:150px;overflow:hidden;max-width:600px;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}
+.mainNoImage:hover{text-decoration: underline;}
+.mainImageContainer{position:relative;width:100%;height:150px;overflow:hidden;max-width:600px}
 .mainImageContainer>div{top:135px}
 .imageCount{left:1px}
 .imageCount,.videoCount{background-color:#fff;opacity:.8;border:0 solid #000;color:#000;font-size:xx-small;line-height:11px;padding:2px;position:absolute;cursor:pointer}
 .videoCount{right:1px}
-.commentDisplay{margin:10px;padding:10px;border:1px solid}
-
+.commentDisplay{margin:10px;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}
+.replyDisplay{filter: brightness(90%);list-style:none;margin-bottom:20px}
 @media screen and (min-width:600px){
 	.commentDisplay{width:400px}
 	.p-datascroller-list{display:inline-flex;flex-wrap: wrap;justify-content:center}

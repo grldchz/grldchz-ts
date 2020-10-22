@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { Comment } from '../types/Comment';
 import ProfileImage from './ProfileImage';
-import MediaScroller from './MediaScroller';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import {FileUpload} from 'primereact/fileupload';
@@ -16,11 +15,11 @@ export interface Props{
     comment: Comment;
     profile: Profile;
     loadComments(): void;
+    openMediaScroller(comment: Comment): void;
   }
-const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => {
+const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openMediaScroller }) => {
   const { getUnescapedText } = AppUtils();
   const { deleteComment } = useCommentService();
-  const [ mediaScroller, setMediaScroller ] = React.useState(false);
   const [ editFormVisible, showEditForm ] = React.useState(false);
   const [ replyFormVisible, showReplyForm ] = React.useState(false);
   const [ deleteFormVisible, showDeleteForm ] = React.useState(false);
@@ -50,19 +49,21 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     }
     setLoading(false);
   };
-
+  const openMediaDialog = () => {
+    openMediaScroller(comment);
+  }
   const renderMainImage = (comment: Comment) => {
     let slide = null;
     if(comment.image != null && comment.image != "" && !comment.image.endsWith(".mp4.jpeg")){
       slide = comment.image.replace("profile", "slide");
     }
-    const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?media=media/'
+    const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?hitcounter=false&media=media/'
       + comment.user_name+ "/" 
       + slide;
     return (
         <div className="centerDiv">
       {comment.num_photos > 0 && slide != null && !comment.image.endsWith(".mp4.jpeg") && (
-          <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
+          <div className="mainImageContainer" onClick={openMediaDialog}>
                 <div className="progressSpinner" style={{display: loading ? "block" : "none"}}>
                   <ProgressSpinner/>
                 </div>
@@ -75,8 +76,8 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
           </div>
       )}
       {comment.num_photos == 0 && comment.num_videos > 0 && (
-        <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
-            <div className="mainNoImage">Main Photo not set
+        <div className="mainImageContainer">
+            <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={openMediaDialog}></Button>
             {comment.num_photos > 0 && (
             <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
             )}
@@ -87,8 +88,8 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         </div>
       )}
       {comment.num_photos > 0 && slide == null && (
-        <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
-            <div className="mainNoImage">Main Photo not set
+        <div className="mainImageContainer">
+            <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={openMediaDialog}></Button>
             {comment.num_photos > 0 && (
             <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
             )}
@@ -164,7 +165,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
           </div>
         )}
       {cardTitle()}
-      {getUnescapedText(comment.comment)}
+      <div style={{padding:'3px'}}>{getUnescapedText(comment.comment)}</div>
       <CommentForm key={'EDIT'+comment.id} visible={editFormVisible} onHide={() => showEditForm(false)}
         editComment={comment} profile={profile} onSubmit={onSubmit} />
       <Dialog key={'DELETE'+comment.id} visible={deleteFormVisible} 
@@ -177,10 +178,6 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         shareId={comment.id} profile={profile} onSubmit={onSubmit}>
           <div><a href={getShareUrl()}>{getShareUrl()}</a></div>
       </CommentForm>
-      <Dialog key={'MEDIA'+comment.id} visible={mediaScroller} 
-        onHide={() => setMediaScroller(false)} blockScroll >
-          <MediaScroller profile={profile} comment={comment} />
-      </Dialog>
       </div>
     );
   };
