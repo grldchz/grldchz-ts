@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Comment } from '../types/Comment';
 import ProfileImage from './ProfileImage';
+import MediaScroller from './MediaScroller';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import {FileUpload} from 'primereact/fileupload';
@@ -15,11 +16,12 @@ export interface Props{
     comment: Comment;
     profile: Profile;
     loadComments(): void;
-    openMediaScroller(comment: Comment): void;
   }
-const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openMediaScroller }) => {
+const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => {
+  const rootEl = document.getElementById('root');
   const { getUnescapedText } = AppUtils();
   const { deleteComment } = useCommentService();
+  const [ mediaScroller, setMediaScroller ] = React.useState(false);
   const [ editFormVisible, showEditForm ] = React.useState(false);
   const [ replyFormVisible, showReplyForm ] = React.useState(false);
   const [ deleteFormVisible, showDeleteForm ] = React.useState(false);
@@ -49,9 +51,6 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openM
     }
     setLoading(false);
   };
-  const openMediaDialog = () => {
-    openMediaScroller(comment);
-  }
   const renderMainImage = (comment: Comment) => {
     let slide = null;
     if(comment.image != null && comment.image != "" && !comment.image.endsWith(".mp4.jpeg")){
@@ -63,7 +62,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openM
     return (
         <div className="centerDiv">
       {comment.num_photos > 0 && slide != null && !comment.image.endsWith(".mp4.jpeg") && (
-          <div className="mainImageContainer" onClick={openMediaDialog}>
+          <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
                 <div className="progressSpinner" style={{display: loading ? "block" : "none"}}>
                   <ProgressSpinner/>
                 </div>
@@ -77,7 +76,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openM
       )}
       {comment.num_photos == 0 && comment.num_videos > 0 && (
         <div className="mainImageContainer">
-            <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={openMediaDialog}></Button>
+            <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
             {comment.num_photos > 0 && (
             <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
             )}
@@ -89,7 +88,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openM
       )}
       {comment.num_photos > 0 && slide == null && (
         <div className="mainImageContainer">
-            <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={openMediaDialog}></Button>
+            <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
             {comment.num_photos > 0 && (
             <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
             )}
@@ -150,7 +149,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openM
       )}
       {renderMainImage(comment)}
         {!comment.shared && !comment.parent_id && comment.user_name === profile.name && (
-          <div style={{paddingTop:'3px',float:'right',paddingLeft:'3px'}}>
+          <div style={{padding:'3px',float:'right'}}>
           <FileUpload name="upl[]" url={process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id} 
             multiple={true} withCredentials={true} mode="basic" auto={true} chooseLabel="Upload"
             accept="image/*,video/mp4" 
@@ -160,7 +159,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openM
           )}
         {!comment.shared && (  
           <div style={{float:'right',paddingLeft:'3px'}}>
-          <Menu model={menuItems} popup ref={menuItemsRef} />
+          <Menu model={menuItems} popup ref={menuItemsRef} appendTo={rootEl} />
           <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
           </div>
         )}
@@ -168,10 +167,18 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments, openM
       <div style={{padding:'3px'}}>{getUnescapedText(comment.comment)}</div>
       <CommentForm key={'EDIT'+comment.id} visible={editFormVisible} onHide={() => showEditForm(false)}
         editComment={comment} profile={profile} onSubmit={onSubmit} />
-      <Dialog key={'DELETE'+comment.id} visible={deleteFormVisible} 
-        onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
-          Are you sure you want to delete this comment?
-      </Dialog>
+      {rootEl && (
+      <div>
+        <Dialog key={'DELETE'+comment.id} visible={deleteFormVisible} appendTo={rootEl} 
+          onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
+            Are you sure you want to delete this comment?
+        </Dialog>
+        <Dialog key={'MEDIA'+comment.id} visible={mediaScroller} appendTo={rootEl} 
+          onHide={() => setMediaScroller(false)} blockScroll >
+            <MediaScroller profile={profile} comment={comment} />
+        </Dialog>
+      </div>
+      )}
       <CommentForm key={'REPLY'+comment.id} visible={replyFormVisible} onHide={() => showReplyForm(false)}
         parentId={comment.id} profile={profile} onSubmit={onSubmit} />
       <CommentForm key={'SHARE'+comment.id} visible={shareFormVisible} onHide={() => showShareForm(false)}

@@ -17,6 +17,7 @@ export interface Props{
   onSubmit(): void;
 }
 const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, editComment, profile, onSubmit, children }) => {
+  const rootEl = document.getElementById('root');
   const { getUnescapedText } = AppUtils();
   const initState: PostComment = {
     comment: ''
@@ -94,8 +95,9 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
       onSubmit();
     });
   };
-  return (
-    <Dialog visible={visible} 
+  return (<div>
+    {rootEl && (
+    <Dialog visible={visible} appendTo={rootEl} 
       onHide={onHide} blockScroll footer={<Button onClick={() => send()} label="Send"/>} >
       <div className="p-grid p-fluid">
         <div className="p-col-12">
@@ -122,6 +124,7 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
         </div>
       )}
     </Dialog>
+    )}</div>
   );
 };
 

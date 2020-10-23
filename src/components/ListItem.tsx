@@ -7,14 +7,13 @@ export interface Props{
     comment: Comment;
     profile: Profile;
     loadComments(): void;
-    openMediaScroller(comment: Comment): void;
   }
-const ListItem: React.FC<Props> = ({ comment, profile, loadComments, openMediaScroller }) => {
+const ListItem: React.FC<Props> = ({ comment, profile, loadComments }) => {
   return (
     <div className="commentDisplay">
-      <CommentDisplay comment={comment} profile={profile} loadComments={loadComments} openMediaScroller={openMediaScroller}/>
+      <CommentDisplay comment={comment} profile={profile} loadComments={loadComments}/>
       {(comment.replies.length>0 &&
-      <ReplyList comment={comment} profile={profile} loadComments={loadComments} openMediaScroller={openMediaScroller}/>
+      <ReplyList comment={comment} profile={profile} loadComments={loadComments}/>
       )}
     </div>
   );

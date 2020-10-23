@@ -7,8 +7,6 @@ import { Button } from 'primereact/button';
 import { AppState } from '../types/AppState';
 import { Comment } from "../types/Comment";
 import { Profile } from '../types/Profile';
-import MediaScroller from './MediaScroller';
-import { Dialog } from 'primereact/dialog';
 
 export interface Props{
   appState: AppState;
@@ -19,17 +17,11 @@ export interface Props{
 
 const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, loadComments }) => {
   const service = useCommentScroller(appState);
-  const [ mediaScroller, setMediaScroller ] = React.useState(false);
-  const [ comment, setComment ] = React.useState<Comment|null>(null);
-  const openMediaScroller = (incomment: Comment) => {
-    setComment(incomment);
-    setMediaScroller(true);
-  }
   const itemTemplate = (comment: Comment) => {
     if (!comment) {
       return (<div></div>);
     }
-    return (<ListItem comment={comment} key={comment.id} profile={profile} loadComments={loadComments} openMediaScroller={openMediaScroller} />);
+    return (<ListItem comment={comment} key={comment.id} profile={profile} loadComments={loadComments} />);
   };
   const onScroll = (evnt?: any) => {
     let start = appState.commentQuery.start;
@@ -85,12 +77,6 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
               <Button ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
             </div>
         }
-        {comment && (
-      <Dialog visible={mediaScroller} 
-        onHide={() => setMediaScroller(false)} blockScroll >
-          <MediaScroller profile={profile} comment={comment} />
-      </Dialog>
-        )}
       </div>
     </>
   );

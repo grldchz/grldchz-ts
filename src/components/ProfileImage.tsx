@@ -8,6 +8,7 @@ export interface Props{
     comment: Comment;
 }
 const ProfileImage: React.FC<Props> = ({ comment }) => {
+    const rootEl = document.getElementById('root');
     const [ state, setState ] = React.useState({display: false});
     const [openImageViewer, setOpenImageViewer] = React.useState(false);
     const openProfileDisplay = () => {
@@ -69,14 +70,18 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
     return (
         <div>
             {renderImage()}
+            {rootEl && (
+            <div>
             <Dialog header="Profile" visible={state.display} style={{width: '90vw'}} 
-                onHide={() => setState({display: false})} blockScroll >
+                onHide={() => setState({display: false})} blockScroll appendTo={rootEl} >
                     {renderCardImage()} {comment.first_name} {comment.last_name} {comment.description}
             </Dialog>
             <Dialog header="Photo" visible={openImageViewer} style={{width: '100vw'}} 
-                onHide={() => setOpenImageViewer(false)} blockScroll >
+                onHide={() => setOpenImageViewer(false)} blockScroll appendTo={rootEl} >
                 <ImageViewer media={media} />
             </Dialog>
+            </div>
+            )}
         </div>
     );
 };
