@@ -133,7 +133,37 @@ const useMediaService = () => {
         });
     });
   };
-  return {service, loadMedia, deleteMedia, submitCaption};
+  const setImage = (postData: any) => {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+    headers.append('Accept', 'application/json; charset=utf-8');
+    return new Promise((resolve, reject) => {
+      fetch(process.env.REACT_APP_GRLDSERVICE_URL+'service.php', {
+        method: 'POST',
+        body: qs.stringify(postData),
+        credentials: "include",
+        headers
+        })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          if(response.status === 'FAIL'){
+            const error = new Error(response.msg);
+            setResult({ status: 'error', error });
+          }
+          else{
+            setResult({ status: 'loaded', payload: response });
+          }
+          resolve(response);
+        })
+        .catch(error => {
+          setResult({ status: 'error', error });
+          reject(error);
+        });
+    });
+  };
+  return {service, loadMedia, deleteMedia, submitCaption, setImage};
 };
 
 export default useMediaService;

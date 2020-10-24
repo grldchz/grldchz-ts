@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Media, PostCaption } from '../types/Media';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Dialog } from 'primereact/dialog';
@@ -9,14 +9,15 @@ import useMediaService from '../services/useMediaService';
 import { ProgressBar } from 'primereact/progressbar';
 import AppUtils from '../AppUtils';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Menu } from 'primereact/menu';
 export interface Props{
     media: Media;
     profile: Profile;
     loadMedia(): void;
 }
 const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
-    const { getUnescapedText } = AppUtils();
-    const { deleteMedia, submitCaption } = useMediaService();
+    const rootEl = document.getElementById('root');    const { getUnescapedText } = AppUtils();
+    const { deleteMedia, submitCaption, setImage } = useMediaService();
     const [loading, setLoading] = React.useState(true);
     const [openImageViewer, setOpenImageViewer] = React.useState(false);
     const [ deleteFormVisible, showDeleteForm ] = React.useState(false);
@@ -35,19 +36,49 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
             + media.content_id + "/img_slide_" 
             + media.file + ".jpeg";
         media.slide = slide;
-        var original = gcotd+"getfile.php?media=media/"
+        const original = gcotd+"getfile.php?media=media/"
             + media.user_name+ "/" 
             + media.content_id + "/src/" 
             + media.file;
         media.original = original + "&original=true";
     }
     else{
-        var mp4 = gcotd+"getfile.php?media=media/"
+        const mp4 = gcotd+"getfile.php?media=media/"
             + media.user_name+ "/" 
             + media.content_id + "/proxy_mp4_" 
             + media.file + ".mp4";
         media.mp4 = mp4;
     }
+    const setAsMain = () => {
+        showProgressBar(true);
+        const postData = {
+            main_img:media.file, 
+            content_id:media.content_id
+        };
+        setImage(postData).then(() => {
+            showProgressBar(false);
+        });
+    };
+    const setAsProfile = (e: any) => {
+        showProgressBar(true);
+        const postData = {
+            profile_img:media.file, 
+            content_id:media.content_id
+        };
+        console.log("setAsProfile", e);
+        if(e.originalEvent.currentTarget.innerHTML.indexOf("Unset") > -1){
+            postData["unset"] = true;
+        }
+        setImage(postData).then(() => {
+            showProgressBar(false);
+        });
+    };
+    const menuItems = [
+        {label: 'Download Original', url:media.original, target:"_blank"},
+        {label: 'Set As Main Image', command:() => setAsMain()},
+        {label: 'Set As Profile Image', command:setAsProfile},
+        {label: 'Unset Profile Image', command:setAsProfile}
+    ];
     const onDelete = () => {
         showProgressBar(true);
         deleteMedia(media).then(() => {
@@ -91,6 +122,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
             showCaptionForm(false);
         });
       };
+      const menuItemsRef = useRef<Menu>(new Menu({}));
       return (
           <div>
           {mediaVisible && (
@@ -132,6 +164,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         <div>
         <Button type="button" icon="pi pi-fw pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
         <Button type="button" icon="pi pi-fw pi-pencil" onClick={() => showCaptionForm(true)} style={{margin: '3px'}} />
+        <Menu model={menuItems} popup ref={menuItemsRef} appendTo={rootEl} />
+        <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
         <Dialog key={'DELETE'+media.id} visible={deleteFormVisible} 
             onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
             Are you sure you want to delete this media?
