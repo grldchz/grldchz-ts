@@ -165,7 +165,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         <Button type="button" icon="pi pi-fw pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
         <Button type="button" icon="pi pi-fw pi-pencil" onClick={() => showCaptionForm(true)} style={{margin: '3px'}} />
         <Menu model={menuItems} popup ref={menuItemsRef} appendTo={rootEl} />
-        <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
+        {media.is_image && (<Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>)}
         <Dialog key={'DELETE'+media.id} visible={deleteFormVisible} 
             onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
             Are you sure you want to delete this media?

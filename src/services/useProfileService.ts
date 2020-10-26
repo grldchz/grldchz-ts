@@ -24,8 +24,7 @@ const useProfileService = (setProfile: any) => {
       redirect: "follow", // manual, error
       integrity: "", // a hash, like "sha256-abcdef1234567890"
       keepalive: false, // true
-      signal: undefined, // AbortController to abort request
-      window: window // null
+      signal: undefined // AbortController to abort request
     })
       .then(response => {
         return response.json();
