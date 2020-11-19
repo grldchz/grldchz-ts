@@ -43,11 +43,18 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       );
   }
   const onImgLoad = (evnt?: any) => {
-    if(evnt.target.width <= evnt.target.height){
-      evnt.target.classList.add("mainImagePortrait");
+    if(evnt.target.width < evnt.target.height){
+      const topPortrait = -(((evnt.target.width/evnt.target.height)*50)/2);
+      evnt.target.style['top'] = topPortrait + "%";
+      evnt.target.style['width'] = '50%';
+      evnt.target.style['left'] = '25%';
+    }
+    else if(evnt.target.width > evnt.target.height){
+      const topLandscape = -(((evnt.target.height/evnt.target.width)*100)/2);
+      evnt.target.style['top'] = topLandscape + "%";
     }
     else{
-      evnt.target.classList.add("mainImageLandscape");
+      evnt.target.style['top'] = '-70%';
     }
     setLoading(false);
   };
@@ -67,7 +74,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
                   <ProgressSpinner/>
                 </div>
               <img style={{display: loading ? "none" : "block"}} alt={slide} 
-                src={src} onLoad={onImgLoad}/>
+                src={src} onLoad={onImgLoad} className="mainImage"/>
               <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
               {comment.num_videos > 0 && (
               <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
@@ -144,8 +151,8 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     return (
     <div>
       {progressBarVisible && (
-        <div className="prpgressBarContainer">
-        <ProgressBar mode="indeterminate" className="progressBar" style={{height: '3px'}} /></div>
+        <div className="progressBarContainer">
+        <ProgressBar mode="indeterminate" /></div>
       )}
       {renderMainImage(comment)}
         {!comment.shared && !comment.parent_id && comment.user_name === profile.name && (
@@ -164,7 +171,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
           </div>
         )}
       {cardTitle()}
-      <div style={{padding:'3px'}}>{getUnescapedText(comment.comment)}</div>
+      <div style={{padding:'3px'}} dangerouslySetInnerHTML={{__html: getUnescapedText(comment.comment)}}></div>
       <CommentForm key={'EDIT'+comment.id} visible={editFormVisible} onHide={() => showEditForm(false)}
         editComment={comment} profile={profile} onSubmit={onSubmit} />
       {rootEl && (

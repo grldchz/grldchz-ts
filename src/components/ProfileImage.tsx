@@ -15,12 +15,18 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
         setState({display: true});
     }
     const onImgLoad = (evnt?: any) => {
-        if(evnt.target.width <= evnt.target.height){
+        if(evnt.target.width < evnt.target.height){
             evnt.target.style['width']='100%';
             evnt.target.style['height']='unset';            
+            const topPortrait = -(((evnt.target.width/evnt.target.height)*(evnt.target.height-evnt.target.width)));
+            evnt.target.style['top'] = topPortrait + "%";
+        }
+        else if(evnt.target.width > evnt.target.height){
+            const leftLandscape = -(((evnt.target.height/evnt.target.width)*((evnt.target.width-evnt.target.height)*2)));
+            evnt.target.style['left']= leftLandscape + '%'; 
         }
         else{
-            evnt.target.style['left']='-15%'; 
+            evnt.target.style['width']='100%';
         }
       };
       const renderImage = () => {

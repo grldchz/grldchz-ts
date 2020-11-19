@@ -2,14 +2,11 @@ body{background-color:#191919}
 .hide{display:none}
 .show{display:inline}
 .centerDiv{display:flex;justify-content:center}
-.progressBarContainer{position:fixed;top:0;margin:0;width:100%}
-.progressBar{height:3px}
+.progressBarContainer{height:3px;position:fixed;top:0;margin:0;width:100%;z-index:9999;overflow: hidden;}
 .profileImageContainer{position:relative;width:50px;height:50px;overflow:hidden;margin-top:3px;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}
 .profile-img{position:absolute;height:100%}
 .media-img,.profile-img{cursor:pointer}
-.mainImageLandscape{top:-50%;width:100%}
-.mainImageLandscape,.mainImagePortrait{display:inline-block;cursor:pointer;position:absolute;max-width:600px}
-.mainImagePortrait{top:-30%;width:50%;left:25%}
+.mainImage{width:100%;display:inline-block;cursor:pointer;position:absolute;max-width:600px}
 .mainNoImage,.progressSpinner{width:100%;text-align:center}
 .mainNoImage{height:150px;display:inline-block;line-height:150px;vertical-align:middle;margin-bottom:3px;}
 .mainNoImage>div{top:135px}

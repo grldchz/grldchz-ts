@@ -98,8 +98,8 @@ const App: React.FC<{}> = () => {
         <CommentScroller appState={appState} setAppState={setAppState} profile={profile} loadComments={loadComments}/>
       }
       {(service.status === 'loading' || profileService.status === 'loading') && (
-        <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
-        <ProgressBar mode="indeterminate" style={{height: '3px'}} /></div>
+        <div className="progressBarContainer">
+        <ProgressBar mode="indeterminate" /></div>
       )}
       {profileService.status === 'error' && !profile && (
         <Login setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />

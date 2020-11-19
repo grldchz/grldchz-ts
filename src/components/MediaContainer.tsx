@@ -128,8 +128,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
           {mediaVisible && (
         <div>
         {progressBarVisible && (
-            <div style={{position:'fixed', top: '0px', margin: '0px', width: '100%'}}>
-            <ProgressBar mode="indeterminate" style={{height: '3px'}} /></div>
+            <div className="progressBarContainer">
+            <ProgressBar mode="indeterminate" /></div>
         )}
         {media.is_image && (
             <div>
