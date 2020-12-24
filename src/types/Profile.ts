@@ -20,7 +20,8 @@ export interface Profile {
     img_margin_left?: string;
     img_margin_top?: string;
     img_json?: string;
-    banner_json?: string;    
+    banner_json?: string;
+    user_name: string;    
 }
 export interface PostProfile {
     firstname: string;

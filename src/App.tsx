@@ -16,12 +16,14 @@ import { AppState } from './types/AppState';
 import CommentScroller from './components/CommentScroller';
 import CommentForm from './components/CommentForm';
 import SearchForm from './components/SearchForm';
+import SearchFriendForm from './components/SearchFriendForm';
 import { CommentQuery, PostSearch } from './types/Comment';
 import useLoginService from './services/useLoginService';
 const App: React.FC<{}> = () => {
   const [profile, setProfile] = React.useState<Profile>();
   const [ profileFormVisible, showProfileForm ] = React.useState(false);
   const [ searchFormVisible, showSearchForm ] = React.useState(false);
+  const [ searchFriendFormVisible, showSearchFriendForm ] = React.useState(false);
   const [ commentFormVisible, showCommentForm ] = React.useState(false);
   const [ logoutDialogVisible, showLogoutDialog ] = React.useState(false);
   const [ appState, setAppState ] = React.useState<AppState>({
@@ -32,6 +34,7 @@ const App: React.FC<{}> = () => {
   const loadComments = (search?: PostSearch) => {
     showCommentForm(false);
     showSearchForm(false);
+    showSearchFriendForm(false);
     const commentQuery:CommentQuery={ start: 0, limit: 10 };
     if(search && search.searchTerm){
       commentQuery.searchTerm = search.searchTerm;
@@ -73,6 +76,7 @@ const App: React.FC<{}> = () => {
         {profile && (
         <div>
           <div style={{textAlign: 'right'}}>
+          <Button type="button" icon="pi pi-users" onClick={() => showSearchFriendForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-user-edit" onClick={() => showProfileForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-plus" onClick={() => showCommentForm(true)} style={{margin: '3px'}} />
@@ -86,6 +90,9 @@ const App: React.FC<{}> = () => {
             profile={profile} onSubmit={loadComments} />
           <Dialog key="Search" visible={searchFormVisible} onHide={() => showSearchForm(false)}>
             <SearchForm onSubmit={loadComments}/>
+          </Dialog>
+          <Dialog key="SearchFriend" visible={searchFriendFormVisible} onHide={() => showSearchFriendForm(false)}>
+            <SearchFriendForm profile={profile}/>
           </Dialog>
           <Dialog visible={logoutDialogVisible} 
             onHide={() => showLogoutDialog(false)} blockScroll footer={renderLogoutFooter()}>

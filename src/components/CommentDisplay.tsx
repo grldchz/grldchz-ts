@@ -142,7 +142,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     return (
       <div className="p-grid">
         <div className="p-col-4">
-        <ProfileImage comment={comment} /></div>
+        <ProfileImage profile={comment} /></div>
         <div className="p-col-8"><b>{comment.first_name} @ {comment.post_date_time}</b></div>
       </div>
     );

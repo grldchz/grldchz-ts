@@ -1,13 +1,15 @@
 import React from 'react';
-import { Comment } from '../types/Comment';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import ImageViewer, { MediaImage } from './ImageViewer';
+import { Profile } from '../types/Profile';
 
 export interface Props{
-    comment: Comment;
+    profile: Partial<Profile>;
 }
-const ProfileImage: React.FC<Props> = ({ comment }) => {
+const ProfileImage: React.FC<Props> = ({ profile }) => {
+    if(profile.user_name) profile.name=  profile.user_name;
+    if(profile.name) profile.user_name = profile.name;
     const rootEl = document.getElementById('root');
     const [ state, setState ] = React.useState({display: false});
     const [openImageViewer, setOpenImageViewer] = React.useState(false);
@@ -30,11 +32,11 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
         }
       };
       const renderImage = () => {
-        if(comment.img_file){
-            const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+comment.user_name+'/'+comment.img_file;
+        if(profile.img_file){
+            const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+profile.user_name+'/'+profile.img_file;
             return (
                 <div className="profileImageContainer">
-                    <img className="profile-img" src={img_file} alt={comment.img_file} onClick={openProfileDisplay}
+                    <img className="profile-img" src={img_file} alt={profile.img_file} onClick={openProfileDisplay}
                       onLoad={onImgLoad}/>
                 </div>
             );
@@ -46,11 +48,11 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
         }
     }
     const renderCardImage = () => {
-        if(comment.img_file){
-            const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+comment.user_name+'/'+comment.img_file;
+        if(profile.img_file){
+            const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+profile.user_name+'/'+profile.img_file;
             return (
                 <div className="profileImageContainer">
-                    <img className="profile-img" src={img_file} alt={comment.img_file} onClick={() => setOpenImageViewer(true)}
+                    <img className="profile-img" src={img_file} alt={profile.img_file} onClick={() => setOpenImageViewer(true)}
                       onLoad={onImgLoad}/>
                 </div>
             );
@@ -64,13 +66,13 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
         }
     }
     let media:MediaImage = {'full':'', 'title':''};
-    if(comment.img_file){
-        const href_file = comment.img_file.replace(/img_thumb_/, "img_full_");
+    if(profile.img_file){
+        const href_file = profile.img_file.replace(/img_thumb_/, "img_full_");
         const img_href = process.env.REACT_APP_GRLDSERVICE_URL + "getfile.php?media=media/"
-            + comment.user_name + "/" + href_file;
+            + profile.user_name + "/" + href_file;
         media = {
             full:img_href, 
-            title:comment.img_file.split("/")[1].replace(/img_thumb_/, "img_profile_")
+            title:profile.img_file.split("/")[1].replace(/img_thumb_/, "img_profile_")
         };	
     }
     return (
@@ -80,7 +82,7 @@ const ProfileImage: React.FC<Props> = ({ comment }) => {
             <div>
             <Dialog header="Profile" visible={state.display} style={{width: '90vw'}} 
                 onHide={() => setState({display: false})} blockScroll appendTo={rootEl} >
-                    {renderCardImage()} {comment.first_name} {comment.last_name} {comment.description}
+                    {renderCardImage()} {profile.first_name} {profile.last_name} {profile.description}
             </Dialog>
             <Dialog header="Photo" visible={openImageViewer} style={{width: '100vw'}} 
                 onHide={() => setOpenImageViewer(false)} blockScroll appendTo={rootEl} >
