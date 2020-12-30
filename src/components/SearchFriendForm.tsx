@@ -5,11 +5,6 @@ import { Profile } from '../types/Profile';
 import { FriendAppState } from '../types/AppState';
 import { FriendQuery, PostSearch } from '../types/Friend';
 import FriendScroller from '../components/FriendScroller';
-// TODO - create useFriendScroller to respond to state changes
-// TODO - create FriendListItem 
-// TODO - create FriendItem model to pass into FriendListItem
-// TODO - create onScroll or onMore method
-// TODO - create timeout loop submit mechanism or just keep the send button
 export interface Props{
     profile: Profile;
   }

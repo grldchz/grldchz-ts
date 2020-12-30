@@ -4,7 +4,7 @@ import ProfileImage from './ProfileImage';
 import MediaScroller from './MediaScroller';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import {FileUpload} from 'primereact/fileupload';
+import { FileUpload } from 'primereact/fileupload';
 import CommentForm from './CommentForm';
 import { Profile } from '../types/Profile';
 import useCommentService from '../services/useCommentService';
@@ -17,6 +17,21 @@ export interface Props{
     profile: Profile;
     loadComments(): void;
   }
+  interface UploadResponse{
+    status: "success" | "error",
+    msg?: string
+  }
+interface UploadFile{
+    name: string;
+    size: number;
+    type: string;
+    objectURL: string;
+    response?: UploadResponse;
+}
+interface Upload{
+    files: UploadFile[];
+    errors:boolean;
+}
 const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => {
   const rootEl = document.getElementById('root');
   const { getUnescapedText } = AppUtils();
@@ -28,6 +43,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const [ shareFormVisible, showShareForm ] = React.useState(false);
   const [ progressBarVisible, showProgressBar ] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [uploadFormVisible, showUploadForm] = React.useState(false);
   const menuItems = [
     {label: 'Reply', icon: 'pi pi-fw pi-plus',command:() => showReplyForm(true)}
   ];
@@ -60,7 +76,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   };
   const renderMainImage = (comment: Comment) => {
     let slide = null;
-    if(comment.image != null && comment.image != "" && !comment.image.endsWith(".mp4.jpeg")){
+    if(comment.image !== null && comment.image !== "" && !comment.image.endsWith(".mp4.jpeg")){
       slide = comment.image.replace("profile", "slide");
     }
     const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?hitcounter=false&media=media/'
@@ -81,7 +97,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
               )}
           </div>
       )}
-      {comment.num_photos == 0 && comment.num_videos > 0 && (
+      {comment.num_photos === 0 && comment.num_videos > 0 && (
         <div className="mainImageContainer">
             <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
             {comment.num_photos > 0 && (
@@ -147,6 +163,73 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       </div>
     );
   }
+  const [ upload, setUpload ] = React.useState<Upload>({files:[], errors:false});
+  const [ uploadProgressBarVisible, showUploadProgressBar ] = React.useState(false);
+  const [ uploadProgress, setUploadProgress ] = React.useState(0);
+  const uploadButtonRef = useRef<FileUpload>(null);
+  const uploadHandler = async(event: any) => {
+    console.log("uploadHandler", event);
+    showUploadProgressBar(true);
+    const x = event.files.length;
+    const space = 100/x;
+    let increment = 1;
+    const uploadProgressIncrements = [];
+    for(let i=0; i<x; i++){
+      increment += space;
+      uploadProgressIncrements.push(increment);
+    }
+    uploadProgressIncrements.push(100);
+    const files = event.files;
+    for(let i = 0; i < files.length; i++){
+      const response =  await doUpload(files[i], Math.round(uploadProgressIncrements[i]));
+      upload.files[i].response = response;
+      if(response.status === 'error') upload.errors = true;
+    };
+    showUploadProgressBar(false);
+    upload.files = upload.files.filter(file => (file.response && file.response.status === 'error'));
+    if(!upload.errors){
+      showUploadForm(false);
+    }
+    loadComments();
+    if(uploadButtonRef.current)uploadButtonRef.current.clear();
+  };
+  const doUpload = async(file: any, uploadProgressIncrement: number) => {
+      let formData = new FormData();
+      formData.append('upl[]', file);  
+      const response = await fetch(process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id,
+        {
+            method: 'POST',
+            body: formData,
+            credentials: "include"
+        }
+      );
+      const responseJson = await response.json();
+      setUploadProgress(uploadProgressIncrement);
+      return responseJson;
+
+    }
+    const onSelect = (event: any) => {
+      console.log("onSelect", event);
+      event.originalEvent.preventDefault();
+      showUploadForm(true);
+      const files = event.files;
+      const uploadFiles: UploadFile[] = [];
+      for(let i = 0; i < files.length; i++){
+        uploadFiles.push(files[i]);
+      }
+      setUpload({files: uploadFiles,errors:false});
+    };
+    const formatUploadResponse = (file: UploadFile) => {
+      if(!file.response){
+        return <div></div>;
+      }
+      else{
+        return <div style={{paddingLeft:'10px'}}>
+          <div style={{color:upload.errors?'red':'inherit'}}>{file.response.status}</div>
+          {file.response.msg && <div style={{color:upload.errors?'red':'inherit'}}>{file.response.msg}</div>}
+        </div>;
+      }
+    }
   const renderComment = (comment: Comment) => {
     return (
     <div>
@@ -157,11 +240,10 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       {renderMainImage(comment)}
         {!comment.shared && !comment.parent_id && comment.user_name === profile.name && (
           <div style={{padding:'3px',float:'right'}}>
-          <FileUpload name="upl[]" url={process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id} 
-            multiple={true} withCredentials={true} mode="basic" auto={true} chooseLabel="Upload"
-            accept="image/*,video/mp4" 
-            onUpload={() => {loadComments();showProgressBar(false);}} 
-            onSelect={() => showProgressBar(true)} />
+            <FileUpload key={'UPLOAD'+comment.id} ref={uploadButtonRef}
+                multiple={true} mode="basic" chooseLabel="Upload"
+                accept="image/*,video/mp4" customUpload={true} uploadHandler={uploadHandler}
+                onSelect={onSelect} auto={true} />
           </div>
           )}
         {!comment.shared && (  
@@ -184,6 +266,32 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
           onHide={() => setMediaScroller(false)} blockScroll >
             <MediaScroller profile={profile} comment={comment} />
         </Dialog>
+        <Dialog key={'UPLOAD_DETAILS'+comment.id} visible={uploadFormVisible} appendTo={rootEl} 
+          onHide={() => showUploadForm(false)} blockScroll >
+        {uploadProgressBarVisible && (
+          <ProgressBar value={uploadProgress} />
+        )}
+        {upload.files.map((file: UploadFile) => {
+          return <div className="commentDisplay" key={'UPLOAD_FILE'+file.name}>
+            <div className="p-grid">
+              <div className="p-col-4">
+                <img src={file.objectURL} alt={file.objectURL} style={{width: '100px'}} />
+              </div>
+              <div className="p-col-8">
+                <div style={{overflow:'hidden',textOverflow:'ellipsis'}}>{file.name}</div>
+                <div>{file.size}</div>
+                <div>{file.type}</div>
+              </div>
+              <div className="p-grid">
+              <div className="p-col-12">
+                <div>{formatUploadResponse(file)}</div>
+              </div>
+              </div>
+            </div>
+          </div>;
+        })}
+        </Dialog>
+
       </div>
       )}
       <CommentForm key={'REPLY'+comment.id} visible={replyFormVisible} onHide={() => showReplyForm(false)}
