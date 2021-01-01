@@ -13,24 +13,24 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { Menu } from 'primereact/menu';
 import AppUtils from '../AppUtils';
 export interface Props{
-    comment: Comment;
-    profile: Profile;
-    loadComments(): void;
-  }
-  interface UploadResponse{
-    status: "success" | "error",
-    msg?: string
-  }
+  comment: Comment;
+  profile: Profile;
+  loadComments(): void;
+}
+interface UploadResponse{
+  status: "success" | "error",
+  msg?: string
+}
 interface UploadFile{
-    name: string;
-    size: number;
-    type: string;
-    objectURL: string;
-    response?: UploadResponse;
+  name: string;
+  size: number;
+  type: string;
+  objectURL: string;
+  response?: UploadResponse;
 }
 interface Upload{
-    files: UploadFile[];
-    errors:boolean;
+  files: UploadFile[];
+  errors:boolean;
 }
 const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => {
   const rootEl = document.getElementById('root');
@@ -76,53 +76,53 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   };
   const renderMainImage = (comment: Comment) => {
     let slide = null;
-    if(comment.image !== null && comment.image !== "" && !comment.image.endsWith(".mp4.jpeg")){
+    if(comment.image != null && comment.image != "" && !comment.image.endsWith(".mp4.jpeg")){
       slide = comment.image.replace("profile", "slide");
     }
     const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?hitcounter=false&media=media/'
       + comment.user_name+ "/" 
       + slide;
     return (
-        <div className="centerDiv">
+      <div className="centerDiv">
       {comment.num_photos > 0 && slide != null && !comment.image.endsWith(".mp4.jpeg") && (
-          <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
-                <div className="progressSpinner" style={{display: loading ? "block" : "none"}}>
-                  <ProgressSpinner/>
-                </div>
-              <img style={{display: loading ? "none" : "block"}} alt={slide} 
-                src={src} onLoad={onImgLoad} className="mainImage"/>
-              <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
-              {comment.num_videos > 0 && (
-              <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
-              )}
+        <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
+          <div className="progressSpinner" style={{display: loading ? "block" : "none"}}>
+            <ProgressSpinner/>
           </div>
-      )}
-      {comment.num_photos === 0 && comment.num_videos > 0 && (
-        <div className="mainImageContainer">
-            <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
-            {comment.num_photos > 0 && (
-            <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
-            )}
-            {comment.num_videos > 0 && (
+          <img style={{display: loading ? "none" : "block"}} alt={slide} 
+            src={src} onLoad={onImgLoad} className="mainImage"/>
+          <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
+          {comment.num_videos > 0 && (
             <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
-            )}
-            </div>
+          )}
+        </div>
+      )}
+      {comment.num_photos == 0 && comment.num_videos > 0 && (
+        <div className="mainImageContainer">
+          <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
+          {comment.num_photos > 0 && (
+            <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
+          )}
+          {comment.num_videos > 0 && (
+            <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
+          )}
+          </div>
         </div>
       )}
       {comment.num_photos > 0 && slide == null && (
         <div className="mainImageContainer">
-            <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
-            {comment.num_photos > 0 && (
+          <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
+          {comment.num_photos > 0 && (
             <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
-            )}
-            {comment.num_videos > 0 && (
+          )}
+          {comment.num_videos > 0 && (
             <div className="videoCount">{"Videos:"+(comment.num_videos>0?comment.num_videos:"")}</div>
-            )}
-            </div>
+          )}
+          </div>
         </div>
       )}
       </div>
-      );
+    );
   };
   const onDelete = () => {
     showDeleteForm(false);
@@ -140,10 +140,10 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   };
   const renderDeleteFooter = () => {
       return (
-          <div>
-              <Button label="Yes" icon="pi pi-check" onClick={() => onDelete()} />
-              <Button label="No" icon="pi pi-times" onClick={() => showDeleteForm(false)} className="p-button-secondary"/>
-          </div>
+        <div>
+          <Button label="Yes" icon="pi pi-check" onClick={() => onDelete()} />
+          <Button label="No" icon="pi pi-times" onClick={() => showDeleteForm(false)} className="p-button-secondary"/>
+        </div>
       );
   };
   const getShareUrl = () => {
@@ -168,7 +168,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const [ uploadProgress, setUploadProgress ] = React.useState(0);
   const uploadButtonRef = useRef<FileUpload>(null);
   const uploadHandler = async(event: any) => {
-    console.log("uploadHandler", event);
+    setUploadProgress(0);
     showUploadProgressBar(true);
     const x = event.files.length;
     const space = 100/x;
@@ -181,7 +181,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     uploadProgressIncrements.push(100);
     const files = event.files;
     for(let i = 0; i < files.length; i++){
-      const response =  await doUpload(files[i], Math.round(uploadProgressIncrements[i]));
+      const response = await doUpload(files[i], Math.round(uploadProgressIncrements[i]));
       upload.files[i].response = response;
       if(response.status === 'error') upload.errors = true;
     };
@@ -193,23 +193,88 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     loadComments();
     if(uploadButtonRef.current)uploadButtonRef.current.clear();
   };
+
+  const getExtension = (filename: string) => {
+    var parts = filename.split('.');
+    return parts[parts.length - 1];
+  };
+
+  const isImage = (filename: string) => {
+    var ext = getExtension(filename);
+    switch (ext.toLowerCase()) {
+      case 'jpg':
+      case 'gif':
+      case 'bmp':
+      case 'png':
+      case 'jpe':
+      case 'jpeg':
+      case 'ico':
+      case 'tiff':
+      case 'tif':
+      case 'svg':
+      case 'svgz':
+      return true;
+    }
+    return false;
+  };
+
+  // const isVideo = (filename: string) => {
+  //   var ext = getExtension(filename);
+  //   switch (ext.toLowerCase()) {
+  //     case 'm4v':
+  //     case 'avi':
+  //     case 'mpg':
+  //     case 'mp4':
+  //     case 'mov':
+  //     case 'qt':
+  //     case 'flv':
+  //     case 'wmv':
+  //     case 'webm':
+  //     case 'ogv':
+  //     case 'rm':
+  //     return true;
+  //   }
+  //   return false;
+  // };
+
+  const isMp4 = (filename: string) => {
+    var ext = getExtension(filename);
+    if(ext.toLowerCase() === 'mp4') {
+      return true;
+    }
+    return false;
+  };  
+  const validateFile = (file: any) => {
+    if(process.env.REACT_APP_GRLDSERVICE_UPLOAD_MAX_SIZE 
+      && file.size < process.env.REACT_APP_GRLDSERVICE_UPLOAD_MAX_SIZE
+      && (isImage(file.name) || isMp4(file.name))){
+      return true;
+    }
+    return false;
+  };
   const doUpload = async(file: any, uploadProgressIncrement: number) => {
+    const isValid = validateFile(file);
+    if(isValid){
       let formData = new FormData();
-      formData.append('upl[]', file);  
+      formData.append('upl[]', file);
+      showProgressBar(true);  
       const response = await fetch(process.env.REACT_APP_GRLDSERVICE_URL+'upload.php?id=' + comment.id,
         {
-            method: 'POST',
-            body: formData,
-            credentials: "include"
+          method: 'POST', 
+          body: formData,
+          credentials: "include"
         }
       );
+      showProgressBar(false);
       const responseJson = await response.json();
       setUploadProgress(uploadProgressIncrement);
       return responseJson;
-
     }
-    const onSelect = (event: any) => {
-      console.log("onSelect", event);
+    else{
+      return {status: "error", msg: process.env.REACT_APP_GRLDSERVICE_UPLOAD_ERROR}
+    }
+  }
+  const onSelect = (event: any) => {
       event.originalEvent.preventDefault();
       showUploadForm(true);
       const files = event.files;
@@ -241,9 +306,9 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         {!comment.shared && !comment.parent_id && comment.user_name === profile.name && (
           <div style={{padding:'3px',float:'right'}}>
             <FileUpload key={'UPLOAD'+comment.id} ref={uploadButtonRef}
-                multiple={true} mode="basic" chooseLabel="Upload"
-                accept="image/*,video/mp4" customUpload={true} uploadHandler={uploadHandler}
-                onSelect={onSelect} auto={true} />
+              multiple={true} mode="basic" chooseLabel="Upload"
+              accept="image/*,video/mp4" customUpload={true} uploadHandler={uploadHandler}
+              onSelect={onSelect} auto={true} />
           </div>
           )}
         {!comment.shared && (  

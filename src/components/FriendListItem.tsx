@@ -13,12 +13,12 @@ const ListItem: React.FC<Props> = ({ friend, loadFriends }) => {
   const rootEl = document.getElementById('root');
   let accepted = false, hidden = true;
   if(friend.outgoing_request != null){
-    accepted = friend.outgoing_request[0]===0?true:false;
-    hidden = friend.outgoing_request[1]===0?false:true;
+    accepted = friend.outgoing_request[0]==0?true:false;
+    hidden = friend.outgoing_request[1]==0?false:true;
   }
   else if(friend.incoming_request != null){
-    accepted = friend.incoming_request[0]===0?true:false;
-    hidden = friend.incoming_request[1]===0?false:true;
+    accepted = friend.incoming_request[0]==0?true:false;
+    hidden = friend.incoming_request[1]==0?false:true;
   }
   const [ requestFormVisible, showRequestForm ] = React.useState(false);
   const [ removeFormVisible, showRemoveForm ] = React.useState(false);
