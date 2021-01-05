@@ -4,13 +4,11 @@ import { Button } from 'primereact/button';
 import { PostSearch } from '../types/Comment';
 export interface Props{
   onSubmit(args?: any): void;
+  prevSearch: PostSearch;
 }
-const SearchForm: React.FC<Props> = ({ onSubmit }) => {
-  const initState: PostSearch = {
-    searchTerm: '', fromDate: '', toDate: ''
-  };
+const SearchForm: React.FC<Props> = ({ onSubmit, prevSearch }) => {
 
-  const [postSearch, setPostSearch] = React.useState<PostSearch>(initState);
+  const [postSearch, setPostSearch] = React.useState<PostSearch>(prevSearch);
   const handleChange = (event: any) => {
     event.persist();
     setPostSearch((prevSearch: any) => ({
@@ -18,7 +16,11 @@ const SearchForm: React.FC<Props> = ({ onSubmit }) => {
       [event.target.name]: event.target.value
     }));
   };
-
+  const handleClearBtnClick = () => {
+    setPostSearch({
+      searchTerm: '', fromDate: '', toDate: ''
+    });
+  };
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSubmit(postSearch);
@@ -58,7 +60,8 @@ const SearchForm: React.FC<Props> = ({ onSubmit }) => {
             </div>
             </div>
           <div>
-          <Button type="submit" label="Send"/>
+          <Button type="submit" label="Send" style={{margin: '3px'}}/>
+          <Button type="button" label="Clear" onClick={() => handleClearBtnClick()} style={{margin: '3px'}}/>
         </div>
       </form>
     </div>

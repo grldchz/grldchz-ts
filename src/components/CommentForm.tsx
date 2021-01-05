@@ -1,8 +1,8 @@
 import React from 'react';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { Editor } from "@tinymce/tinymce-react";
 import { Profile } from '../types/Profile';
 import { Comment, PostComment } from '../types/Comment';
 import useCommentService from '../services/useCommentService';
@@ -35,11 +35,10 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
   }
   const [postComment, setPostComment] = React.useState<PostComment>(initState);
   const { service, submitComment } = useCommentService();
-  const handleChange = (event: any) => {
-    event.persist();
+  const handleChange = (content: any, editor: any) => {
     setPostComment((prevComment: any) => ({
       ...prevComment,
-      [event.target.name]: event.target.value
+      comment: content
     }));
   };
   const getDateTime = () => {
@@ -97,7 +96,7 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
   };
   return (<div>
     {rootEl && (
-    <Dialog visible={visible} appendTo={rootEl} 
+    <Dialog visible={visible} appendTo={rootEl} style={{width: '100vw'}}
       onHide={onHide} blockScroll footer={<Button onClick={() => send()} label="Send"/>} >
       <div className="p-grid p-fluid">
         <div className="p-col-12">
@@ -106,10 +105,13 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
       </div>
       <div className="p-grid p-fluid">
         <div className="p-col-12">
-          <InputTextarea rows={5} cols={30} 
-            name="comment"
-            value={postComment.comment} onChange={handleChange}/>
         </div>
+        <Editor init={{menubar:false, width:'100%'}}
+          apiKey={process.env.REACT_APP_TINYMCE_API_KEY} 
+          toolbar="emoticons link image | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat"
+          plugins={['emoticons advlist autolink lists link']}
+          value={postComment.comment} onEditorChange={handleChange}
+        />
       </div>
   
       {service.status === 'loading' && (

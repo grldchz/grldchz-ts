@@ -31,19 +31,25 @@ const App: React.FC<{}> = () => {
     comments: [], commentsTotal: 0, loading: false
   });
   const profileService = useProfileService(setProfile);
+  const [prevSearch, setPrevSearch ] = React.useState<PostSearch>({
+    searchTerm: '', fromDate: '', toDate: ''
+  });
   const loadComments = (search?: PostSearch) => {
     showCommentForm(false);
     showSearchForm(false);
     showSearchFriendForm(false);
     const commentQuery:CommentQuery={ start: 0, limit: 10 };
-    if(search && search.searchTerm){
-      commentQuery.searchTerm = search.searchTerm;
-    }
-    if(search && search.fromDate){
-      commentQuery.fromDate = search.fromDate;
-    }
-    if(search && search.toDate){
-      commentQuery.toDate = search.toDate;
+    if(search){
+      setPrevSearch(search);
+      if(search.searchTerm){
+        commentQuery.searchTerm = search.searchTerm;
+      }
+      if(search.fromDate){
+        commentQuery.fromDate = search.fromDate;
+      }
+      if(search.toDate){
+        commentQuery.toDate = search.toDate;
+      }
     }
     setAppState({
       commentQuery: commentQuery,
@@ -89,7 +95,7 @@ const App: React.FC<{}> = () => {
           <CommentForm key="NEW" visible={commentFormVisible} onHide={() => showCommentForm(false)}
             profile={profile} onSubmit={loadComments} />
           <Dialog key="Search" visible={searchFormVisible} onHide={() => showSearchForm(false)}>
-            <SearchForm onSubmit={loadComments}/>
+            <SearchForm onSubmit={loadComments} prevSearch={prevSearch}/>
           </Dialog>
           <Dialog key="SearchFriend" visible={searchFriendFormVisible} onHide={() => showSearchFriendForm(false)}>
             <SearchFriendForm profile={profile}/>
