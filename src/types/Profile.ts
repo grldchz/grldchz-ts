@@ -29,3 +29,10 @@ export interface PostProfile {
     email: string;
     userdesc?: string;
 }
+
+export interface PostChangePassword {
+    changepass: string;
+    oldpassword: string;
+    newpassword: string;
+    newpassword2: string;
+}

@@ -40,7 +40,7 @@ const Login: React.FC<Props> = ({ setProfile }) => {
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     submitLogin(login).then((response: any) => {
-      if(response != null && response.terms_accepted === 1){
+      if(response != null && response.terms_accepted == 1){
         service.status = 'terms';
       }
       else if(response.status){
