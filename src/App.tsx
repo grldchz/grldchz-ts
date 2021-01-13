@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import 'primereact/resources/primereact.min.css';
-import 'primereact/resources/themes/nova-light/theme.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import { Button } from 'primereact/button';
@@ -76,8 +75,22 @@ const App: React.FC<{}> = () => {
       window.location.reload();
     });
   };
+  const LightTheme = React.lazy(() => import('./LightTheme'));
+  const DarkTheme = React.lazy(() => import('./DarkTheme'));
+  const ThemeSelector = () => {
+    const nowHour = new Date().getHours();
+    const DARK = nowHour > 17 || nowHour < 6;
+    return (
+      <>
+        <React.Suspense fallback={<></>}>
+          {(!DARK) && <LightTheme />}
+          {(DARK) && <DarkTheme />}
+        </React.Suspense>
+      </>
+    )
+  }
   return (
-    <div>
+    <div><ThemeSelector/>
       <div className="menu-bar">
         {profile && (
         <div>

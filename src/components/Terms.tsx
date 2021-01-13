@@ -17,7 +17,7 @@ const Terms: React.FC<Props> = ({ setProfile }) => {
   };
 
   return (
-    <div style={{backgroundColor:'white'}}><h1>Terms and Conditions</h1>
+    <div><h1>Terms and Conditions</h1>
 <h2><blockquote>By registering for, accessing, and using Grilled Cheese of the Day you agree to the following terms:</blockquote></h2>
 <h3>
 <ul>
