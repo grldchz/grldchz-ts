@@ -45,7 +45,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const [loading, setLoading] = React.useState(true);
   const [uploadFormVisible, showUploadForm] = React.useState(false);
   const menuItems = [
-    {label: 'Reply', icon: 'pi pi-fw pi-plus',command:() => showReplyForm(true)}
+    {label: 'Reply', icon: 'pi pi-fw pi-reply',command:() => showReplyForm(true)}
   ];
   if(comment.user_name === profile.name){
     menuItems.push(
@@ -311,11 +311,20 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
               onSelect={onSelect} auto={true} />
           </div>
           )}
-        {!comment.shared && (  
-          <div style={{float:'right',paddingLeft:'3px'}}>
-          <Menu model={menuItems} popup ref={menuItemsRef} appendTo={rootEl} />
-          <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
-          </div>
+        {!comment.shared && ( 
+          <> 
+          {comment.user_name === profile.name && (
+            <div style={{float:'right',paddingLeft:'3px'}}>
+              <Menu model={menuItems} popup ref={menuItemsRef} appendTo={rootEl} />
+              <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
+            </div>
+          )}
+          {comment.user_name != profile.name && (
+            <div style={{float:'right',paddingLeft:'3px'}}>
+              <Button icon="pi pi-reply" onClick={() => showReplyForm(true)} style={{margin: '3px'}} />
+            </div>
+          )}
+          </>
         )}
       {cardTitle()}
       <div style={{padding:'3px'}} dangerouslySetInnerHTML={{__html: getUnescapedText(comment.comment)}}></div>

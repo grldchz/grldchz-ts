@@ -15,9 +15,9 @@
 .imageCount{left:1px}
 .imageCount,.videoCount{background-color:#fff;opacity:.8;border:0 solid #000;color:#000;font-size:xx-small;line-height:11px;padding:2px;position:absolute;cursor:pointer}
 .videoCount{right:1px}
-.commentDisplay{margin:10px;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}
-.replyDisplay{filter: brightness(90%);list-style:none;margin-bottom:20px}
+.commentDisplay{padding-bottom: 10px;margin-bottom:20px;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}
+.replyList{list-style:none;margin:5px 5px 20px 5px;padding-left: 0}
 @media screen and (min-width:600px){
-	.commentDisplay{width:400px}
+	.commentDisplay{margin:10px;width:400px}
 	.p-datascroller-list{display:inline-flex;flex-wrap: wrap;justify-content:center}
 }

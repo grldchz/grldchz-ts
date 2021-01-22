@@ -94,10 +94,13 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
       onSubmit();
     });
   };
+  const nowHour = new Date().getHours();
+  const DARK = nowHour > 17 || nowHour < 6;
+
   return (<div>
     {rootEl && (
     <Dialog visible={visible} appendTo={rootEl} style={{width: '100vw'}}
-      onHide={onHide} blockScroll footer={<Button onClick={() => send()} label="Send"/>} >
+      onHide={onHide} blockScroll footer={<Button icon="pi pi-check" onClick={() => send()} label="Send"/>} >
       <div className="p-grid p-fluid">
         <div className="p-col-12">
           {children}
@@ -106,7 +109,7 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
       <div className="p-grid p-fluid">
         <div className="p-col-12">
         </div>
-        <Editor init={{menubar:false, width:'100%'}}
+        <Editor init={{menubar:false, width:'100%', skin: DARK?"oxide-dark":"", content_css: DARK?"dark":""}}
           apiKey={process.env.REACT_APP_TINYMCE_API_KEY} 
           toolbar="emoticons link image | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat"
           plugins={['emoticons advlist autolink lists link']}

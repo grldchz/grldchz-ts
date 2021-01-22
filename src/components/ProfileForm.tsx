@@ -116,8 +116,8 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
                 value={postProfile.userdesc} onChange={handleChange} />
             </div>
           </div>
-          <Button type="submit" label="Send" style={{margin: '3px'}}/>
-          <Button type="button" label="Change Password" onClick={() => showChangePasswordForm(true)} style={{margin: '3px'}} />
+          <Button icon="pi pi-check" type="submit" label="Send" style={{margin: '3px'}}/>
+          <Button icon="pi pi-lock" type="button" label="Change Password" onClick={() => showChangePasswordForm(true)} style={{margin: '3px'}} />
       </form>
       {rootEl && (
         <Dialog key={'CHANGEPASSWORD'+profile.id} visible={changePasswordFormVisible} appendTo={rootEl} 
@@ -148,7 +148,7 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
             </div>
             </div>
           <div>
-          <Button type="submit" label="Send" style={{margin: '3px'}}/>
+          <Button icon="pi pi-check" type="submit" label="Send" style={{margin: '3px'}}/>
         </div>
       </form>
         </Dialog>

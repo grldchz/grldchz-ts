@@ -67,7 +67,7 @@ const FriendScroller: React.FC<Props> = ({ appState, setAppState, loadFriends })
               <DataScroller value={service.payload} className="centerDiv"
                   itemTemplate={itemTemplate} rows={10}
                   lazy={true} onLazyLoad={onScroll} loader={moreButtonRef.current}/>
-              <Button ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
+              <Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
             </div>
         }
         {service.status === 'loaded' && service.payload && service.payload.length === 0 &&

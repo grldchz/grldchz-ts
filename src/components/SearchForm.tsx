@@ -60,8 +60,8 @@ const SearchForm: React.FC<Props> = ({ onSubmit, prevSearch }) => {
             </div>
             </div>
           <div>
-          <Button type="submit" label="Send" style={{margin: '3px'}}/>
-          <Button type="button" label="Clear" onClick={() => handleClearBtnClick()} style={{margin: '3px'}}/>
+          <Button icon="pi pi-check" type="submit" label="Send" style={{margin: '3px'}}/>
+          <Button icon="pi pi-times" type="button" label="Clear" onClick={() => handleClearBtnClick()} style={{margin: '3px'}}/>
         </div>
       </form>
     </div>

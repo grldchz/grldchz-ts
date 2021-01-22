@@ -62,7 +62,7 @@ const SearchForm: React.FC<Props> = ({profile}) => {
                 </div>
                 </div>
             <div>
-            <Button type="submit" label="Send"/>
+            <Button icon="pi pi-check" type="submit" label="Send"/>
             </div>
         </form>
         <FriendScroller appState={appState} setAppState={setAppState} loadFriends={loadFriends}/>
