@@ -47,7 +47,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const menuItems = [
     {label: 'Reply', icon: 'pi pi-fw pi-reply',command:() => showReplyForm(true)}
   ];
-  if(comment.user_name === profile.name){
+  if(comment.user_name == profile.name){
     menuItems.push(
       {label: 'Edit', icon: 'pi pi-fw pi-pencil',command:() => showEditForm(true)},
       {label: 'Delete', icon: 'pi pi-fw pi-trash',command:() => showDeleteForm(true)}
@@ -60,13 +60,13 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   }
   const onImgLoad = (evnt?: any) => {
     if(evnt.target.width < evnt.target.height){
-      const topPortrait = -(((evnt.target.width/evnt.target.height)*50)/2);
+      const topPortrait = -(((evnt.target.width/evnt.target.height)*20)/2);
       evnt.target.style['top'] = topPortrait + "%";
       evnt.target.style['width'] = '50%';
       evnt.target.style['left'] = '25%';
     }
     else if(evnt.target.width > evnt.target.height){
-      const topLandscape = -(((evnt.target.height/evnt.target.width)*100)/2);
+      const topLandscape = -(((evnt.target.height/evnt.target.width)*70)/2);
       evnt.target.style['top'] = topLandscape + "%";
     }
     else{
@@ -79,7 +79,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     if(comment.image != null && comment.image != "" && !comment.image.endsWith(".mp4.jpeg")){
       slide = comment.image.replace("profile", "slide");
     }
-    const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?hitcounter=false&media=media/'
+    const src = process.env.REACT_APP_GRLDSERVICE_URL+'getfile.php?media=media/'
       + comment.user_name+ "/" 
       + slide;
     return (
@@ -183,10 +183,10 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     for(let i = 0; i < files.length; i++){
       const response = await doUpload(files[i], Math.round(uploadProgressIncrements[i]));
       upload.files[i].response = response;
-      if(response.status === 'error') upload.errors = true;
+      if(response.status == 'error') upload.errors = true;
     };
     showUploadProgressBar(false);
-    upload.files = upload.files.filter(file => (file.response && file.response.status === 'error'));
+    upload.files = upload.files.filter(file => (file.response && file.response.status == 'error'));
     if(!upload.errors){
       showUploadForm(false);
     }
@@ -239,7 +239,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
 
   const isMp4 = (filename: string) => {
     var ext = getExtension(filename);
-    if(ext.toLowerCase() === 'mp4') {
+    if(ext.toLowerCase() == 'mp4') {
       return true;
     }
     return false;
@@ -303,7 +303,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         <ProgressBar mode="indeterminate" /></div>
       )}
       {renderMainImage(comment)}
-        {!comment.shared && !comment.parent_id && comment.user_name === profile.name && (
+        {!comment.shared && !comment.parent_id && comment.user_name == profile.name && (
           <div style={{padding:'3px',float:'right'}}>
             <FileUpload key={'UPLOAD'+comment.id} ref={uploadButtonRef}
               multiple={true} mode="basic" chooseLabel="Upload"
@@ -311,9 +311,9 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
               onSelect={onSelect} auto={true} />
           </div>
           )}
-        {!comment.shared && ( 
+        {!comment.shared && profile.name != "guest" && ( 
           <> 
-          {comment.user_name === profile.name && (
+          {comment.user_name == profile.name && (
             <div style={{float:'right',paddingLeft:'3px'}}>
               <Menu model={menuItems} popup ref={menuItemsRef} appendTo={rootEl} />
               <Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>
@@ -325,6 +325,11 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
             </div>
           )}
           </>
+        )}
+        {!comment.parent_id && comment.user_name != profile.name &&  (
+            <div style={{float:'right',paddingLeft:'3px'}}>
+              <Button icon="pi pi-share-alt" onClick={() => showShareForm(true)} style={{margin: '3px'}} />
+            </div>
         )}
       {cardTitle()}
       <div style={{padding:'3px'}} dangerouslySetInnerHTML={{__html: getUnescapedText(comment.comment)}}></div>

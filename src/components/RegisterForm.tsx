@@ -74,13 +74,13 @@ const RegisterFormComponent: React.FC<{}> = () => {
         </div>
       </form>
 
-      {service.status === 'loading' && (
+      {service.status == 'loading' && (
         <ProgressSpinner />
       )}
-      {service.status === 'loaded' && (
+      {service.status == 'loaded' && (
         <div>{service.payload}</div>
       )}
-      {service.status === 'error' && (
+      {service.status == 'error' && (
         <div>{service.error.message}</div>
       )}
     </div>

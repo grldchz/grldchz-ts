@@ -83,6 +83,9 @@ const Login: React.FC<Props> = ({ setProfile }) => {
           <Button type="submit" label="Send" icon="pi pi-check" style={{margin: '3px'}} />
           <Button type="button" label="Register" icon="pi pi-user-plus" onClick={() => showRegisterForm(true)} style={{margin: '3px'}} />
           <Button type="button" label="Forgot" icon="pi pi-question" onClick={() => showForgotForm(true)} style={{margin: '3px'}} />
+          {process.env.REACT_APP_PUBLIC_ENABLED == "true" && (
+          <Button type="button" label="Continue as Guest" icon="pi pi-sign-in" onClick={() => window.location.reload()} style={{margin: '3px'}} />
+          )}
         </div>
       </form>
       <Dialog key="Register" visible={registerFormVisible} onHide={() => showRegisterForm(false)}>
@@ -92,15 +95,15 @@ const Login: React.FC<Props> = ({ setProfile }) => {
         <ForgotForm />
       </Dialog>
 
-      {service.status === 'loading' && (
+      {service.status == 'loading' && (
         <ProgressSpinner />
       )}
-      {service.status === 'error' && (
+      {service.status == 'error' && (
         <div>
          {service.error.message}
         </div>
       )}
-      {service.status === 'loaded' && (
+      {service.status == 'loaded' && (
         <Terms setProfile={(profile: Profile) => setProfile(profile)} />
       )}
     </div>

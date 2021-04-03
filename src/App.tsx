@@ -70,16 +70,20 @@ const App: React.FC<{}> = () => {
   const { service, logout } = useLoginService();
   const onLogout = () => {
     logout().then((response) => {
-      console.log(response);
       showLogoutDialog(false);
-      window.location.reload();
+      profileService.status = 'error';
+      setProfile(undefined);
+      setAppState({
+        commentQuery: { start: 0, limit: 10 },
+        comments: [], commentsTotal: 0, loading: true
+      });
     });
   };
   const LightTheme = React.lazy(() => import('./LightTheme'));
   const DarkTheme = React.lazy(() => import('./DarkTheme'));
   const ThemeSelector = () => {
     const nowHour = new Date().getHours();
-    const DARK = nowHour > 17 || nowHour < 6;
+    const DARK = nowHour > 18 || nowHour < 6;
     return (
       <>
         <React.Suspense fallback={<></>}>
@@ -92,15 +96,27 @@ const App: React.FC<{}> = () => {
   return (
     <div><ThemeSelector/>
       <div className="menu-bar">
-        {profile && (
-        <div>
-          <div style={{textAlign: 'right'}}>
-          <Button type="button" icon="pi pi-users" onClick={() => showSearchFriendForm(true)} style={{margin: '3px'}} />
+        {profile && profile.name != "guest" && (
+          <div style={{display: 'inline'}}>
             <Button type="button" icon="pi pi-search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-users" onClick={() => showSearchFriendForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-user-edit" onClick={() => showProfileForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-plus" onClick={() => showCommentForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-sign-out" onClick={() => showLogoutDialog(true)} style={{margin: '3px'}} />
           </div>
+        )}
+        {profile && profile.name == "guest" && (
+          <div style={{display: 'inline'}}>
+            <Button type="button" icon="pi pi-search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-sign-in" onClick={() => onLogout()} label="Login" style={{margin: '3px'}} />
+          </div>
+        )}
+      </div>
+      {profile &&
+        <div>
+          <Dialog key="SearchFriend" visible={searchFriendFormVisible} onHide={() => showSearchFriendForm(false)}>
+            <SearchFriendForm profile={profile}/>
+          </Dialog>
           <Dialog visible={profileFormVisible} 
             onHide={() => showProfileForm(false)} blockScroll >
             <ProfileForm profile={profile} onSubmit={handleProfileFormSubmit} />
@@ -110,27 +126,21 @@ const App: React.FC<{}> = () => {
           <Dialog key="Search" visible={searchFormVisible} onHide={() => showSearchForm(false)}>
             <SearchForm onSubmit={loadComments} prevSearch={prevSearch}/>
           </Dialog>
-          <Dialog key="SearchFriend" visible={searchFriendFormVisible} onHide={() => showSearchFriendForm(false)}>
-            <SearchFriendForm profile={profile}/>
-          </Dialog>
           <Dialog visible={logoutDialogVisible} 
             onHide={() => showLogoutDialog(false)} blockScroll footer={renderLogoutFooter()}>
               Are you sure you want to logout?
           </Dialog>
-          </div>
-        )}
-      </div>
-      {profile &&
-        <CommentScroller appState={appState} setAppState={setAppState} profile={profile} loadComments={loadComments}/>
+          <CommentScroller appState={appState} setAppState={setAppState} profile={profile} loadComments={loadComments}/>
+        </div>
       }
-      {(service.status === 'loading' || profileService.status === 'loading') && (
+      {(service.status == 'loading' || profileService.status == 'loading') && (
         <div className="progressBarContainer">
         <ProgressBar mode="indeterminate" /></div>
       )}
-      {profileService.status === 'error' && !profile && (
+      {profileService.status == 'error' && !profile && (
         <Login setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
       )}
-      {profileService.status === 'terms' && !profile && (
+      {profileService.status == 'terms' && !profile && (
         <Terms setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
       )}
     </div>

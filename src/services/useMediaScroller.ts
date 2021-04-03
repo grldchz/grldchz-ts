@@ -12,7 +12,7 @@ const useMediaScroller = (scrollerState: MediaScrollerState) => {
     name = name.replace(/[[]/, "[").replace(/[\]]/, "]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
       results = regex.exec(window.location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
   };
   
   useEffect(() => {
@@ -66,16 +66,14 @@ const useMediaScroller = (scrollerState: MediaScrollerState) => {
     })
       .then(response => response.json())
       .then(response => {
-        if(response.status === 'FAIL'){
+        if(response.status == 'FAIL'){
           const error = new Error(response.msg);
           setResult({ status: 'error', error });
         }
         else{
-          //console.log("useMediaScroller response", response);
           scrollerState.results = scrollerState.results.concat(response.results);
             scrollerState.total = response.total;
             scrollerState.loading = false;
-            //console.log("useMediaScroller results", scrollerState.results);
             setResult({ status: 'loaded', payload: scrollerState.results });
         }
       })

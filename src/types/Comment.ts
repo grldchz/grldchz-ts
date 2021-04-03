@@ -15,6 +15,7 @@ export interface Comment {
   shared?: number;
   user_date_time: Date;
   user_name: string;
+  open_public: number;
 }
 export interface CommentQuery {
   content_id?: string | null,
@@ -31,6 +32,7 @@ export interface PostComment {
   parentId?: number;
   shareId?: number;
   dateTime?: string;
+  openPublic?: boolean;
 }
 
 export interface PostSearch {

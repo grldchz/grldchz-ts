@@ -2,6 +2,7 @@ import React from 'react';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import {InputSwitch} from 'primereact/inputswitch';
 import { Editor } from "@tinymce/tinymce-react";
 import { Profile } from '../types/Profile';
 import { Comment, PostComment } from '../types/Comment';
@@ -20,7 +21,8 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
   const rootEl = document.getElementById('root');
   const { getUnescapedText } = AppUtils();
   const initState: PostComment = {
-    comment: ''
+    comment: '',
+    openPublic: false
   };
   if(parentId){
     initState.parentId = parentId;
@@ -32,6 +34,7 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
     initState.editId = editComment.id;
     initState.parentId = editComment.parent_id;
     initState.comment = getUnescapedText(editComment.comment);
+    initState.openPublic = editComment.open_public==1?true:false;
   }
   const [postComment, setPostComment] = React.useState<PostComment>(initState);
   const { service, submitComment } = useCommentService();
@@ -96,16 +99,41 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
   };
   const nowHour = new Date().getHours();
   const DARK = nowHour > 17 || nowHour < 6;
-
+  const handlePublicChange = (e: any) => {
+    setPostComment((prevComment: any) => ({
+      ...prevComment,
+      openPublic: e.value
+    }));
+  }
+  const footer = (
+    <>
+    {profile.name != "guest" && (
+    <div>
+        {process.env.REACT_APP_PUBLIC_ENABLED == "true" && (
+        <>
+        <div style={{float:'left',display:'flex',alignItems:'center'}}>
+          <InputSwitch checked={postComment.openPublic} onChange={handlePublicChange} /> 
+          </div>
+          <div style={{float:'left',display:'flex',alignItems:'center',paddingLeft:'5px'}}>
+          {postComment.openPublic?"Public":"Friends Only"}
+        </div>
+        </>
+        )}
+        <Button icon="pi pi-check" onClick={() => send()} label="Send"/>
+    </div>
+    )}
+    </>
+  );
   return (<div>
     {rootEl && (
     <Dialog visible={visible} appendTo={rootEl} style={{width: '100vw'}}
-      onHide={onHide} blockScroll footer={<Button icon="pi pi-check" onClick={() => send()} label="Send"/>} >
+      onHide={onHide} blockScroll footer={footer} >
       <div className="p-grid p-fluid">
         <div className="p-col-12">
           {children}
         </div>
       </div>
+      {profile.name != "guest" && (
       <div className="p-grid p-fluid">
         <div className="p-col-12">
         </div>
@@ -116,14 +144,14 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
           value={postComment.comment} onEditorChange={handleChange}
         />
       </div>
-  
-      {service.status === 'loading' && (
+      )}
+      {service.status == 'loading' && (
         <ProgressSpinner />
       )}
-      {service.status === 'loaded' && (
+      {service.status == 'loaded' && (
         <div>Response: {service.payload}</div>
       )}
-      {service.status === 'error' && (
+      {service.status == 'error' && (
         <div>
           {service.error.message}
         </div>

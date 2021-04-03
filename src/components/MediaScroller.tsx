@@ -47,13 +47,13 @@ const MediaScroller: React.FC<Props> = ({ profile, comment }) => {
   return (
     <>
       <div>
-        {(scrollerState.loading || service.status === 'loading') && (
+        {(scrollerState.loading || service.status == 'loading') && (
             <ProgressSpinner />
         )}
-        {service.status === 'error' && (
+        {service.status == 'error' && (
           <div>{service.error.message}</div>
         )}
-        {service.status === 'loaded' && scrollerState.results.length>0 &&
+        {service.status == 'loaded' && scrollerState.results.length>0 &&
           <div>
             <DataScroller value={service.payload} itemTemplate={itemTemplate} rows={5}
               lazy={true} onLazyLoad={onScroll}/>

@@ -153,13 +153,13 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
       </form>
         </Dialog>
       )}
-      {service.status === 'loading' && (
+      {service.status == 'loading' && (
           <ProgressSpinner />
       )}
-      {service.status === 'loaded' && (
+      {service.status == 'loaded' && (
         <div>Response: {service.payload}</div>
       )}
-      {service.status === 'error' && (
+      {service.status == 'error' && (
         <div>
           {service.error.message}
         </div>

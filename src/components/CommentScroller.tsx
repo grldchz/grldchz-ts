@@ -25,7 +25,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
   };
   const onScroll = (evnt?: any) => {
     let start = appState.commentQuery.start;
-    if(appState.commentQuery.limit > appState.commentsTotal){
+    if(appState.commentQuery.limit >= appState.commentsTotal){
       start = 0;
       setAppState({
         commentQuery: {
@@ -62,14 +62,14 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
   return (
     <>
       <div>
-        {(appState.loading || service.status === 'loading') && (
+        {(appState.loading || service.status == 'loading') && (
           <div className="progressBarContainer">
             <ProgressBar mode="indeterminate" /></div>
         )}
-        {service.status === 'error' && (
+        {service.status == 'error' && (
           <div>Error: {service.error.message}</div>
         )}
-        {service.status === 'loaded' && service.payload && service.payload.length > 0 &&
+        {service.status == 'loaded' && service.payload && service.payload.length > 0 &&
             <div>
               <DataScroller value={service.payload} className="centerDiv"
                   itemTemplate={itemTemplate} rows={10}
@@ -77,7 +77,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
               <Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
             </div>
         }
-        {service.status === 'loaded' && service.payload && service.payload.length === 0 &&
+        {service.status == 'loaded' && service.payload && service.payload.length == 0 &&
             <div>
               No results found.
             </div>

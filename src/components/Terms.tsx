@@ -123,13 +123,13 @@ Grilled Cheese of the Day.
 <h4><blockquote>If you have any questions about this Agreement, please feel free to contact us at admin@grilledcheeseoftheday.com</blockquote></h4>
       <Button type="button" label="Accept" icon="pi pi-check" onClick={handleOnClick} />
 
-      {service.status === 'loading' && (
+      {service.status == 'loading' && (
         <ProgressSpinner />
       )}
-      {service.status === 'loaded' && (
+      {service.status == 'loaded' && (
         <div>Accepted</div>
       )}
-      {service.status === 'error' && (
+      {service.status == 'error' && (
         <div>
          {service.error.message}
         </div>

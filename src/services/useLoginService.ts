@@ -28,7 +28,7 @@ const useLoginService = () => {
           return response.json();
         })
         .then(response => {
-          if(response.status === 'FAIL'){
+          if(response.status == 'FAIL'){
             const error = new Error(response.msg);
             setService({ status: 'error', error });
           }
@@ -59,7 +59,7 @@ const useLoginService = () => {
           return response.json();
         })
         .then(response => {
-          if(response.status === 'FAIL'){
+          if(response.status == 'FAIL'){
             const error = new Error(response.msg);
             setService({ status: 'error', error });
           }

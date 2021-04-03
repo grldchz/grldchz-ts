@@ -65,7 +65,6 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
             profile_img:media.file, 
             content_id:media.content_id
         };
-        console.log("setAsProfile", e);
         if(e.originalEvent.currentTarget.innerHTML.indexOf("Unset") > -1){
             postData["unset"] = true;
         }
@@ -95,7 +94,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         );
     };
     const getCaption = () => {
-        if(media.title !== media.file){
+        if(media.title != media.file){
             return getUnescapedText(media.title);
         }
         else{
@@ -160,7 +159,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
 				<div>views: {media.num_hits}</div>
             </div>
         )}
-        {profile.name === media.user_name && (
+        {profile.name == media.user_name && (
         <div>
         <Button type="button" icon="pi pi-fw pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
         <Button type="button" icon="pi pi-fw pi-pencil" onClick={() => showCaptionForm(true)} style={{margin: '3px'}} />

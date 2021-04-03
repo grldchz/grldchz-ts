@@ -1,4 +1,5 @@
-body{background-color:#f0f0f0;color: #191919;}
+body{background-color:#fcfcfc;color: #191919;}
 .replyDisplay{margin: 5px 5px 20px 5px;padding: 3px !important;background-color: #fcfcfc !important;color: #191919 !important;border:0px solid #666 !important;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}
 .shareDisplay{margin: 5px 5px 20px 5px;padding: 3px !important;background-color: #cddce2 !important;color: #191919 !important;border:0px solid #666 !important;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}
 .commentDisplay{background-color:#f0f0f0 !important;}
+body .p-datascroller .p-datascroller-content{border:0;}

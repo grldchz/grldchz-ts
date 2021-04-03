@@ -52,12 +52,11 @@ const useMediaService = () => {
       })
         .then(response => response.json())
         .then(response => {
-          if(response.status === 'FAIL'){
+          if(response.status == 'FAIL'){
             const error = new Error(response.msg);
             setResult({ status: 'error', error });
           }
           else{
-            console.log("useMediaScroller results", response.results);
             setResult({ status: 'loaded', payload: response.results });
           }
           resolve(response);
@@ -85,7 +84,7 @@ const useMediaService = () => {
           return response.json();
         })
         .then(response => {
-          if(response.status === 'FAIL'){
+          if(response.status == 'FAIL'){
             const error = new Error(response.msg);
             setResult({ status: 'error', error });
           }
@@ -117,7 +116,7 @@ const useMediaService = () => {
           return response.json();
         })
         .then(response => {
-          if(response.status === 'FAIL'){
+          if(response.status == 'FAIL'){
             const error = new Error(response.msg);
             setResult({ status: 'error', error });
           }
@@ -147,7 +146,7 @@ const useMediaService = () => {
           return response.json();
         })
         .then(response => {
-          if(response.status === 'FAIL'){
+          if(response.status == 'FAIL'){
             const error = new Error(response.msg);
             setResult({ status: 'error', error });
           }

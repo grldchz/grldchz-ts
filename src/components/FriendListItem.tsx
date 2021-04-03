@@ -163,13 +163,13 @@ const ListItem: React.FC<Props> = ({ friend, loadFriends }) => {
           onHide={() => showUnHideForm(false)} blockScroll footer={renderUnHideFooter()}>
             Are you sure you want to un-hide this user?  You will now see their posts.
         </Dialog>
-        {service.status === 'loading' && (
+        {service.status == 'loading' && (
           <ProgressSpinner />
         )}
-        {service.status === 'loaded' && (
+        {service.status == 'loaded' && (
           <div>{service.payload}</div>
         )}
-        {service.status === 'error' && (
+        {service.status == 'error' && (
           <div>{service.error.message}</div>
         )}
       </div>
