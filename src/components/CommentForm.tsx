@@ -93,8 +93,10 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
 
   const send = () => {
     postComment.dateTime = getDateTime();
-    submitComment(postComment).then(() => {
-      onSubmit();
+    submitComment(postComment).then((response: any) => {
+      if(!response.status){
+        onSubmit();
+      }
     });
   };
   const nowHour = new Date().getHours();
@@ -149,10 +151,10 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
         <ProgressSpinner />
       )}
       {service.status == 'loaded' && (
-        <div>Response: {service.payload}</div>
+        <div style={{color:'green'}}>{service.payload}</div>
       )}
       {service.status == 'error' && (
-        <div>
+        <div style={{color:'red'}}>
           {service.error.message}
         </div>
       )}
