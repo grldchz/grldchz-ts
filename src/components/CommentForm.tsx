@@ -141,8 +141,8 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
         </div>
         <Editor init={{menubar:false, width:'100%', skin: DARK?"oxide-dark":"", content_css: DARK?"dark":""}}
           apiKey={process.env.REACT_APP_TINYMCE_API_KEY} 
-          toolbar="emoticons link image | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat"
-          plugins={['emoticons advlist autolink lists link']}
+          toolbar="emoticons link image | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat codesample"
+          plugins={['emoticons advlist autolink lists link codesample']}
           value={postComment.comment} onEditorChange={handleChange}
         />
       </div>
