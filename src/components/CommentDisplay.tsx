@@ -295,6 +295,10 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         </div>;
       }
     }
+    const setCodeBoxStyle = (content: string) => {
+      content = content.replace("<pre","<pre style=\"overflow:auto\"");
+      return content;
+    };
   const renderComment = (comment: Comment) => {
     return (
     <div>
@@ -332,7 +336,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
             </div>
         )}
       {cardTitle()}
-      <div style={{padding:'3px'}} dangerouslySetInnerHTML={{__html: getUnescapedText(comment.comment)}}></div>
+      <div style={{padding:'3px'}} dangerouslySetInnerHTML={{__html: setCodeBoxStyle(getUnescapedText(comment.comment))}}></div>
       <CommentForm key={'EDIT'+comment.id} visible={editFormVisible} onHide={() => showEditForm(false)}
         editComment={comment} profile={profile} onSubmit={onSubmit} />
       {rootEl && (

@@ -2,7 +2,7 @@
   "name": "grldchz",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://localhost/grldchz-ts",
+  "homepage": "http://localhost/grldchz-ts/build",
   "dependencies": {
     "@tinymce/tinymce-react": "^3.8.4",
     "@types/dom-inputevent": "^1.0.6",
