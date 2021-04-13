@@ -296,7 +296,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       }
     }
     const setCodeBoxStyle = (content: string) => {
-      content = content.replace("<pre","<pre style=\"overflow:auto\"");
+      content = content.replace("<pre","<pre class=\"pre-display\"");
       return content;
     };
   const renderComment = (comment: Comment) => {
