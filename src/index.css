@@ -20,7 +20,25 @@
 .menu-bar{text-align: right;}
 .pre-display{overflow-x:auto;max-width:300px;}
 @media screen and (min-width:600px){
-	.commentDisplay{margin:10px;width:400px}
+	.commentDisplay{margin:10px;width:300px}
 	.p-datascroller-list{display:inline-flex;flex-wrap: wrap;justify-content:center}
-	.pre-display{max-width:400px;}
+	.pre-display{max-width:300px;}
+}
+@media screen and (min-width:800px){
+	.extraWide{width:600px;min-height:350px}
+	.extraHeight{height:250px}
+	.extraHeight>div{top:235px}
+	.pre-display{max-width:600px;}
+}
+@media screen and (min-width:1000px){
+	.extraWide{width:800px;min-height:400px}
+	.extraHeight{height:300px}
+	.extraHeight>div{top:285px}
+	.pre-display{max-width:800px;}
+}
+@media screen and (min-width:1200px){
+	.extraWide{width:1000px;min-height:500px}
+	.extraHeight{height:350px}
+	.extraHeight>div{top:335px}
+	.pre-display{max-width:1000px;}
 }

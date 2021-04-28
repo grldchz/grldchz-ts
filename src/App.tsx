@@ -7,6 +7,7 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import Login from './components/Login';
 import Terms from './components/Terms';
+import Cookies from './components/Cookies';
 import ProfileForm from './components/ProfileForm';
 import useProfileService from './services/useProfileService';
 import {ProgressBar} from 'primereact/progressbar';
@@ -96,7 +97,13 @@ const App: React.FC<{}> = () => {
   return (
     <div><ThemeSelector/>
       <div className="menu-bar">
-        {profile && profile.name != "guest" && (
+        {profile && profile.name && profile.name == "guest" && (
+          <div style={{display: 'inline'}}>
+            <Button type="button" icon="pi pi-search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-sign-in" onClick={() => onLogout()} label="Login" style={{margin: '3px'}} />
+          </div>
+        )}
+        {profile && profile.name && profile.name != "guest" && (
           <div style={{display: 'inline'}}>
             <Button type="button" icon="pi pi-search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
             <Button type="button" icon="pi pi-users" onClick={() => showSearchFriendForm(true)} style={{margin: '3px'}} />
@@ -105,14 +112,8 @@ const App: React.FC<{}> = () => {
             <Button type="button" icon="pi pi-sign-out" onClick={() => showLogoutDialog(true)} style={{margin: '3px'}} />
           </div>
         )}
-        {profile && profile.name == "guest" && (
-          <div style={{display: 'inline'}}>
-            <Button type="button" icon="pi pi-search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-sign-in" onClick={() => onLogout()} label="Login" style={{margin: '3px'}} />
-          </div>
-        )}
       </div>
-      {profile &&
+      {profile && profile.name &&
         <div>
           <Dialog key="SearchFriend" visible={searchFriendFormVisible} onHide={() => showSearchFriendForm(false)}>
             <SearchFriendForm profile={profile}/>
@@ -142,6 +143,9 @@ const App: React.FC<{}> = () => {
       )}
       {profileService.status == 'terms' && !profile && (
         <Terms setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
+      )}
+      {profileService.status == 'cookies' && !profile && (
+        <Cookies setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
       )}
     </div>
   );

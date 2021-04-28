@@ -18,10 +18,17 @@ const AppUtils: any = () => {
     const capitalizeFirstLetter = function(str: string) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     };
-    // public interface
+    const getParameterByName = (name: string) => {
+        name = name.replace(/[[]/, "[").replace(/[\]]/, "]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+          results = regex.exec(window.location.search);
+        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      };
+        // public interface
     return {
         getUnescapedText,
-        capitalizeFirstLetter
+        capitalizeFirstLetter,
+        getParameterByName
     };
 }
 export default AppUtils;

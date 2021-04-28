@@ -34,7 +34,7 @@ interface Upload{
 }
 const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => {
   const rootEl = document.getElementById('root');
-  const { getUnescapedText } = AppUtils();
+  const { getUnescapedText, getParameterByName } = AppUtils();
   const { deleteComment } = useCommentService();
   const [ mediaScroller, setMediaScroller ] = React.useState(false);
   const [ editFormVisible, showEditForm ] = React.useState(false);
@@ -74,6 +74,11 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     }
     setLoading(false);
   };
+  let mainImageContainerClasses = "mainImageContainer";
+  if(getParameterByName("content_id")){
+    mainImageContainerClasses += " extraHeight";
+  }
+
   const renderMainImage = (comment: Comment) => {
     let slide = null;
     if(comment.image != null && comment.image != "" && !comment.image.endsWith(".mp4.jpeg")){
@@ -85,7 +90,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     return (
       <div className="centerDiv">
       {comment.num_photos > 0 && slide != null && !comment.image.endsWith(".mp4.jpeg") && (
-        <div className="mainImageContainer" onClick={() => setMediaScroller(true)}>
+        <div className={mainImageContainerClasses} onClick={() => setMediaScroller(true)}>
           <div className="progressSpinner" style={{display: loading ? "block" : "none"}}>
             <ProgressSpinner/>
           </div>
@@ -98,7 +103,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         </div>
       )}
       {comment.num_photos == 0 && comment.num_videos > 0 && (
-        <div className="mainImageContainer">
+        <div className={mainImageContainerClasses}>
           <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
           {comment.num_photos > 0 && (
             <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
@@ -110,7 +115,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         </div>
       )}
       {comment.num_photos > 0 && slide == null && (
-        <div className="mainImageContainer">
+        <div className={mainImageContainerClasses}>
           <div className="mainNoImage"><Button alt="Main Photo not set" icon="pi pi-images" onClick={() => setMediaScroller(true)}></Button>
           {comment.num_photos > 0 && (
             <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>

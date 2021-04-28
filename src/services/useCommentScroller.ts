@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Service } from '../types/Service';
 import { Comment, CommentQuery } from '../types/Comment';
 import { AppState } from '../types/AppState';
+import AppUtils from '../AppUtils';
 
 /**
  * Fetch and add the response to the return
@@ -12,12 +13,7 @@ const useCommentScroller = (appState: AppState) => {
   const [result, setResult] = useState<Service<Comment[]>>({
     status: 'loading'
   });
-  const getParameterByName = (name: string) => {
-    name = name.replace(/[[]/, "[").replace(/[\]]/, "]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-      results = regex.exec(window.location.search);
-    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-  };
+  const { getParameterByName } = AppUtils();
   
   useEffect(() => {
     const query: CommentQuery = appState.commentQuery;

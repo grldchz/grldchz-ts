@@ -12,7 +12,7 @@ const Terms: React.FC<Props> = ({ setProfile }) => {
 
   const handleOnClick = () => {
     acceptTerms().then((response) => {
-      setProfile(response);
+      window.location.reload();
     });
   };
 
@@ -111,12 +111,17 @@ Grilled Cheese of the Day.
 </li>
 </ul>
 </h3>
+<h1>Cookie Policy</h1>
+<h2><blockquote>By using Grilled Cheese of the Day you agree to the following cookie policy:</blockquote></h2>
+<h3><blockquote>
+You agree Grilled Cheese of the Day can store cookies on your device.  These cookies are strictly necessary for Grilled Cheese of the Day to function properly.
+</blockquote></h3>
 <h1>Privacy Notice</h1>
 <h2><blockquote>By registering for, accessing, and using Grilled Cheese of the Day you agree that you have read the following notice:</blockquote></h2>
 <h3><blockquote>Grilled Cheese of the Day collects your first name, last name, email directly from you when you voluntarily provide it to us.  Additionally, Grilled Cheese of the Day collects information such as your IP address, the date you register, and whether or not you've accepted these terms.  Grilled Cheese of the Day does not share any information about you to anyone, ever.  Your account information and all content (posts containing text, photos, and videos) is completely private unless you accept somebody's friend request or somebody else accepts yours thereby allowing them to see your posts and you their's.  There are no third party applications, no advertisements, no news feeds, and definitely no algorithms to predict your activity on Grilled Cheese of the Day.</blockquote></h3>
 <h1>Disclaimer</h1>
 <h2><blockquote>By registering for, accessing, and using Grilled Cheese of the Day you agree that you have read the following disclaimer:</blockquote></h2>
-<h3><blockquote>Grilled Cheese of the Day and its components are offered for informational purposes only; Grilled Cheese of the Day shall not be responsible or liable for the accuracy, usefulness or availability of any information transmitted or made available via the site, and shall not be responsible or liable for any error or omissions in that information.</blockquote></h3>
+<h3><blockquote>Grilled Cheese of the Day and its components are offered for informational purposes only; Grilled Cheese of the Day shall not be responsible or liable for the accuracy, usefulness or availability of any information transmitted or made available via Grilled Cheese of the Day, and shall not be responsible or liable for any error or omissions in that information.</blockquote></h3>
 <h1>Intellectual Property</h1>
 <h2><blockquote>By registering for, accessing, and using Grilled Cheese of the Day you agree that you have read the following statement:</blockquote></h2>
 <h3><blockquote>Grilled Cheese of the Day and its original content, features, and functionality are owned by REDACTED FOR PRIVACY and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</blockquote></h3>
