@@ -20,7 +20,7 @@ const Cookies: React.FC<Props> = ({ setProfile }) => {
     <div><h1>Cookie Policy</h1>
 <h2><blockquote>By using Grilled Cheese of the Day you agree to the following cookie policy:</blockquote></h2>
 <h3><blockquote>
-You agree Grilled Cheese of the Day can store cookies on your device.  One of these cookies' sole purpose is to remember that you agreed to the following disclaimer and intellectual property statement.  The other cookie is strictly necessary for Grilled Cheese of the Day to function properly.
+You agree Grilled Cheese of the Day can store a cookie on your device.  This cookie's purpose is to remember that you agreed to the following disclaimer and intellectual property statement and is strictly necessary for Grilled Cheese of the Day to function properly.
 </blockquote></h3>
 <h1>Disclaimer</h1>
 <h2><blockquote>By using Grilled Cheese of the Day you agree that you have read the following disclaimer:</blockquote></h2>
