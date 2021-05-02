@@ -131,6 +131,9 @@ const App: React.FC<{}> = () => {
             onHide={() => showLogoutDialog(false)} blockScroll footer={renderLogoutFooter()}>
               Are you sure you want to logout?
           </Dialog>
+          {profile.cookie_policy && (
+            <Cookies setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
+          )}
           <CommentScroller appState={appState} setAppState={setAppState} profile={profile} loadComments={loadComments}/>
         </div>
       }
@@ -143,9 +146,6 @@ const App: React.FC<{}> = () => {
       )}
       {profileService.status == 'terms' && !profile && (
         <Terms setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
-      )}
-      {profileService.status == 'cookies' && !profile && (
-        <Cookies setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
       )}
     </div>
   );

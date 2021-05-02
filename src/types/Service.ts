@@ -21,15 +21,9 @@ interface ServiceTerms {
   error: Error;
 }
 
-interface ServiceCookies {
-  status: 'cookies';
-  error: Error;
-}
-
 export type Service<T> =
   | ServiceInit
   | ServiceLoading
   | ServiceLoaded<T>
   | ServiceError
-  | ServiceTerms
-  | ServiceCookies;
+  | ServiceTerms;

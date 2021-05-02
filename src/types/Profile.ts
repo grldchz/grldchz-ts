@@ -21,7 +21,8 @@ export interface Profile {
     img_margin_top?: string;
     img_json?: string;
     banner_json?: string;
-    user_name: string;    
+    user_name: string;
+    cookie_policy: boolean;    
 }
 export interface PostProfile {
     firstname: string;

@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 import { Service } from '../types/Service';
 import { Profile } from '../types/Profile';
 
 const useProfileService = (setProfile: any) => {
-  const [service, setService] = useState<Service<Profile>>({
+  const [service, setService] = React.useState<Service<Profile>>({
     status: 'loading'
   }); 
-  useEffect(() => {
+  React.useEffect(() => {
     fetch(process.env.REACT_APP_GRLDSERVICE_URL+'service.php?get=profile', {
       method: "GET", // POST, PUT, DELETE, etc.
       headers: {
@@ -26,9 +26,7 @@ const useProfileService = (setProfile: any) => {
       keepalive: false, // true
       signal: undefined // AbortController to abort request
     })
-      .then(response => {
-        return response.json();
-      })
+      .then(response => response.json())
       .then(response => {
         if (response.status == 'FAIL') {
           const error = new Error(response.msg);
@@ -37,10 +35,6 @@ const useProfileService = (setProfile: any) => {
         else if (response.status == 'TERMS') {
           const error = new Error(response.msg);
           setService({ status: 'terms', error });
-        }
-        else if (response.status == 'COOKIES') {
-          const error = new Error(response.msg);
-          setService({ status: 'cookies', error });
         }
         else {
           setProfile(response);
