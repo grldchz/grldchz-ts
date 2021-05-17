@@ -26,7 +26,7 @@ const ListItem: React.FC<Props> = ({ friend, loadFriends }) => {
   const [ rejectFormVisible, showRejectForm ] = React.useState(false);
   const [ hideFormVisible, showHideForm ] = React.useState(false);
   const [ unHideFormVisible, showUnHideForm ] = React.useState(false);
-  const { service, submitFriendRequest } = useFriendService();
+  const { friendService, submitFriendRequest } = useFriendService();
   const onFriendRequest = () => {
     showRequestForm(false);
     submitFriendRequest({requestUser:friend.id}).then((response) => {
@@ -163,14 +163,14 @@ const ListItem: React.FC<Props> = ({ friend, loadFriends }) => {
           onHide={() => showUnHideForm(false)} blockScroll footer={renderUnHideFooter()}>
             Are you sure you want to un-hide this user?  You will now see their posts.
         </Dialog>
-        {service.status == 'loading' && (
+        {friendService.status == 'loading' && (
           <ProgressSpinner />
         )}
-        {service.status == 'loaded' && (
-          <div>{service.payload}</div>
+        {friendService.status == 'loaded' && (
+          <div>{friendService.payload}</div>
         )}
-        {service.status == 'error' && (
-          <div>{service.error.message}</div>
+        {friendService.status == 'error' && (
+          <div>{friendService.error.message}</div>
         )}
       </div>
       )}

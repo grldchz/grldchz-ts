@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Service } from '../types/Service';
 
 const useFriendService = () => {
-  const [service, setService] = useState<Service<any>>({
+  const [friendService, setService] = useState<Service<any>>({
     status: 'init'
   }); 
   const submitFriendRequest = (data: any) => {
@@ -39,7 +39,7 @@ const useFriendService = () => {
     });
   };
 
-  return {service, submitFriendRequest};
+  return {friendService, submitFriendRequest};
 
 };
 

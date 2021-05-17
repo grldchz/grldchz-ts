@@ -28,6 +28,10 @@ const useCommentService = () => {
             const error = new Error(response.msg);
             setService({ status: 'error', error });
           }
+          else if(response.status == 'PERMS'){
+            const error = new Error(response.msg);
+            setService({ status: 'perms', error });
+          }
           else{
             setService({ status: 'loaded', payload: response });
           }

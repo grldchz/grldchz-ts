@@ -7,6 +7,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Profile } from '../types/Profile';
 import { Comment, PostComment } from '../types/Comment';
 import useCommentService from '../services/useCommentService';
+import useFriendService from '../services/useFriendService';
 import AppUtils from '../AppUtils';
 export interface Props{
   visible: boolean;
@@ -38,6 +39,12 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
   }
   const [postComment, setPostComment] = React.useState<PostComment>(initState);
   const { service, submitComment } = useCommentService();
+  const { friendService, submitFriendRequest } = useFriendService();
+  const onFriendRequest = () => {
+    submitFriendRequest({requestUser:2}).then((response) => {
+      //
+    });
+  };
   const handleChange = (content: any, editor: any) => {
     setPostComment((prevComment: any) => ({
       ...prevComment,
@@ -100,7 +107,7 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
     });
   };
   const nowHour = new Date().getHours();
-  const DARK = nowHour > 17 || nowHour < 6;
+  const DARK = nowHour > 18 || nowHour < 6;
   const handlePublicChange = (e: any) => {
     setPostComment((prevComment: any) => ({
       ...prevComment,
@@ -152,6 +159,22 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
       )}
       {service.status == 'loaded' && (
         <div style={{color:'green'}}>{service.payload}</div>
+      )}
+      {service.status == 'perms' && (
+        <div>
+        <div style={{color:'red'}}>
+          {service.error.message}
+        </div><Button label="Request Public Access" onClick={() => onFriendRequest()} />
+        {friendService.status == 'loading' && (
+          <ProgressSpinner />
+        )}
+        {friendService.status == 'loaded' && (
+          <div style={{color:'green'}}>{friendService.payload}</div>
+        )}
+        {friendService.status == 'error' && (
+          <div style={{color:'red'}}>{friendService.error.message}</div>
+        )}
+        </div>
       )}
       {service.status == 'error' && (
         <div style={{color:'red'}}>

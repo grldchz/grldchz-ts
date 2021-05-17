@@ -21,9 +21,15 @@ interface ServiceTerms {
   error: Error;
 }
 
+interface ServicePerms {
+  status: 'perms';
+  error: Error;
+}
+
 export type Service<T> =
   | ServiceInit
   | ServiceLoading
   | ServiceLoaded<T>
   | ServiceError
-  | ServiceTerms;
+  | ServiceTerms
+  | ServicePerms;
