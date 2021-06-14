@@ -19,7 +19,10 @@ import SearchForm from './components/SearchForm';
 import SearchFriendForm from './components/SearchFriendForm';
 import { CommentQuery, PostSearch } from './types/Comment';
 import useLoginService from './services/useLoginService';
+import MediaScroller from './components/MediaScroller';
+import AppUtils from './AppUtils';
 const App: React.FC<{}> = () => {
+  const { getParameterByName } = AppUtils();
   const [profile, setProfile] = React.useState<Profile>();
   const [ profileFormVisible, showProfileForm ] = React.useState(false);
   const [ searchFormVisible, showSearchForm ] = React.useState(false);
@@ -134,7 +137,14 @@ const App: React.FC<{}> = () => {
           {profile.cookie_policy && (
             <Cookies setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
           )}
+          {getParameterByName("media_id") && (
+          <div style={{position:"fixed",overflow:"hidden"}}>
+          <MediaScroller profile={profile} content_id={getParameterByName("content_id")} media_id={getParameterByName("media_id")} />
+          </div>
+          )}
+          {getParameterByName("media_id") == "" && (
           <CommentScroller appState={appState} setAppState={setAppState} profile={profile} loadComments={loadComments}/>
+          )}
         </div>
       }
       {(service.status == 'loading' || profileService.status == 'loading') && (

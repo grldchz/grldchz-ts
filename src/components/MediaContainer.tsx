@@ -10,13 +10,15 @@ import { ProgressBar } from 'primereact/progressbar';
 import AppUtils from '../AppUtils';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Menu } from 'primereact/menu';
+import CopyToClipboardDialog from './CopyToClipboardDialog';
 export interface Props{
     media: Media;
     profile: Profile;
     loadMedia(): void;
 }
 const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
-    const rootEl = document.getElementById('root');    const { getUnescapedText } = AppUtils();
+    const rootEl = document.getElementById('root');    
+    const { getUnescapedText } = AppUtils();
     const { deleteMedia, submitCaption, setImage } = useMediaService();
     const [loading, setLoading] = React.useState(true);
     const [openImageViewer, setOpenImageViewer] = React.useState(false);
@@ -25,6 +27,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
     const [ captionFormVisible, showCaptionForm ] = React.useState(false); 
     const gcotd = process.env.REACT_APP_GRLDSERVICE_URL;
     const [ mediaVisible, showMedia ] = React.useState(true); 
+    const [ shareFormVisible, showShareForm ] = React.useState(false);
     if(media.is_image){
         const full = gcotd+"getfile.php?media=media/"
             + media.user_name+ "/" 
@@ -73,6 +76,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         });
     };
     const menuItems = [
+        {label: 'Share', command:() => showShareForm(true)},
         {label: 'Download Original', url:media.original, target:"_blank"},
         {label: 'Set As Main Image', command:() => setAsMain()},
         {label: 'Set As Profile Image', command:setAsProfile},
@@ -113,7 +117,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
           [event.target.name]: event.target.value
         }));
       };
-      const sendCaption = () => {
+    const sendCaption = () => {
         showProgressBar(true);
         submitCaption(postCaption).then(() => {
             media.title = postCaption.caption;
@@ -121,6 +125,15 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
             showCaptionForm(false);
         });
       };
+
+ 
+    const getShareUrl = () => {
+        var url = window.location.href;
+        if(url.indexOf("?")>-1){
+          url = url.substring(0, url.indexOf("?")-1);
+        }
+      return url+"?content_id="+media.content_id+"&media_id="+media.id;
+    };
       const menuItemsRef = useRef<Menu>(new Menu({}));
       return (
           <div>
@@ -141,7 +154,6 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                         onClick={() => setOpenImageViewer(true)}/>
                 </div>
                 <div>{getCaption()}</div>
-				<div>views: {media.num_hits}</div>
                 <Dialog key={'IMAGE'+media.id} visible={openImageViewer} style={{width: '100vw'}} 
                 onHide={() => setOpenImageViewer(false)} blockScroll >
                     <ImageViewer media={media} />
@@ -156,14 +168,14 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                     </video>
                 </div>					
                 <div>{getCaption()}</div>
-				<div>views: {media.num_hits}</div>
             </div>
         )}
         {profile.name == media.user_name && (
-        <div>
+        <div style={{float:'right',paddingLeft:'3px'}}>
         <Button type="button" icon="pi pi-fw pi-trash" onClick={() => showDeleteForm(true)} style={{margin: '3px'}} />
         <Button type="button" icon="pi pi-fw pi-pencil" onClick={() => showCaptionForm(true)} style={{margin: '3px'}} />
         <Menu model={menuItems} popup ref={menuItemsRef} appendTo={rootEl} />
+        {!media.is_image && (<Button icon="pi pi-share-alt" onClick={() => showShareForm(true)} style={{margin: '3px'}} />)}
         {media.is_image && (<Button icon="pi pi-bars" onClick={(event) => menuItemsRef.current.toggle(event)} style={{margin: '3px'}}/>)}
         <Dialog key={'DELETE'+media.id} visible={deleteFormVisible} 
             onHide={() => showDeleteForm(false)} blockScroll footer={renderDeleteFooter()}>
@@ -181,9 +193,18 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         </Dialog>
         </div>
         )}
+        {media.user_name != profile.name &&  (
+            <div style={{float:'right',paddingLeft:'3px'}}>
+              <Button icon="pi pi-share-alt" onClick={() => showShareForm(true)} style={{margin: '3px'}} />
+            </div>
+        )}
+		<div style={{float:'right',paddingLeft:'3px'}}>views: {media.num_hits}</div>
         </div>
         )}
         {!mediaVisible && (<div></div>)}
+        <CopyToClipboardDialog key={'SHARE'+media.id} textToCopy={getShareUrl()} visible={shareFormVisible} 
+            onHide={() => showShareForm(false)} asDialog={true}>            
+        </CopyToClipboardDialog>
         </div>
     );
 }

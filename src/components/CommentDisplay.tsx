@@ -12,6 +12,7 @@ import { ProgressBar } from 'primereact/progressbar';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Menu } from 'primereact/menu';
 import AppUtils from '../AppUtils';
+import CopyToClipboardDialog from './CopyToClipboardDialog';
 export interface Props{
   comment: Comment;
   profile: Profile;
@@ -78,7 +79,6 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   if(getParameterByName("content_id")){
     mainImageContainerClasses += " extraHeight";
   }
-
   const renderMainImage = (comment: Comment) => {
     let slide = null;
     if(comment.image != null && comment.image != "" && !comment.image.endsWith(".mp4.jpeg")){
@@ -311,6 +311,10 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         <div className="progressBarContainer">
         <ProgressBar mode="indeterminate" /></div>
       )}
+      {getParameterByName("content_id") && (
+        <div><a href={window.location.href.split("?")[0]}>Home</a> {" > content_id=" + getParameterByName("content_id")}</div>
+      )}
+
       {renderMainImage(comment)}
         {!comment.shared && !comment.parent_id && comment.user_name == profile.name && (
           <div style={{padding:'3px',float:'right'}}>
@@ -352,7 +356,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         </Dialog>
         <Dialog key={'MEDIA'+comment.id} visible={mediaScroller} appendTo={rootEl} 
           onHide={() => setMediaScroller(false)} blockScroll >
-            <MediaScroller profile={profile} comment={comment} />
+            <MediaScroller profile={profile} content_id={comment.id} />
         </Dialog>
         <Dialog key={'UPLOAD_DETAILS'+comment.id} visible={uploadFormVisible} appendTo={rootEl} 
           onHide={() => showUploadForm(false)} blockScroll >
@@ -386,7 +390,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         parentId={comment.id} profile={profile} onSubmit={onSubmit} />
       <CommentForm key={'SHARE'+comment.id} visible={shareFormVisible} onHide={() => showShareForm(false)}
         shareId={comment.id} profile={profile} onSubmit={onSubmit}>
-          <div><a href={getShareUrl()}>{getShareUrl()}</a></div>
+          <CopyToClipboardDialog key={'SHARE'+comment.id} textToCopy={getShareUrl()} onHide={()=>{}} asDialog={false}></CopyToClipboardDialog>
       </CommentForm>
       </div>
     );
