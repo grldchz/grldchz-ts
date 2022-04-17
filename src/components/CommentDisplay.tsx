@@ -311,7 +311,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         <div className="progressBarContainer">
         <ProgressBar mode="indeterminate" /></div>
       )}
-      {getParameterByName("content_id") && (
+      {!comment.parent_id && getParameterByName("content_id") && (
         <div><a href={window.location.href.split("?")[0]}>Home</a> {" > content_id=" + getParameterByName("content_id")}</div>
       )}
 
@@ -392,6 +392,9 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         shareId={comment.id} profile={profile} onSubmit={onSubmit}>
           <CopyToClipboardDialog key={'SHARE'+comment.id} textToCopy={getShareUrl()} onHide={()=>{}} asDialog={false}></CopyToClipboardDialog>
       </CommentForm>
+      {!comment.parent_id && (
+        <div><a href={getShareUrl()}></a></div>
+      )}
       </div>
     );
   };

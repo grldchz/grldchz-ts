@@ -19,7 +19,7 @@ const Cookies: React.FC<Props> = ({ setProfile }) => {
   };
 
   const content = () => (
-    <div><h1>Cookie Policy</h1>
+    <noindex><div><h1>Cookie Policy</h1>
     <h2><blockquote>By using Grilled Cheese of the Day you agree to the following cookie policy:</blockquote></h2>
     <h3><blockquote>
     You agree Grilled Cheese of the Day can store a cookie on your device.  This first party cookie is strictly necessary for Grilled Cheese of the Day to function properly.  There are no third party tracking cookies on Grilled Cheese of the Day.
@@ -31,7 +31,7 @@ const Cookies: React.FC<Props> = ({ setProfile }) => {
     <h2><blockquote>By using Grilled Cheese of the Day you agree that you have read the following statement:</blockquote></h2>
     <h3><blockquote>Grilled Cheese of the Day and its original content, features, and functionality are owned by REDACTED FOR PRIVACY and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</blockquote></h3>
     <h4>If you have any questions about this Agreement, please send them to admin@grilledcheeseoftheday.com</h4> 
-    </div>
+    </div></noindex>
   );
   const footer = () => (
     <div>
@@ -48,7 +48,7 @@ const Cookies: React.FC<Props> = ({ setProfile }) => {
   ); 
   return (
     <div>
-      <Dialog key={'COOKIEFORM'} visible={cookieFormVisible} 
+      <Dialog key={'COOKIEFORM'} visible={cookieFormVisible} modal={false} 
           onHide={() => showCookieForm(false)} blockScroll footer={footer()}>
           {content()}
       </Dialog>    

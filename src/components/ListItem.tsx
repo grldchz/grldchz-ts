@@ -16,7 +16,7 @@ const ListItem: React.FC<Props> = ({ comment, profile, loadComments }) => {
     cssClasses += " extraWide";
   }
   return (
-    <div className={cssClasses}>
+    <div className={cssClasses} id={comment.id+""}>
       <CommentDisplay comment={comment} profile={profile} loadComments={loadComments}/>
       {(comment.replies.length>0 &&
       <ReplyList comment={comment} profile={profile} loadComments={loadComments}/>

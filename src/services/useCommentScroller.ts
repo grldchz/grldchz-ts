@@ -70,6 +70,9 @@ const useCommentScroller = (appState: AppState) => {
             appState.commentsTotal = response.total;
             appState.loading = false;
             setResult({ status: 'loaded', payload: appState.comments });
+            let loaded = ((appState.commentQuery.start)+(appState.commentQuery.limit));
+            loaded = loaded<appState.commentsTotal?loaded:appState.commentsTotal;
+            //window.location.hash = 'loaded'+loaded;
         }
       })
       .catch(error => setResult({ status: 'error', error }));

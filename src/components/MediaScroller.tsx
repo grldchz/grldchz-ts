@@ -56,8 +56,9 @@ const MediaScroller: React.FC<Props> = ({ profile, content_id, media_id }) => {
         )}
         {service.status == 'loaded' && scrollerState.results.length>0 &&
           <div>
-            <DataScroller value={service.payload} itemTemplate={itemTemplate} rows={5}
-              lazy={true} onLazyLoad={onScroll}/>
+            {!media_id && <DataScroller value={service.payload} itemTemplate={itemTemplate} rows={5}
+              lazy={true} onLazyLoad={onScroll}/>}
+            {media_id && <div>{itemTemplate(service.payload[0])}</div>}
           </div>
         }
         {!content_id && (
