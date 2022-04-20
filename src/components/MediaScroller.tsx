@@ -36,7 +36,7 @@ const MediaScroller: React.FC<Props> = ({ profile, content_id, media_id }) => {
     setScrollerState({
       query: { 
         start: start, 
-        limit: scrollerState.total-evnt.rows, 
+        limit: scrollerState.total-evnt.rows<1?10:scrollerState.total-evnt.rows, 
         content_id: content_id, media_id: media_id
       },
       results: scrollerState.results, 

@@ -36,8 +36,8 @@ const ProfileImage: React.FC<Props> = ({ profile }) => {
             const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+profile.user_name+'/'+profile.img_file;
             return (
                 <div className="profileImageContainer">
-                    <img className="profile-img" src={img_file} alt={profile.img_file} onClick={openProfileDisplay}
-                      onLoad={onImgLoad}/>
+                    <img className="profile-img" src={img_file} alt={profile.first_name+" "+profile.last_name} onClick={openProfileDisplay}
+                      onLoad={onImgLoad} title={profile.first_name+" "+profile.last_name}/>
                 </div>
             );
         }
@@ -52,8 +52,8 @@ const ProfileImage: React.FC<Props> = ({ profile }) => {
             const img_file = process.env.REACT_APP_GRLDSERVICE_URL+'media/'+profile.user_name+'/'+profile.img_file;
             return (
                 <div className="profileImageContainer">
-                    <img className="profile-img" src={img_file} alt={profile.img_file} onClick={() => setOpenImageViewer(true)}
-                      onLoad={onImgLoad}/>
+                    <img className="profile-img" src={img_file} alt={profile.first_name+" "+profile.last_name} onClick={() => setOpenImageViewer(true)}
+                      onLoad={onImgLoad} title={profile.first_name+" "+profile.last_name}/>
                 </div>
             );
         }
@@ -72,7 +72,7 @@ const ProfileImage: React.FC<Props> = ({ profile }) => {
             + profile.user_name + "/" + href_file;
         media = {
             full:img_href, 
-            title:profile.img_file.split("/")[1].replace(/img_thumb_/, "img_profile_")
+            title:profile.first_name+" "+profile.last_name
         };	
     }
     return (
@@ -84,7 +84,7 @@ const ProfileImage: React.FC<Props> = ({ profile }) => {
                 onHide={() => setState({display: false})} blockScroll appendTo={rootEl} >
                     {renderCardImage()} {profile.first_name} {profile.last_name} {profile.description}
             </Dialog>
-            <Dialog header="Photo" visible={openImageViewer} style={{width: '100vw'}} 
+            <Dialog visible={openImageViewer} style={{width: '100vw'}} 
                 onHide={() => setOpenImageViewer(false)} blockScroll appendTo={rootEl} >
                 <ImageViewer media={media} />
             </Dialog>

@@ -27,7 +27,7 @@ const ImageViewer: React.FC<Props> = ({ media }) => {
             <ProgressSpinner/>
         </div>
         <div style={{display: loading ? "none" : "block"}}>
-            <img src={media.full} alt={media.title}
+            <img src={media.full} alt={media.title} title={media.title}
                 style={{transform: 'scale('+scale+') translate(-'+translate+'%, -'+translate+'%)'}} 
                 onLoad={() => setLoading(false)} onDoubleClick={handleDoubleCLick} />
         </div>
