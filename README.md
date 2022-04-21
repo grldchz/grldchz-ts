@@ -15,13 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# GRLDCHZ    |    [GRLDSERVICE](https://github.com/grldchz/grldservice)    |    [GRLDENV](https://github.com/grldchz/grldenv)
+# GRLDCHZ
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Run-time Dependencies
 
-grldservice
+[grldservice](https://github.com/grldchz/grldservice)
 
 ## Get Started
 
