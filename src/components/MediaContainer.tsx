@@ -18,7 +18,7 @@ export interface Props{
 }
 const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
     const rootEl = document.getElementById('root');    
-    const { getUnescapedText } = AppUtils();
+	const { getUnescapedText, getParameterByName } = AppUtils();
     const { deleteMedia, submitCaption, setImage } = useMediaService();
     const [loading, setLoading] = React.useState(true);
     const [openImageViewer, setOpenImageViewer] = React.useState(false);
@@ -132,7 +132,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         if(url.indexOf("?")>-1){
           url = url.substring(0, url.indexOf("?")-1);
         }
-      return url+"?content_id="+media.content_id+"&media_id="+media.id;
+      return url+"?contentid="+media.content_id+"&mediaid="+media.id;
     };
       const menuItemsRef = useRef<Menu>(new Menu({}));
       return (
@@ -153,7 +153,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                         onLoad={() => setLoading(false)}
                         onClick={() => setOpenImageViewer(true)}/>
                 </div>
-                <div>{getCaption()}</div>
+				{getParameterByName("mediaid")!=""&&(<div>{getCaption()}</div>)}
+				{getParameterByName("mediaid")===""&&(<div><a href={getShareUrl()}>{getCaption()}</a></div>)}
                 <Dialog key={'IMAGE'+media.id} visible={openImageViewer} style={{width: '100vw'}} 
                 onHide={() => setOpenImageViewer(false)} blockScroll >
                     <ImageViewer media={media} />
@@ -167,7 +168,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                         <source src={media.mp4} type="video/mp4" />
                     </video>
                 </div>					
-                <div>{getCaption()}</div>
+				{getParameterByName("mediaid")!=""&&(<div>{getCaption()}</div>)}
+				{getParameterByName("mediaid")===""&&(<div><a href={getShareUrl()}>{getCaption()}</a></div>)}
             </div>
         )}
         {profile.name == media.user_name && (

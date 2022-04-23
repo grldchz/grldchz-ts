@@ -27,8 +27,8 @@ const useCommentScroller = (appState: AppState) => {
     if(query.content_id){
       queryString += '&content_id='+query.content_id;
     }
-    else if(getParameterByName("content_id")){
-      queryString += '&content_id='+getParameterByName("content_id");
+    else if(getParameterByName("contentid")){
+      queryString += '&content_id='+getParameterByName("contentid");
     }
     if(query.searchTerm){
       queryString += '&searchTerm='+query.searchTerm;

@@ -144,12 +144,12 @@ const App: React.FC<{}> = () => {
           {profile.cookie_policy && (
             <Cookies setProfile={(profile: Profile) => handleProfileFormSubmit(profile)} />
           )}
-          {getParameterByName("media_id") && (
+          {getParameterByName("mediaid") && (
           <div>
-          <MediaScroller profile={profile} content_id={getParameterByName("content_id")} media_id={getParameterByName("media_id")} />
+          <MediaScroller profile={profile} content_id={getParameterByName("contentid")} media_id={getParameterByName("mediaid")} />
           </div>
           )}
-          {getParameterByName("media_id") == "" && (
+          {getParameterByName("mediaid") == "" && (
           <CommentScroller appState={appState} setAppState={setAppState} profile={profile} loadComments={loadComments}/>
           )}
         </div>

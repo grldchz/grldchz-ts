@@ -38,8 +38,8 @@ const useMediaScroller = (scrollerState: MediaScrollerState) => {
         queryString += "&media_id=" + scrollerState.query.media_id;
       }
     }
-    else if(getParameterByName("content_id")){
-      queryString += '&content_id='+getParameterByName("content_id");
+    else if(getParameterByName("contentid")){
+      queryString += '&content_id='+getParameterByName("contentid");
       if(getParameterByName("media_id")){
         queryString += "&media_id=" + getParameterByName("media_id");
       }

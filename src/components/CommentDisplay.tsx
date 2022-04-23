@@ -76,7 +76,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     setLoading(false);
   };
   let mainImageContainerClasses = "mainImageContainer";
-  if(getParameterByName("content_id")){
+  if(getParameterByName("contentid")){
     mainImageContainerClasses += " extraHeight";
   }
   const renderMainImage = (comment: Comment) => {
@@ -156,7 +156,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     if(url.indexOf("?")>-1){
       url = url.substring(0, url.indexOf("?")-1);
     }
-    return url + "?content_id=" + comment.id;
+    return url + "?contentid=" + comment.id;
   };
   const menuItemsRef = useRef<Menu>(new Menu({}));
   const cardTitle = () => {
@@ -164,8 +164,16 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       <div className="p-grid">
         <div className="p-col-4">
         <ProfileImage profile={comment} /></div>
-        <div className="p-col-8"><b>{comment.first_name} @ {comment.post_date_time}</b></div>
-      </div>
+		{comment.parent_id && (
+        <div className="p-col-8">{comment.first_name} @ {comment.post_date_time}</div>
+		)}
+		{!comment.parent_id && getParameterByName("contentid")=="" && (
+        <div className="p-col-8"><a href={getShareUrl()}>{comment.first_name} @ {comment.post_date_time}</a></div>
+		)}
+ 		{!comment.parent_id && getParameterByName("contentid")!="" && (
+        <div className="p-col-8">{comment.first_name} @ {comment.post_date_time}</div>
+		)}
+     </div>
     );
   }
   const [ upload, setUpload ] = React.useState<Upload>({files:[], errors:false});
@@ -311,8 +319,8 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         <div className="progressBarContainer">
         <ProgressBar mode="indeterminate" /></div>
       )}
-      {!comment.parent_id && getParameterByName("content_id") && (
-        <div><a href={window.location.href.split("?")[0]}>Home</a> {" > content_id=" + getParameterByName("content_id")}</div>
+      {!comment.parent_id && getParameterByName("contentid") && (
+        <div><a href={window.location.href.split("?")[0]}>Home</a> {" > contentid=" + getParameterByName("contentid")}</div>
       )}
 
       {renderMainImage(comment)}
@@ -392,9 +400,6 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         shareId={comment.id} profile={profile} onSubmit={onSubmit}>
           <CopyToClipboardDialog key={'SHARE'+comment.id} textToCopy={getShareUrl()} onHide={()=>{}} asDialog={false}></CopyToClipboardDialog>
       </CommentForm>
-      {!comment.parent_id && (
-        <div><a href={getShareUrl()}></a></div>
-      )}
       </div>
     );
   };
