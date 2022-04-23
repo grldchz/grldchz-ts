@@ -16,6 +16,7 @@ export interface Comment {
   user_date_time: Date;
   user_name: string;
   open_public: number;
+  image_title: string;
 }
 export interface CommentQuery {
   content_id?: string | null,

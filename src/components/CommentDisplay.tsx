@@ -94,7 +94,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
           <div className="progressSpinner" style={{display: loading ? "block" : "none"}}>
             <ProgressSpinner/>
           </div>
-          <img style={{display: loading ? "none" : "block"}} alt={slide} 
+          <img style={{display: loading ? "none" : "block"}} alt={slide} title={getUnescapedText(comment.image_title)}
             src={src} onLoad={onImgLoad} className="mainImage"/>
           <div className="imageCount">{"Photos:"+(comment.num_photos>0?comment.num_photos:"")}</div>
           {comment.num_videos > 0 && (
