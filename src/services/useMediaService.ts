@@ -1,3 +1,8 @@
+/**
+This is a part of the GRLDCHZ Social network
+
+Copyright (C) 2008 grilledcheeseoftheday.com
+**/
 import qs from 'qs';
 import { useState } from 'react';
 import { Service } from '../types/Service';

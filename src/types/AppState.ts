@@ -1,3 +1,8 @@
+/**
+This is a part of the GRLDCHZ Social network
+
+Copyright (C) 2008 grilledcheeseoftheday.com
+**/
 import { Comment, CommentQuery } from "./Comment";
 import { Friend, FriendQuery } from "./Friend";
 

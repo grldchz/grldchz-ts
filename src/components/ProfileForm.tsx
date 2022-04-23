@@ -1,3 +1,8 @@
+/**
+This is a part of the GRLDCHZ Social network
+
+Copyright (C) 2008 grilledcheeseoftheday.com
+**/
 import React, { useState } from 'react';
 import useSubmitProfileService from '../services/useSubmitProfileService';
 import { ProgressSpinner } from 'primereact/progressspinner';

@@ -1,3 +1,8 @@
+/**
+This is a part of the GRLDCHZ Social network
+
+Copyright (C) 2008 grilledcheeseoftheday.com
+**/
 const AppUtils: any = () => {
     const getUnescapedText = (escapedText: string) => {
         const str = escapedText;
