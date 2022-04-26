@@ -26,9 +26,7 @@ import { CommentQuery, PostSearch } from './types/Comment';
 import useLoginService from './services/useLoginService';
 import MediaScroller from './components/MediaScroller';
 import AppUtils from './AppUtils';
-import { Helmet } from 'react-helmet';
 const App: React.FC<{}> = () => {
-  const url = window.location.href;
   const { getParameterByName } = AppUtils();
   const [profile, setProfile] = React.useState<Profile>();
   const [ profileFormVisible, showProfileForm ] = React.useState(false);
@@ -106,11 +104,6 @@ const App: React.FC<{}> = () => {
   }
   return (
     <div><ThemeSelector/>
-      <div className="helmet">
-          <Helmet>
-          <link rel="canonical" href={url} />
-          </Helmet>
-      </div>
       <div className="menu-bar">
         {profile && profile.name && profile.name == "guest" && (
           <div style={{display: 'inline'}}>

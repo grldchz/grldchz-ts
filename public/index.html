@@ -1,3 +1,81 @@
+<?php
+if ( !file_exists( dirname(__FILE__).'/../grldservice' ) && !is_dir( dirname(__FILE__).'/../grldservice' ) ) {
+	$grldservice = "/grldservice-dev";
+	require_once(dirname(__FILE__).'/grldservice-dev/lib/Auth.php');
+	require_once(dirname(__FILE__).'/grldservice-dev/lib/Media.php');
+	require_once(dirname(__FILE__).'/grldservice-dev/lib/Posts.php');
+}
+else{
+	require_once(dirname(__FILE__).'/../grldservice/lib/Auth.php');
+	require_once(dirname(__FILE__).'/../grldservice/lib/Media.php');
+	require_once(dirname(__FILE__).'/../grldservice/lib/Posts.php');
+}
+$auth = new Auth();
+if(isset($_GET["contentid"]) && $_GET["contentid"] != null
+		&& isset($_GET["mediaid"]) && $_GET["mediaid"] != null){ 
+	$media = new Media($auth, $_GET["contentid"], $_GET["mediaid"]);
+	$media->getMedia();
+	$mediaobj = json_decode($media->printOutput());
+	foreach($mediaobj->{'results'} as $mediarec){
+		$description=stripslashes(strip_tags($mediarec->{'title'}));
+		$description=substr($description,0,300).((strlen($description)<300)?"":"...");
+		$title=substr($description,0,60).((strlen($description)<60)?"":"...");
+		if($mediarec->{"is_image"}){
+			$slide = $grldservice."/getfile.php?media=media/".$mediarec->{"user_name"}."/".$mediarec->{"content_id"}."/img_slide_".$mediarec->{"file"}.".jpeg";
+			$html.="<p><img src='".$slide."' alt='".$mediarec->{"file"}."' title='".$mediarec->{"title"}."'/></p>";
+			$html.="<p>".$mediarec->{"title"}."</p>";
+		}
+		else{
+			$mp4 = $grldservice."/getfile.php?media=media/".$mediarec->{"user_name"}."/".$mediarec->{"content_id"}."/proxy_mp4_".$mediarec->{"file"}.".mp4";
+			$html.="<video controls=true style='width:100%;max-width:600px' title='".$mediarec->{"title"}."'><source src='".$mp4."' type='video/mp4' /></video>";					
+			$html.="<p>".$mediarec->{"title"}."</p>";
+		}
+	}
+}
+else if(isset($_GET["contentid"]) && $_GET["contentid"] != null){
+	$posts = new Posts($auth, $_GET["contentid"]);
+	$posts->getPosts();
+	$obj = json_decode($posts->printOutput());
+	if($obj->{'results'}){
+		foreach($obj->{'results'} as $rec){
+			$html.=$rec->{'first_name'}." ".$rec->{'last_name'}." @ ".$rec->{'post_date_time'}.$rec->{'comment'};
+			$description=stripslashes(strip_tags($rec->{'comment'}));
+			$description=substr($description,0,300).((strlen($description)<300)?"":"...");
+			$title=substr($description,0,60).((strlen($description)<60)?"":"...");
+			$media = new Media($auth, $_GET["contentid"]);
+			$media->getMedia();
+			$mediaobj = json_decode($media->printOutput());
+			if($mediaobj->{'results'}){
+				foreach($mediaobj->{'results'} as $mediarec){
+					$html.="<p><a href='?contentid=".$mediarec->{"content_id"}."&mediaid=".$mediarec->{"id"}."'>".$mediarec->{"title"}."</a></p>";
+				}
+			}
+			foreach($rec->{'replies'} as $reply){
+				$html.=$reply->{'first_name'}." ".$reply->{'last_name'}." @ ".$reply->{'post_date_time'}.$reply->{'comment'};
+			}
+		}
+	}
+}
+else{
+	$start=0;
+	if(isset($_GET["start"]) && $_GET["start"] != null){
+		$start=$_GET["start"];
+	}
+	$posts = new Posts($auth, $start."", "10");
+	$posts->getPosts();
+	$obj = json_decode($posts->printOutput());
+	foreach($obj->{'results'} as $rec){
+		$html.="<p><a href='?contentid=".$rec->{"id"}."'>".$rec->{'first_name'}." ".$rec->{'last_name'}." @ ".$rec->{'post_date_time'}."</a></p>".$rec->{'comment'};
+		$description.=$rec->{'comment'}." ";
+	}
+	if(($start+10)<$obj->{'total'}){
+		$html.="<a href='?start=".($start+10)."'>more</a>";
+	}
+	$description=strip_tags($description);
+	$description=substr($description,0,300).((strlen($description)<300)?"":"...");
+	$title=substr($description,0,60).((strlen($description)<60)?"":"...");
+}
+?>
 <!DOCTYPE html>
 <!--
 This is a part of the GRLDCHZ Social network
@@ -6,11 +84,12 @@ Copyright (C) 2008 grilledcheeseoftheday.com
 -->
 <html lang="en">
   <head>
-    <title>GRLDCHZ</title>
+    <title><?php print $title; ?></title>
+	<meta name="description" content="<?php print $description; ?>" />
+	<link rel="canonical" href="https://www.grilledcheeseoftheday.com/index.php" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=8;FF=3;OtherUA=4"/>
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,8 +104,10 @@ Copyright (C) 2008 grilledcheeseoftheday.com
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="%PUBLIC_URL%/img/grldchz-icon-144.png" />
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-	<div style="clear:both;width:100%;text-align:center;padding:20px;">grilledcheeseoftheday.com &#169 2008</div>
+    <noscript>
+	<?php print $html; ?>
+	</noscript>
+	<div style="clear:both;width:100%;text-align:center;padding:20px;">grilledcheeseoftheday.com &#169 2022</div>
   </body>
 </html>

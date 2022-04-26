@@ -12,7 +12,7 @@ import { Button } from 'primereact/button';
 import { AppState } from '../types/AppState';
 import { Comment } from "../types/Comment";
 import { Profile } from '../types/Profile';
-import { Helmet } from 'react-helmet';
+import AppUtils from '../AppUtils';
 export interface Props{
   appState: AppState;
   setAppState(appState: AppState): void;
@@ -21,6 +21,7 @@ export interface Props{
 }
 
 const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, loadComments }) => {
+  const { getParameterByName } = AppUtils();
   const service = useCommentScroller(appState);
   const itemTemplate = (comment: Comment) => {
     if (!comment) {
@@ -79,14 +80,9 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
               <DataScroller value={service.payload} className="centerDiv"
                   itemTemplate={itemTemplate} rows={10}
                   lazy={true} onLazyLoad={onScroll} loader={moreButtonRef.current}/>
-              <Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
-              <div className="helmet">
-                  <Helmet>
-                  <meta
-                      name="description"
-                      content={appState.comments.map(obj=>obj.comment.replace(/(<([^>]+)>)/gi, "")).join(" ").substring(0,320)}></meta>
-                  </Helmet>
-              </div>
+				{getParameterByName("contentid")=="" && (
+					<Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
+				)}
             </div>
         }
         {service.status == 'loaded' && service.payload && service.payload.length == 0 &&

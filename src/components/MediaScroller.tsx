@@ -63,7 +63,12 @@ const MediaScroller: React.FC<Props> = ({ profile, content_id, media_id }) => {
           <div>
             {!media_id && <DataScroller value={service.payload} itemTemplate={itemTemplate} rows={5}
               lazy={true} onLazyLoad={onScroll}/>}
-            {media_id && <div>{itemTemplate(service.payload[0])}</div>}
+            {media_id && (
+				<div>
+					<a href={window.location.href.split("?")[0]}>Home</a> > <a href={window.location.href.split("?")[0]+"?contentid="+content_id}>{"contentid=" + content_id}</a> > mediaid={media_id}
+					{itemTemplate(service.payload[0])}
+				</div>
+			)}
           </div>
         }
         {!content_id && (

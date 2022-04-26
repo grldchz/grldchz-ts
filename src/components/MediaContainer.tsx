@@ -169,7 +169,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         {!media.is_image && (
             <div>
                 <div className="embed-responsive embed-responsive-16by9" style={{ width: '100%', maxWidth: '600px' }}>
-                    <video controls={true} className="embed-responsive-item" style={{ width: '100%', maxWidth: '600px' }}>
+                    <video controls={true} className="embed-responsive-item" style={{ width: '100%', maxWidth: '600px' }}
+						 title={media.title}>
                         <source src={media.mp4} type="video/mp4" />
                     </video>
                 </div>					
