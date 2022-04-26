@@ -1,6 +1,7 @@
 <?php
 if ( !file_exists( dirname(__FILE__).'/../grldservice' ) && !is_dir( dirname(__FILE__).'/../grldservice' ) ) {
-	$grldservice = "/grldservice-dev";
+	$grldservice = "/grldservice";
+	//$grldservice = "/grldservice-dev";
 	require_once(dirname(__FILE__).'/grldservice-dev/lib/Auth.php');
 	require_once(dirname(__FILE__).'/grldservice-dev/lib/Media.php');
 	require_once(dirname(__FILE__).'/grldservice-dev/lib/Posts.php');
