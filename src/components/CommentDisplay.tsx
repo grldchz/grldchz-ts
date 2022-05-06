@@ -159,7 +159,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
   const getShareUrl = () => {
     var url = window.location.href;
     if(url.indexOf("?")>-1){
-      url = url.substring(0, url.indexOf("?")-1);
+      url = url.substring(0, url.indexOf("?"));
     }
     return url + "?contentid=" + comment.id;
   };
@@ -327,7 +327,11 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       {!comment.parent_id && getParameterByName("contentid") && (
         <div><a href={window.location.href.split("?")[0]}>Home</a> {" > contentid=" + getParameterByName("contentid")}</div>
       )}
-
+        {!comment.parent_id && comment.user_name == profile.name && process.env.REACT_APP_PUBLIC_ENABLED == "true" && (
+        <div style={{color:'red'}}>
+			{comment.open_public==0?"":"PUBLIC"}
+        </div>
+        )}
       {renderMainImage(comment)}
         {!comment.shared && !comment.parent_id && comment.user_name == profile.name && (
           <div style={{padding:'3px',float:'right'}}>

@@ -135,14 +135,25 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
     const getShareUrl = () => {
         var url = window.location.href;
         if(url.indexOf("?")>-1){
-          url = url.substring(0, url.indexOf("?")-1);
+          url = url.substring(0, url.indexOf("?"));
         }
       return url+"?contentid="+media.content_id+"&mediaid="+media.id;
     };
-      const menuItemsRef = useRef<Menu>(new Menu({}));
-      return (
-          <div>
-          {mediaVisible && (
+    const menuItemsRef = useRef<Menu>(new Menu({}));
+	let cssClasses = ""
+	if(getParameterByName("mediaid")!=""){
+		cssClasses = "commentDisplay extraWide";
+	}
+    return (
+        <div className={cssClasses}>
+		{getParameterByName("mediaid")!=""&&(
+		<div>
+			<a href={window.location.href.split("?")[0]}>Home</a> > 
+			<a href={window.location.href.split("?")[0]+"?contentid="+media.content_id}>{"contentid=" + media.content_id}</a> > 
+			mediaid={media.id}
+		</div>
+		)}
+        {mediaVisible && (
         <div>
         {progressBarVisible && (
             <div className="progressBarContainer">

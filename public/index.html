@@ -1,7 +1,5 @@
 <?php
 if ( !file_exists( dirname(__FILE__).'/../grldservice' ) && !is_dir( dirname(__FILE__).'/../grldservice' ) ) {
-	$grldservice = "/grldservice";
-	//$grldservice = "/grldservice-dev";
 	require_once(dirname(__FILE__).'/grldservice-dev/lib/Auth.php');
 	require_once(dirname(__FILE__).'/grldservice-dev/lib/Media.php');
 	require_once(dirname(__FILE__).'/grldservice-dev/lib/Posts.php');
@@ -12,34 +10,51 @@ else{
 	require_once(dirname(__FILE__).'/../grldservice/lib/Posts.php');
 }
 $auth = new Auth();
+$grldservice = $auth->get_service_context();
+$domain=$auth->get_domain()==false?"localhost":"www.".$auth->get_domain();
+$protocol=$auth->get_secure()==1?"https://":"http://";
+$ui_context=$auth->get_ui_context();
+$home=$protocol.$domain.$ui_context."/index.php";
+$title=$auth->get_title();
+$description="Grilled Cheese of the Day is a free social network where you can post text, photos, and videos to share with friends and family.";
 if(isset($_GET["contentid"]) && $_GET["contentid"] != null
 		&& isset($_GET["mediaid"]) && $_GET["mediaid"] != null){ 
+	$html.="<p><a href='".$home."'>Home</a> > ";
+	$html.="<a href='".$home."?contentid=".$_GET["contentid"]."'>contentid=".$_GET["contentid"]."</a> > ";
+	$html.="mediaid=".$_GET["mediaid"]."</p>";
 	$media = new Media($auth, $_GET["contentid"], $_GET["mediaid"]);
 	$media->getMedia();
 	$mediaobj = json_decode($media->printOutput());
-	foreach($mediaobj->{'results'} as $mediarec){
-		$description=stripslashes(strip_tags($mediarec->{'title'}));
-		$description=substr($description,0,300).((strlen($description)<300)?"":"...");
-		$title=substr($description,0,60).((strlen($description)<60)?"":"...");
-		if($mediarec->{"is_image"}){
-			$slide = $grldservice."/getfile.php?media=media/".$mediarec->{"user_name"}."/".$mediarec->{"content_id"}."/img_slide_".$mediarec->{"file"}.".jpeg";
-			$html.="<p><img src='".$slide."' alt='".$mediarec->{"file"}."' title='".$mediarec->{"title"}."'/></p>";
-			$html.="<p>".$mediarec->{"title"}."</p>";
+	if($mediaobj->{'results'}){
+		foreach($mediaobj->{'results'} as $mediarec){
+			$description=stripslashes(strip_tags($mediarec->{'title'}));
+			$description=substr($description,0,300).((strlen($description)<300)?"":"...");
+			$title=substr($description,0,60).((strlen($description)<60)?"":"...");
+			if($mediarec->{"is_image"}){
+				$slide = $grldservice."/getfile.php?media=media/".$mediarec->{"user_name"}."/".$mediarec->{"content_id"}."/img_slide_".$mediarec->{"file"}.".jpeg";
+				$html.="<p><img src='".$slide."' alt='".$mediarec->{"file"}."' title='".$mediarec->{"title"}."'/></p>";
+				$html.="<h2>".$mediarec->{"title"}."</h2>";
+			}
+			else{
+				$mp4 = $grldservice."/getfile.php?media=media/".$mediarec->{"user_name"}."/".$mediarec->{"content_id"}."/proxy_mp4_".$mediarec->{"file"}.".mp4";
+				$html.="<video controls=true style='width:100%;max-width:600px' title='".$mediarec->{"title"}."'><source src='".$mp4."' type='video/mp4' /></video>";
+				$html.="<h2>".$mediarec->{"title"}."</h2>";
+			}
 		}
-		else{
-			$mp4 = $grldservice."/getfile.php?media=media/".$mediarec->{"user_name"}."/".$mediarec->{"content_id"}."/proxy_mp4_".$mediarec->{"file"}.".mp4";
-			$html.="<video controls=true style='width:100%;max-width:600px' title='".$mediarec->{"title"}."'><source src='".$mp4."' type='video/mp4' /></video>";					
-			$html.="<p>".$mediarec->{"title"}."</p>";
-		}
+	}
+	else{
+		$html="Media Not Found";
 	}
 }
 else if(isset($_GET["contentid"]) && $_GET["contentid"] != null){
+	$html.="<p><a href='".$home."'>Home</a> > ";
+	$html.="<a href='".$home."?contentid=".$_GET["contentid"]."'>contentid=".$_GET["contentid"]."</a></p>";
 	$posts = new Posts($auth, $_GET["contentid"]);
 	$posts->getPosts();
 	$obj = json_decode($posts->printOutput());
 	if($obj->{'results'}){
 		foreach($obj->{'results'} as $rec){
-			$html.=$rec->{'first_name'}." ".$rec->{'last_name'}." @ ".$rec->{'post_date_time'}.$rec->{'comment'};
+			$html.=$rec->{'first_name'}." ".$rec->{'last_name'}." @ ".$rec->{'post_date_time'}."<h2>".$rec->{'comment'}."</h2>";
 			$description=stripslashes(strip_tags($rec->{'comment'}));
 			$description=substr($description,0,300).((strlen($description)<300)?"":"...");
 			$title=substr($description,0,60).((strlen($description)<60)?"":"...");
@@ -48,13 +63,18 @@ else if(isset($_GET["contentid"]) && $_GET["contentid"] != null){
 			$mediaobj = json_decode($media->printOutput());
 			if($mediaobj->{'results'}){
 				foreach($mediaobj->{'results'} as $mediarec){
-					$html.="<p><a href='?contentid=".$mediarec->{"content_id"}."&mediaid=".$mediarec->{"id"}."'>".$mediarec->{"title"}."</a></p>";
+					$html.="<p><a href='".$home."?contentid=".$mediarec->{"content_id"}."&mediaid=".$mediarec->{"id"}."'>".$mediarec->{"title"}."</a></p>";
 				}
 			}
-			foreach($rec->{'replies'} as $reply){
-				$html.=$reply->{'first_name'}." ".$reply->{'last_name'}." @ ".$reply->{'post_date_time'}.$reply->{'comment'};
+			if($rec->{'replies'}){
+				foreach($rec->{'replies'} as $reply){
+					$html.=$reply->{'first_name'}." ".$reply->{'last_name'}." @ ".$reply->{'post_date_time'}."<h4>".$reply->{'comment'}."</h4>";
+				}
 			}
 		}
+	}
+	else{
+		$html="Content Not Found";
 	}
 }
 else{
@@ -65,29 +85,34 @@ else{
 	$posts = new Posts($auth, $start."", "10");
 	$posts->getPosts();
 	$obj = json_decode($posts->printOutput());
-	foreach($obj->{'results'} as $rec){
-		$html.="<p><a href='?contentid=".$rec->{"id"}."'>".$rec->{'first_name'}." ".$rec->{'last_name'}." @ ".$rec->{'post_date_time'}."</a></p>".$rec->{'comment'};
-		$description.=$rec->{'comment'}." ";
+	if($obj->{'results'}){
+		foreach($obj->{'results'} as $rec){
+			$html.="<a href='".$home."?contentid=".$rec->{"id"}."'>".$rec->{'first_name'}." ".$rec->{'last_name'}." @ ".$rec->{'post_date_time'}."</a><h2>".$rec->{'comment'}."</h2>";
+			$description.=$rec->{'comment'}." ";
+		}
+		if(($start+10)<$obj->{'total'}){
+			$html.="<a href='".$home."?start=".($start+10)."'>more</a>";
+		}
+		$description=strip_tags($description);
+		$description=substr($description,0,300).((strlen($description)<300)?"":"...");
+		$title=substr($description,0,60).((strlen($description)<60)?"":"...");
 	}
-	if(($start+10)<$obj->{'total'}){
-		$html.="<a href='?start=".($start+10)."'>more</a>";
+	else{
+		$html="No Results Found";
 	}
-	$description=strip_tags($description);
-	$description=substr($description,0,300).((strlen($description)<300)?"":"...");
-	$title=substr($description,0,60).((strlen($description)<60)?"":"...");
 }
 ?>
 <!DOCTYPE html>
 <!--
 This is a part of the GRLDCHZ Social network
 
-Copyright (C) 2008 grilledcheeseoftheday.com
+Copyright (C) 2022 grilledcheeseoftheday.com
 -->
 <html lang="en">
   <head>
     <title><?php print $title; ?></title>
 	<meta name="description" content="<?php print $description; ?>" />
-	<link rel="canonical" href="https://www.grilledcheeseoftheday.com/index.php" />
+	<link rel="canonical" href="<?php echo $home; ?>" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=8;FF=3;OtherUA=4"/>
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -107,8 +132,9 @@ Copyright (C) 2008 grilledcheeseoftheday.com
   <body>
     <div id="root"></div>
     <noscript>
+	<h1><?php print $auth->get_title(); ?></h1>
 	<?php print $html; ?>
 	</noscript>
-	<div style="clear:both;width:100%;text-align:center;padding:20px;">grilledcheeseoftheday.com &#169 2022</div>
+	<div id="copyright"><?php print $auth->get_title(); ?> &#169 2022</div>
   </body>
 </html>

@@ -1,8 +1,9 @@
 /**
 This is a part of the GRLDCHZ Social network
 
-Copyright (C) 2008 grilledcheeseoftheday.com
+Copyright (C) 2022 grilledcheeseoftheday.com
 **/
+#copyright{clear:both;width:100%;text-align:center;padding:20px;}
 .hide{display:none}
 .show{display:inline}
 .centerDiv{display:flex;justify-content:center}
