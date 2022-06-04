@@ -21,16 +21,19 @@ export interface Props{
 }
 
 const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, loadComments }) => {
-  const { getParameterByName } = AppUtils();
+  const { getParameterByName, getContextRoot } = AppUtils();
   const service = useCommentScroller(appState);
   const itemTemplate = (comment: Comment) => {
     if (!comment) {
       return (<div></div>);
     }
-    return (<ListItem comment={comment} key={comment.id} profile={profile} loadComments={loadComments} />);
+    return (<ListItem appState={appState} comment={comment} key={comment.id} profile={profile} loadComments={loadComments} />);
   };
   const onScroll = (evnt?: any) => {
     let start = appState.commentQuery.start;
+    if(getParameterByName("start")){
+      start += parseInt(getParameterByName("start"));
+    }
     if(appState.commentQuery.limit >= appState.commentsTotal){
       start = 0;
       setAppState({
@@ -64,6 +67,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
       }
     }
   };
+  const backButtonRef = useRef(null);
   const moreButtonRef = useRef(null);
   return (
     <>
@@ -77,11 +81,17 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
         )}
         {service.status == 'loaded' && service.payload && service.payload.length > 0 &&
             <div>
+				{getParameterByName("start")!="" && (
+					<div><Button icon="pi pi-angle-double-left" ref={backButtonRef} type="button" label="back" style={{margin: '3px'}}
+					 onClick={() => window.location.href=getContextRoot()} title="Load most recent posts"/>
+					 You are currently viewing page {(parseInt(getParameterByName("start"))/10)+1} of older posts.</div>
+				)}
               <DataScroller value={service.payload} className="centerDiv"
                   itemTemplate={itemTemplate} rows={10}
                   lazy={true} onLazyLoad={onScroll} loader={moreButtonRef.current}/>
-				{getParameterByName("contentid")=="" && (
-					<Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
+				{getParameterByName("contentid")=="" && (appState.commentsTotal > (appState.commentQuery.start+10)) && (
+					<Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}
+					 title="Load older posts"/>
 				)}
             </div>
         }

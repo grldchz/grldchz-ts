@@ -27,7 +27,7 @@ import useLoginService from './services/useLoginService';
 import MediaScroller from './components/MediaScroller';
 import AppUtils from './AppUtils';
 const App: React.FC<{}> = () => {
-  const { getParameterByName } = AppUtils();
+  const { getParameterByName, getContextRoot } = AppUtils();
   const [profile, setProfile] = React.useState<Profile>();
   const [ profileFormVisible, showProfileForm ] = React.useState(false);
   const [ searchFormVisible, showSearchForm ] = React.useState(false);
@@ -42,7 +42,7 @@ const App: React.FC<{}> = () => {
   const [prevSearch, setPrevSearch ] = React.useState<PostSearch>({
     searchTerm: '', fromDate: '', toDate: ''
   });
-  const loadComments = (search?: PostSearch) => {
+  const loadComments = (search?: PostSearch, content_id?: any) => {
     showCommentForm(false);
     showSearchForm(false);
     showSearchFriendForm(false);
@@ -59,6 +59,9 @@ const App: React.FC<{}> = () => {
         commentQuery.toDate = search.toDate;
       }
     }
+	else if(content_id){
+		commentQuery.content_id = content_id;
+	}
     setAppState({
       commentQuery: commentQuery,
       comments: [], commentsTotal: 0, loading: true
@@ -107,17 +110,19 @@ const App: React.FC<{}> = () => {
       <div className="menu-bar">
         {profile && profile.name && profile.name == "guest" && (
           <div style={{display: 'inline'}}>
-            <Button type="button" icon="pi pi-search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-sign-in" onClick={() => onLogout()} label="Login" style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-home" title={process.env.REACT_APP_TITLE} onClick={() => window.location.href=getContextRoot()} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-search" title="Search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-sign-in" title="Sign In" onClick={() => onLogout()} label="Login" style={{margin: '3px'}} />
           </div>
         )}
         {profile && profile.name && profile.name != "guest" && (
           <div style={{display: 'inline'}}>
-            <Button type="button" icon="pi pi-search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-users" onClick={() => showSearchFriendForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-user-edit" onClick={() => showProfileForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-plus" onClick={() => showCommentForm(true)} style={{margin: '3px'}} />
-            <Button type="button" icon="pi pi-sign-out" onClick={() => showLogoutDialog(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-home" title={process.env.REACT_APP_TITLE} onClick={() => window.location.href=getContextRoot()} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-search" title="Search" onClick={() => showSearchForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-users" title="Find Friends" onClick={() => showSearchFriendForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-user-edit" title="Edit Profile" onClick={() => showProfileForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-plus" title="Post Content" onClick={() => showCommentForm(true)} style={{margin: '3px'}} />
+            <Button type="button" icon="pi pi-sign-out" title="Sign Out" onClick={() => showLogoutDialog(true)} style={{margin: '3px'}} />
           </div>
         )}
       </div>

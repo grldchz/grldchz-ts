@@ -118,7 +118,7 @@ const ListItem: React.FC<Props> = ({ friend, loadFriends }) => {
         <div className="p-col-3">
         <ProfileImage profile={friend} /></div>
         <div className="p-col-6">
-          <div><b>{friend.first_name} {friend.last_name}</b></div>
+          <div><b>{friend.first_name}</b></div>
           <div>Member since {friend.user_date_time}</div>
         </div>
         <div className="p-col-3">

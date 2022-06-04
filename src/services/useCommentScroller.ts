@@ -18,22 +18,33 @@ const useCommentScroller = (appState: AppState) => {
   const [result, setResult] = useState<Service<Comment[]>>({
     status: 'loading'
   });
-  const { getParameterByName } = AppUtils();
+  const { getParameterByName, getQueryParamByName } = AppUtils();
   
   useEffect(() => {
     const query: CommentQuery = appState.commentQuery;
     let queryString = 'limit='+query.limit+'&sort=[{"property":"id","direction":"desc"}]';
+	let start = 0;
+    if(getParameterByName("start")){
+      start += parseInt(getParameterByName("start"));
+    }
     if(query.start){
-      queryString += '&start='+query.start;
+      start += query.start;
     }
-    else{
-      queryString += '&start=0';
-    }
+	queryString += '&start='+start;
     if(query.content_id){
       queryString += '&content_id='+query.content_id;
     }
     else if(getParameterByName("contentid")){
       queryString += '&content_id='+getParameterByName("contentid");
+    }
+    if(getQueryParamByName("searchTerm")){
+      queryString += '&searchTerm='+getQueryParamByName("searchTerm");
+    }
+    if(getQueryParamByName("fromDate")){
+      queryString += '&fromDate='+getQueryParamByName("fromDate");
+    }
+    if(getQueryParamByName("toDate")){
+      queryString += '&toDate='+getQueryParamByName("toDate");
     }
     if(query.searchTerm){
       queryString += '&searchTerm='+query.searchTerm;
@@ -77,6 +88,7 @@ const useCommentScroller = (appState: AppState) => {
             setResult({ status: 'loaded', payload: appState.comments });
             let loaded = ((appState.commentQuery.start)+(appState.commentQuery.limit));
             loaded = loaded<appState.commentsTotal?loaded:appState.commentsTotal;
+			//TODO push state to url
         }
       })
       .catch(error => setResult({ status: 'error', error }));

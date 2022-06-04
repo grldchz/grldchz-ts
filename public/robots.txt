@@ -1,3 +1,9 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow: /static/
+Disallow: /grldchz/
+Disallow: /grldchz-dev/
+Disallow: /grldchz-ts/
+Disallow: /grldservice/
+Disallow: /grldservice-dev/
+Sitemap: https://www.grilledcheeseoftheday.com/sitemap.txt

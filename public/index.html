@@ -10,18 +10,22 @@ else{
 	require_once(dirname(__FILE__).'/../grldservice/lib/Posts.php');
 }
 $auth = new Auth();
+$auth->authenticate();
 $grldservice = $auth->get_service_context();
 $domain=$auth->get_domain()==false?"localhost":"www.".$auth->get_domain();
 $protocol=$auth->get_secure()==1?"https://":"http://";
 $ui_context=$auth->get_ui_context();
-$home=$protocol.$domain.$ui_context."/index.php";
+$home=$protocol.$domain.$ui_context;
+$canonical=$home;
 $title=$auth->get_title();
+$displayTitle='<a href="'.$home.'/index.php" title="Home">'.$auth->get_title().'</a>';
 $description="Grilled Cheese of the Day is a free social network where you can post text, photos, and videos to share with friends and family.";
-if(isset($_GET["contentid"]) && $_GET["contentid"] != null
-		&& isset($_GET["mediaid"]) && $_GET["mediaid"] != null){ 
-	$html.="<p><a href='".$home."'>Home</a> > ";
-	$html.="<a href='".$home."?contentid=".$_GET["contentid"]."'>contentid=".$_GET["contentid"]."</a> > ";
-	$html.="mediaid=".$_GET["mediaid"]."</p>";
+if(isset($_GET["contentid"]) && $_GET["contentid"] != null && is_numeric($_GET["contentid"])
+		&& isset($_GET["mediaid"]) && $_GET["mediaid"] != null && is_numeric($_GET["mediaid"])){
+	$canonical.="/content/".$_GET["contentid"]."/".$_GET["mediaid"];
+	$html.="<p><a href='".$home."/index.php' title='Home'>Home</a> > ";
+	$html.="<a href='".$home."/content/".$_GET["contentid"]."/index.php' title='Back to Parent'>contentId=".$_GET["contentid"]."</a> > ";
+	$html.="mediaId=".$_GET["mediaid"]."</p>";
 	$media = new Media($auth, $_GET["contentid"], $_GET["mediaid"]);
 	$media->getMedia();
 	$mediaobj = json_decode($media->printOutput());
@@ -46,15 +50,16 @@ if(isset($_GET["contentid"]) && $_GET["contentid"] != null
 		$html="Media Not Found";
 	}
 }
-else if(isset($_GET["contentid"]) && $_GET["contentid"] != null){
-	$html.="<p><a href='".$home."'>Home</a> > ";
-	$html.="<a href='".$home."?contentid=".$_GET["contentid"]."'>contentid=".$_GET["contentid"]."</a></p>";
+else if(isset($_GET["contentid"]) && $_GET["contentid"] != null && is_numeric($_GET["contentid"])){
+	$canonical.="/content/".$_GET["contentid"];
+	$html.="<p><a href='".$home."/index.php' title='Home'>Home</a> > ";
+	$html.="contentId=".$_GET["contentid"]."</p>";
 	$posts = new Posts($auth, $_GET["contentid"]);
 	$posts->getPosts();
 	$obj = json_decode($posts->printOutput());
 	if($obj->{'results'}){
 		foreach($obj->{'results'} as $rec){
-			$html.=$rec->{'first_name'}." ".$rec->{'last_name'}." @ ".$rec->{'post_date_time'}."<h2>".$rec->{'comment'}."</h2>";
+			$html.="<h2>".$rec->{'comment'}."</h2>".$rec->{'first_name'}." @ ".$rec->{'post_date_time'};
 			$description=stripslashes(strip_tags($rec->{'comment'}));
 			$description=substr($description,0,300).((strlen($description)<300)?"":"...");
 			$title=substr($description,0,60).((strlen($description)<60)?"":"...");
@@ -63,12 +68,12 @@ else if(isset($_GET["contentid"]) && $_GET["contentid"] != null){
 			$mediaobj = json_decode($media->printOutput());
 			if($mediaobj->{'results'}){
 				foreach($mediaobj->{'results'} as $mediarec){
-					$html.="<p><a href='".$home."?contentid=".$mediarec->{"content_id"}."&mediaid=".$mediarec->{"id"}."'>".$mediarec->{"title"}."</a></p>";
+					$html.="<p><a href='".$home."/content/".$mediarec->{"content_id"}."/".$mediarec->{"id"}."/index.php' title='".$mediarec->{"title"}."'>".$mediarec->{"title"}."</a></p>";
 				}
 			}
 			if($rec->{'replies'}){
 				foreach($rec->{'replies'} as $reply){
-					$html.=$reply->{'first_name'}." ".$reply->{'last_name'}." @ ".$reply->{'post_date_time'}."<h4>".$reply->{'comment'}."</h4>";
+					$html.="<h4>".$reply->{'comment'}."</h4>".$reply->{'first_name'}." @ ".$reply->{'post_date_time'};
 				}
 			}
 		}
@@ -79,19 +84,21 @@ else if(isset($_GET["contentid"]) && $_GET["contentid"] != null){
 }
 else{
 	$start=0;
-	if(isset($_GET["start"]) && $_GET["start"] != null){
+	if(isset($_GET["start"]) && $_GET["start"] != null && is_numeric($_GET["start"]) && $_GET["start"] != 0){
 		$start=$_GET["start"];
+		$canonical.="/start/".$start;
+		$description="Page ".(($start/10)+1)." of ".$description;
+		$displayTitle = "Page ".(($start/10)+1)." of ".$displayTitle;
 	}
 	$posts = new Posts($auth, $start."", "10");
 	$posts->getPosts();
 	$obj = json_decode($posts->printOutput());
 	if($obj->{'results'}){
 		foreach($obj->{'results'} as $rec){
-			$html.="<a href='".$home."?contentid=".$rec->{"id"}."'>".$rec->{'first_name'}." ".$rec->{'last_name'}." @ ".$rec->{'post_date_time'}."</a><h2>".$rec->{'comment'}."</h2>";
-			$description.=$rec->{'comment'}." ";
+			$html.="<h2>".$rec->{'comment'}."</h2><a href='".$home."/content/".$rec->{"id"}."/index.php' title='Go to Page'>".$rec->{'first_name'}." @ ".$rec->{'post_date_time'}."</a>";
 		}
 		if(($start+10)<$obj->{'total'}){
-			$html.="<a href='".$home."?start=".($start+10)."'>more</a>";
+			$html.="<p><a href='".$home."/start/".($start+10)."/index.php' title='Load More Posts'>more</a></p>";
 		}
 		$description=strip_tags($description);
 		$description=substr($description,0,300).((strlen($description)<300)?"":"...");
@@ -103,16 +110,11 @@ else{
 }
 ?>
 <!DOCTYPE html>
-<!--
-This is a part of the GRLDCHZ Social network
-
-Copyright (C) 2022 grilledcheeseoftheday.com
--->
 <html lang="en">
   <head>
     <title><?php print $title; ?></title>
 	<meta name="description" content="<?php print $description; ?>" />
-	<link rel="canonical" href="<?php echo $home; ?>" />
+	<link rel="canonical" href="<?php echo $canonical."/index.php"; ?>" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=8;FF=3;OtherUA=4"/>
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -132,7 +134,7 @@ Copyright (C) 2022 grilledcheeseoftheday.com
   <body>
     <div id="root"></div>
     <noscript>
-	<h1><?php print $auth->get_title(); ?></h1>
+	<h1><?php print $displayTitle; ?></h1>
 	<?php print $html; ?>
 	</noscript>
 	<div id="copyright"><?php print $auth->get_title(); ?> &#169 2022</div>

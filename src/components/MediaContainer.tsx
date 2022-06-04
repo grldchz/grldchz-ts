@@ -23,7 +23,7 @@ export interface Props{
 }
 const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
     const rootEl = document.getElementById('root');    
-	const { getUnescapedText, getParameterByName } = AppUtils();
+	const { getUnescapedText, getParameterByName, getContextRoot } = AppUtils();
     const { deleteMedia, submitCaption, setImage } = useMediaService();
     const [loading, setLoading] = React.useState(true);
     const [openImageViewer, setOpenImageViewer] = React.useState(false);
@@ -82,7 +82,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
     };
     const menuItems = [
         {label: 'Share', command:() => showShareForm(true)},
-        {label: 'Download Original', url:media.original, target:"_blank"},
+        {label: 'Download Original', url:media.original},
         {label: 'Set As Main Image', command:() => setAsMain()},
         {label: 'Set As Profile Image', command:setAsProfile},
         {label: 'Unset Profile Image', command:setAsProfile}
@@ -132,13 +132,9 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
       };
 
  
-    const getShareUrl = () => {
-        var url = window.location.href;
-        if(url.indexOf("?")>-1){
-          url = url.substring(0, url.indexOf("?"));
-        }
-      return url+"?contentid="+media.content_id+"&mediaid="+media.id;
-    };
+  const getShareUrl = () => {
+	return getContextRoot() + "/content/" + media.content_id + "/" + media.id;
+  };
     const menuItemsRef = useRef<Menu>(new Menu({}));
 	let cssClasses = ""
 	if(getParameterByName("mediaid")!=""){
@@ -146,13 +142,11 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
 	}
     return (
         <div className={cssClasses}>
-		{getParameterByName("mediaid")!=""&&(
-		<div>
-			<a href={window.location.href.split("?")[0]}>Home</a> > 
-			<a href={window.location.href.split("?")[0]+"?contentid="+media.content_id}>{"contentid=" + media.content_id}</a> > 
-			mediaid={media.id}
-		</div>
-		)}
+        {getParameterByName("mediaid")!=""&&(
+            <div>
+                <a href={getContextRoot()} title={process.env.REACT_APP_TITLE}>{process.env.REACT_APP_TITLE}</a> > <a href={getContextRoot() + "/content/" + media.content_id} title="Back to Parent">{"contentid=" + media.content_id}</a> > mediaid={media.id}
+            </div>
+        )}
         {mediaVisible && (
         <div>
         {progressBarVisible && (
@@ -169,8 +163,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                         onLoad={() => setLoading(false)}
                         onClick={() => setOpenImageViewer(true)}/>
                 </div>
-				{getParameterByName("mediaid")!=""&&(<div>{getCaption()}</div>)}
-				{getParameterByName("mediaid")===""&&(<div><a href={getShareUrl()}>{getCaption()}</a></div>)}
+				<div>{getCaption()}</div>
                 <Dialog key={'IMAGE'+media.id} visible={openImageViewer} style={{width: '100vw'}} 
                 onHide={() => setOpenImageViewer(false)} blockScroll >
                     <ImageViewer media={media} />
@@ -185,8 +178,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
                         <source src={media.mp4} type="video/mp4" />
                     </video>
                 </div>					
-				{getParameterByName("mediaid")!=""&&(<div>{getCaption()}</div>)}
-				{getParameterByName("mediaid")===""&&(<div><a href={getShareUrl()}>{getCaption()}</a></div>)}
+				<div>{getCaption()}</div>
             </div>
         )}
         {profile.name == media.user_name && (

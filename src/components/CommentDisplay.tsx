@@ -18,10 +18,12 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { Menu } from 'primereact/menu';
 import AppUtils from '../AppUtils';
 import CopyToClipboardDialog from './CopyToClipboardDialog';
+import { AppState } from '../types/AppState';
 export interface Props{
+  appState: AppState;
   comment: Comment;
   profile: Profile;
-  loadComments(): void;
+  loadComments(args?: any, content_id?: any): void;
 }
 interface UploadResponse{
   status: "success" | "error",
@@ -38,9 +40,9 @@ interface Upload{
   files: UploadFile[];
   errors:boolean;
 }
-const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => {
+const CommentDisplay: React.FC<Props> = ({ appState, comment, profile, loadComments }) => {
   const rootEl = document.getElementById('root');
-  const { getUnescapedText, getParameterByName } = AppUtils();
+  const { getUnescapedText, getParameterByName, getContextRoot } = AppUtils();
   const { deleteComment } = useCommentService();
   const [ mediaScroller, setMediaScroller ] = React.useState(false);
   const [ editFormVisible, showEditForm ] = React.useState(false);
@@ -81,7 +83,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     setLoading(false);
   };
   let mainImageContainerClasses = "mainImageContainer";
-  if(getParameterByName("contentid")){
+  if(getParameterByName("contentid") || appState.commentQuery.content_id){
     mainImageContainerClasses += " extraHeight";
   }
   const renderMainImage = (comment: Comment) => {
@@ -146,7 +148,12 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     showEditForm(false);
     showShareForm(false);
     showReplyForm(false);
-    loadComments();
+	if(!comment.parent_id){
+        loadComments(null, comment.id);
+	}
+	else{
+		loadComments(null, comment.parent_id);
+	}
   };
   const renderDeleteFooter = () => {
       return (
@@ -156,12 +163,10 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         </div>
       );
   };
+
   const getShareUrl = () => {
-    var url = window.location.href;
-    if(url.indexOf("?")>-1){
-      url = url.substring(0, url.indexOf("?"));
-    }
-    return url + "?contentid=" + comment.id;
+	let shareUrl = getContextRoot() + "/content/" + comment.id;
+    return shareUrl;
   };
   const menuItemsRef = useRef<Menu>(new Menu({}));
   const cardTitle = () => {
@@ -169,15 +174,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
       <div className="p-grid">
         <div className="p-col-4">
         <ProfileImage profile={comment} /></div>
-		{comment.parent_id && (
         <div className="p-col-8">{comment.first_name} @ {comment.post_date_time}</div>
-		)}
-		{!comment.parent_id && getParameterByName("contentid")=="" && (
-        <div className="p-col-8"><a href={getShareUrl()}>{comment.first_name} @ {comment.post_date_time}</a></div>
-		)}
- 		{!comment.parent_id && getParameterByName("contentid")!="" && (
-        <div className="p-col-8">{comment.first_name} @ {comment.post_date_time}</div>
-		)}
      </div>
     );
   }
@@ -208,7 +205,7 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
     if(!upload.errors){
       showUploadForm(false);
     }
-    loadComments();
+    loadComments(null, comment.id);
     if(uploadButtonRef.current)uploadButtonRef.current.clear();
   };
 
@@ -325,9 +322,9 @@ const CommentDisplay: React.FC<Props> = ({ comment, profile, loadComments }) => 
         <ProgressBar mode="indeterminate" /></div>
       )}
       {!comment.parent_id && getParameterByName("contentid") && (
-        <div><a href={window.location.href.split("?")[0]}>Home</a> {" > contentid=" + getParameterByName("contentid")}</div>
+        <div><a href={getContextRoot()} title={process.env.REACT_APP_TITLE}>{process.env.REACT_APP_TITLE}</a> {" > contentid=" + getParameterByName("contentid")}</div>
       )}
-        {!comment.parent_id && comment.user_name == profile.name && process.env.REACT_APP_PUBLIC_ENABLED == "true" && (
+      {!comment.parent_id && comment.user_name == profile.name && process.env.REACT_APP_PUBLIC_ENABLED == "true" && (
         <div style={{color:'red'}}>
 			{comment.open_public==0?"":"PUBLIC"}
         </div>

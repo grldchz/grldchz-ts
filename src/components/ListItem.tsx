@@ -9,22 +9,24 @@ import CommentDisplay from './CommentDisplay'
 import { Profile } from '../types/Profile';
 import ReplyList from './ReplyList';
 import AppUtils from '../AppUtils';
+import { AppState } from '../types/AppState';
 export interface Props{
+	appState: AppState;
     comment: Comment;
     profile: Profile;
     loadComments(): void;
   }
-const ListItem: React.FC<Props> = ({ comment, profile, loadComments }) => {
+const ListItem: React.FC<Props> = ({ appState, comment, profile, loadComments }) => {
   const { getParameterByName } = AppUtils();
   let cssClasses = "commentDisplay";
-  if(getParameterByName("contentid")){
+  if(getParameterByName("contentid") || appState.commentQuery.content_id){
     cssClasses += " extraWide";
   }
   return (
     <div className={cssClasses} id={comment.id+""}>
-      <CommentDisplay comment={comment} profile={profile} loadComments={loadComments}/>
+      <CommentDisplay appState={appState} comment={comment} profile={profile} loadComments={loadComments}/>
       {(comment.replies.length>0 &&
-      <ReplyList comment={comment} profile={profile} loadComments={loadComments}/>
+      <ReplyList appState={appState} comment={comment} profile={profile} loadComments={loadComments}/>
       )}
     </div>
   );
