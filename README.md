@@ -1,5 +1,7 @@
 # GRLDCHZ
 
+A social networking platform where you can post text, photos, and videos.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Run-time Dependencies
