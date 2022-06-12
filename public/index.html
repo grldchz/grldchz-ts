@@ -28,6 +28,8 @@ else{
 	require_once(dirname(__FILE__).'/../grldservice/lib/Posts.php');
 }
 $auth = new Auth();
+$title=$auth->get_title();
+try{
 $auth->authenticate();
 $grldservice = $auth->get_service_context();
 $domain=$auth->get_domain()==false?"localhost":"www.".$auth->get_domain();
@@ -35,20 +37,19 @@ $protocol=$auth->get_secure()==1?"https://":"http://";
 $ui_context=$auth->get_ui_context();
 $home=$protocol.$domain.$ui_context;
 $canonical=$home;
-$title=$auth->get_title();
 $displayTitle='<a href="'.$home.'/index.php" title="Home">'.$auth->get_title().'</a>';
 $description="Grilled Cheese of the Day is a free social network where you can post text, photos, and videos to share with friends and family.";
 if(isset($_GET["contentid"]) && $_GET["contentid"] != null && is_numeric($_GET["contentid"])
 		&& isset($_GET["mediaid"]) && $_GET["mediaid"] != null && is_numeric($_GET["mediaid"])){
 	$canonical.="/content/".$_GET["contentid"]."/".$_GET["mediaid"];
 	$html.="<p><a href='".$home."/index.php' title='Home'>Home</a> > ";
-	$html.="<a href='".$home."/content/".$_GET["contentid"]."/index.php' title='Back to Parent'>contentId=".$_GET["contentid"]."</a> > ";
-	$html.="mediaId=".$_GET["mediaid"]."</p>";
+	$html.="<a href='".$home."/content/".$_GET["contentid"]."/index.php' title='Back to Content Page'>content/".$_GET["contentid"]."</a>";
 	$media = new Media($auth, $_GET["contentid"], $_GET["mediaid"]);
 	$media->getMedia();
 	$mediaobj = json_decode($media->printOutput());
 	if($mediaobj->{'results'}){
 		foreach($mediaobj->{'results'} as $mediarec){
+			$html.=" > ".$mediarec->{'file'}."</p>";
 			$description=stripslashes(strip_tags($mediarec->{'title'}));
 			$description=substr($description,0,300).((strlen($description)<300)?"":"...");
 			$title=substr($description,0,60).((strlen($description)<60)?"":"...");
@@ -71,7 +72,7 @@ if(isset($_GET["contentid"]) && $_GET["contentid"] != null && is_numeric($_GET["
 else if(isset($_GET["contentid"]) && $_GET["contentid"] != null && is_numeric($_GET["contentid"])){
 	$canonical.="/content/".$_GET["contentid"];
 	$html.="<p><a href='".$home."/index.php' title='Home'>Home</a> > ";
-	$html.="contentId=".$_GET["contentid"]."</p>";
+	$html.="content/".$_GET["contentid"]."</p>";
 	$posts = new Posts($auth, $_GET["contentid"]);
 	$posts->getPosts();
 	$obj = json_decode($posts->printOutput());
@@ -125,6 +126,10 @@ else{
 	else{
 		$html="No Results Found";
 	}
+}
+}
+catch(Exception $e){
+	$html.="<p>".$e->getMessage()."</p>";
 }
 ?>
 <!DOCTYPE html>

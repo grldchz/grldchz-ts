@@ -157,7 +157,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
         <div className={cssClasses}>
         {getParameterByName("mediaid")!=""&&(
             <div>
-                <a href={getContextRoot()} title={process.env.REACT_APP_TITLE}>{process.env.REACT_APP_TITLE}</a> > <a href={getContextRoot() + "/content/" + media.content_id} title="Back to Parent">{"contentid=" + media.content_id}</a> > mediaid={media.id}
+                <a href={getContextRoot()} title={process.env.REACT_APP_TITLE}>home</a> > <a href={getContextRoot() + "/content/" + media.content_id} title="Back to Parent">{"content/" + media.content_id}</a> > {media.file}
             </div>
         )}
         {mediaVisible && (

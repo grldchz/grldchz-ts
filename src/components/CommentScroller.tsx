@@ -43,6 +43,9 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
     return (<ListItem appState={appState} comment={comment} key={comment.id} profile={profile} loadComments={loadComments} />);
   };
   const onScroll = (evnt?: any) => {
+	if(appState.commentQuery.content_id){
+		return;
+	}
     let start = appState.commentQuery.start;
     if(getParameterByName("start")){
       start += parseInt(getParameterByName("start"));
@@ -51,7 +54,8 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
       start = 0;
       setAppState({
         commentQuery: {
-          start: start,
+          content_id: appState.commentQuery.content_id,
+		  start: start,
           limit: appState.commentQuery.limit,
           searchTerm: appState.commentQuery.searchTerm,
           fromDate: appState.commentQuery.fromDate,
@@ -67,6 +71,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
       if(start < appState.commentsTotal){
         setAppState({
           commentQuery: {
+            content_id: appState.commentQuery.content_id,
             start: start,
             limit: evnt.rows,
             searchTerm: appState.commentQuery.searchTerm,

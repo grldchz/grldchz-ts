@@ -55,7 +55,7 @@ const App: React.FC<{}> = () => {
   const [prevSearch, setPrevSearch ] = React.useState<PostSearch>({
     searchTerm: '', fromDate: '', toDate: ''
   });
-  const loadComments = (search?: PostSearch, content_id?: any) => {
+  const loadComments = (search?: PostSearch, content_id?: any, parent_id?: any) => {
     showCommentForm(false);
     showSearchForm(false);
     showSearchFriendForm(false);

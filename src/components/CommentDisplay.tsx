@@ -36,7 +36,7 @@ export interface Props{
   appState: AppState;
   comment: Comment;
   profile: Profile;
-  loadComments(args?: any, content_id?: any): void;
+  loadComments(args?: any, content_id?: any, parent_id?: any): void;
 }
 interface UploadResponse{
   status: "success" | "error",
@@ -335,7 +335,7 @@ const CommentDisplay: React.FC<Props> = ({ appState, comment, profile, loadComme
         <ProgressBar mode="indeterminate" /></div>
       )}
       {!comment.parent_id && getParameterByName("contentid") && (
-        <div><a href={getContextRoot()} title={process.env.REACT_APP_TITLE}>{process.env.REACT_APP_TITLE}</a> {" > contentid=" + getParameterByName("contentid")}</div>
+        <div><a href={getContextRoot()} title={process.env.REACT_APP_TITLE}>home</a> > {"content/" + getParameterByName("contentid")}</div>
       )}
       {!comment.parent_id && comment.user_name == profile.name && process.env.REACT_APP_PUBLIC_ENABLED == "true" && (
         <div style={{color:'red'}}>
