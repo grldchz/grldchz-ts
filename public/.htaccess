@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^start\/([^/]*)/?(index.php)?$ index.php?start=$1
+RewriteRule ^content\/([^/]*)/?([^/]*)/?(index.php)?$ index.php?contentid=$1&mediaid=$2
