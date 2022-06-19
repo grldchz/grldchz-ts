@@ -95,13 +95,16 @@ const useCommentScroller = (appState: AppState) => {
           setResult({ status: 'error', error });
         }
         else{
-            appState.comments = appState.comments.concat(response.results);
+            if(query.content_id){
+                //Replace the one in the appState.comments with the one in response.results
+                appState.comments = appState.comments.map(obj => response.results.find((o: Comment) => o.id === obj.id) || obj);
+            }
+            else{
+                appState.comments = appState.comments.concat(response.results);
+            }
             appState.commentsTotal = response.total;
             appState.loading = false;
             setResult({ status: 'loaded', payload: appState.comments });
-            let loaded = ((appState.commentQuery.start)+(appState.commentQuery.limit));
-            loaded = loaded<appState.commentsTotal?loaded:appState.commentsTotal;
-			//TODO push state to url
         }
       })
       .catch(error => setResult({ status: 'error', error }));

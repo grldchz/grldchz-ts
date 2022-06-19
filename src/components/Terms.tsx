@@ -36,7 +36,7 @@ const Terms: React.FC<Props> = ({ setProfile }) => {
 
   return (
     <div><h1>Terms and Conditions</h1>
-<h2><blockquote>By registering for, accessing, and using grilledcheeseoftheday.com you agree to the following terms:</blockquote></h2>
+<h2><blockquote>By registering for, accessing, and using {process.env.REACT_APP_TITLE} you agree to the following terms:</blockquote></h2>
 <h3>
 <ul>
 <li>
@@ -57,16 +57,16 @@ You will not upload viruses or other malicious code.
 </li>
 <li>
 You will not post unauthorized commercial communications (such as spam) on 
-grilledcheeseoftheday.com.
+{process.env.REACT_APP_TITLE}.
 </li>
 <li>
 You will not collect users' content or information, or otherwise access 
-grilledcheeseoftheday.com, using automated means (such as harvesting bots, robots, 
+{process.env.REACT_APP_TITLE}, using automated means (such as harvesting bots, robots,
 spiders, or scrapers) without permission.
 </li>
 <li>
 You will not engage in unlawful multi-level marketing, such as a pyramid scheme, on 
-grilledcheeseoftheday.com.
+{process.env.REACT_APP_TITLE}.
 </li>
 <li>
 You will not solicit login information or access an account belonging to someone else.
@@ -76,20 +76,20 @@ You will not bully, intimidate, or harass any user.
 </li>
 <li>
 You will not publicize or offer any contest, giveaway, or sweepstakes (“promotion”) on 
-grilledcheeseoftheday.com.
+{process.env.REACT_APP_TITLE}.
 </li>
 <li>
-You will not use grilledcheeseoftheday.com to do anything unlawful, misleading, malicious, 
+You will not use {process.env.REACT_APP_TITLE} to do anything unlawful, misleading, malicious,
 or discriminatory.
 </li>
 <li>
 You will not do anything that could disable, overburden, or impair the proper working of 
-grilledcheeseoftheday.com, such as a denial of service attack.
+{process.env.REACT_APP_TITLE}, such as a denial of service attack.
 </li>
 <li>
 You will not facilitate or encourage any violations of these terms.
 </li><li>
-You will not provide any false personal information on grilledcheeseoftheday.com, or create an 
+You will not provide any false personal information on {process.env.REACT_APP_TITLE}, or create an
 account for anyone other than yourself without permission.
 </li><li>
 You will not create more than one personal profile.
@@ -99,19 +99,19 @@ If we disable your account, you will not create another one without permission.
 You will not use your personal profile for your own commercial gain (such as selling your 
 status update to an advertiser).
 </li><li>
-You will not use grilledcheeseoftheday.com if you are under 13.
+You will not use {process.env.REACT_APP_TITLE} if you are under 13.
 </li><li>
-You will not use grilledcheeseoftheday.com if you are a convicted sex offender.
+You will not use {process.env.REACT_APP_TITLE} if you are a convicted sex offender.
 </li><li>
 You will keep your contact information accurate and up-to-date.
 </li><li>
 You will not share your password, let anyone else access your account, or do anything 
 else that might jeopardize the security of your account.
 </li><li>
-You will not post content or take any action on grilledcheeseoftheday.com that infringes 
+You will not post content or take any action on {process.env.REACT_APP_TITLE} that infringes
 or violates someone else's rights or otherwise violates the law.
 </li><li>
-We can remove any content or information you post on grilledcheeseoftheday.com if we believe 
+We can remove any content or information you post on {process.env.REACT_APP_TITLE} if we believe
 that it violates this Statement.
 </li><li>
 If we remove your content for infringing someone else's copyright, and you believe we removed 
@@ -121,29 +121,29 @@ If you repeatedly infringe other people's intellectual property rights, we will 
 account when appropriate.
 </li><li>
 If you collect information from users, you will: obtain their consent, make it clear you (and 
-not grilledcheeseoftheday.com) are the one collecting their information, and post a privacy 
+not {process.env.REACT_APP_TITLE}) are the one collecting their information, and post a privacy
 policy explaining what information you collect and how you will use it.
 </li><li>
 You will not post anyone's identification documents or sensitive financial information on 
-grilledcheeseoftheday.com.
+{process.env.REACT_APP_TITLE}.
 </li>
 </ul>
 </h3>
 <h1>Cookie Policy</h1>
-<h2><blockquote>By using grilledcheeseoftheday.com you agree to the following cookie policy:</blockquote></h2>
+<h2><blockquote>By using {process.env.REACT_APP_TITLE} you agree to the following cookie policy:</blockquote></h2>
 <h3><blockquote>
-You agree grilledcheeseoftheday.com can store a cookie on your device.  This first party cookie is strictly necessary for grilledcheeseoftheday.com to function properly.  There are no third party tracking cookies on grilledcheeseoftheday.com.
+You agree {process.env.REACT_APP_TITLE} can store a cookie on your device.  This first party cookie is strictly necessary for {process.env.REACT_APP_TITLE} to function properly.  There are no third party tracking cookies on {process.env.REACT_APP_TITLE}.
 </blockquote></h3>
 <h1>Privacy Notice</h1>
-<h2><blockquote>By registering for, accessing, and using grilledcheeseoftheday.com you agree that you have read the following notice:</blockquote></h2>
-<h3><blockquote>grilledcheeseoftheday.com collects your first name, last name, email directly from you when you voluntarily provide it to us.  Additionally, grilledcheeseoftheday.com collects information such as your IP address, the date you register, and whether or not you've accepted these terms.  grilledcheeseoftheday.com does not share any information about you to anyone, ever.  Your account information and all content (posts containing text, photos, and videos) is completely private unless you accept somebody's friend request or somebody else accepts yours thereby allowing them to see your posts and you their's.  There are no third party applications, no advertisements, no news feeds, and definitely no algorithms to predict your activity on grilledcheeseoftheday.com.</blockquote></h3>
+<h2><blockquote>By registering for, accessing, and using {process.env.REACT_APP_TITLE} you agree that you have read the following notice:</blockquote></h2>
+<h3><blockquote>{process.env.REACT_APP_TITLE} collects your first name, last name, email directly from you when you voluntarily provide it to us.  Additionally, {process.env.REACT_APP_TITLE} collects information such as your IP address, the date you register, and whether or not you've accepted these terms.  {process.env.REACT_APP_TITLE} does not share any information about you to anyone, ever.  Your account information and all content (posts containing text, photos, and videos) is completely private unless you accept somebody's friend request or somebody else accepts yours thereby allowing them to see your posts and you their's.  There are no third party applications, no advertisements, no news feeds, and definitely no algorithms to predict your activity on {process.env.REACT_APP_TITLE}.</blockquote></h3>
 <h1>Disclaimer</h1>
-<h2><blockquote>By registering for, accessing, and using grilledcheeseoftheday.com you agree that you have read the following disclaimer:</blockquote></h2>
-<h3><blockquote>grilledcheeseoftheday.com and its components are offered for informational purposes only; grilledcheeseoftheday.com shall not be responsible or liable for the accuracy, usefulness or availability of any information transmitted or made available via grilledcheeseoftheday.com, and shall not be responsible or liable for any error or omissions in that information.</blockquote></h3>
+<h2><blockquote>By registering for, accessing, and using {process.env.REACT_APP_TITLE} you agree that you have read the following disclaimer:</blockquote></h2>
+<h3><blockquote>{process.env.REACT_APP_TITLE} and its components are offered for informational purposes only; {process.env.REACT_APP_TITLE} shall not be responsible or liable for the accuracy, usefulness or availability of any information transmitted or made available via {process.env.REACT_APP_TITLE}, and shall not be responsible or liable for any error or omissions in that information.</blockquote></h3>
 <h1>Intellectual Property</h1>
-<h2><blockquote>By registering for, accessing, and using grilledcheeseoftheday.com you agree that you have read the following statement:</blockquote></h2>
-<h3><blockquote>grilledcheeseoftheday.com and its original content, features, and functionality are owned by REDACTED FOR PRIVACY and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</blockquote></h3>
-<h4><blockquote>If you have any questions about this Agreement, please feel free to contact us at admin@grilledcheeseoftheday.com</blockquote></h4>
+<h2><blockquote>By registering for, accessing, and using {process.env.REACT_APP_TITLE} you agree that you have read the following statement:</blockquote></h2>
+<h3><blockquote>{process.env.REACT_APP_TITLE} and its original content, features, and functionality are owned by REDACTED FOR PRIVACY and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</blockquote></h3>
+<h4><blockquote>If you have any questions about this Agreement, please feel free to contact us at {process.env.REACT_APP_ADMIN_EMAIL}</blockquote></h4>
       <Button type="button" label="Accept" icon="pi pi-check" onClick={handleOnClick} />
 
       {service.status == 'loading' && (

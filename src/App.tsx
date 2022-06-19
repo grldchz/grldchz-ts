@@ -55,11 +55,13 @@ const App: React.FC<{}> = () => {
   const [prevSearch, setPrevSearch ] = React.useState<PostSearch>({
     searchTerm: '', fromDate: '', toDate: ''
   });
-  const loadComments = (search?: PostSearch, content_id?: any, parent_id?: any) => {
+  const loadComments = (search?: PostSearch, content_id?: any) => {
     showCommentForm(false);
     showSearchForm(false);
     showSearchFriendForm(false);
     const commentQuery:CommentQuery={ start: 0, limit: 10 };
+    let comments = [];
+    let commentsTotal = 0;
     if(search){
       setPrevSearch(search);
       if(search.searchTerm){
@@ -73,11 +75,15 @@ const App: React.FC<{}> = () => {
       }
     }
 	else if(content_id){
-		commentQuery.content_id = content_id;
+	  commentQuery.content_id = content_id;
+	  comments = appState.comments;
+	  commentsTotal = appState.commentsTotal;
 	}
     setAppState({
       commentQuery: commentQuery,
-      comments: [], commentsTotal: 0, loading: true
+      comments: comments,
+      commentsTotal: commentsTotal,
+      loading: true
     });
   };
   const handleProfileFormSubmit = (profile: Profile) => {

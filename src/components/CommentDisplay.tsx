@@ -36,7 +36,7 @@ export interface Props{
   appState: AppState;
   comment: Comment;
   profile: Profile;
-  loadComments(args?: any, content_id?: any, parent_id?: any): void;
+  loadComments(args?: any, content_id?: any): void;
 }
 interface UploadResponse{
   status: "success" | "error",
@@ -96,7 +96,7 @@ const CommentDisplay: React.FC<Props> = ({ appState, comment, profile, loadComme
     setLoading(false);
   };
   let mainImageContainerClasses = "mainImageContainer";
-  if(getParameterByName("contentid") || appState.commentQuery.content_id){
+  if(getParameterByName("contentid")){
     mainImageContainerClasses += " extraHeight";
   }
   const renderMainImage = (comment: Comment) => {

@@ -93,7 +93,38 @@ const useCommentService = () => {
         });
     });
   };
-  return {service, submitComment, deleteComment};
+  const getComment = (content_id: number) => {
+    setService({ status: 'loading' });
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+    headers.append('Accept', 'application/json; charset=utf-8');
+    let queryString = 'limit=10&sort=[{"property":"id","direction":"desc"}]&start=0';
+    return new Promise((resolve, reject) => {
+    fetch(process.env.REACT_APP_GRLDSERVICE_URL+'service.php?get=posts&content_id='+content_id+'&'+queryString, {
+      method: "GET",
+      headers,
+      body: undefined,
+      credentials: "include"
+    })
+      .then(response => response.json())
+      .then(response => {
+        if(response.status){
+          const error = new Error(response.msg);
+          setService({ status: 'error', error });
+        }
+        else{
+            setService({ status: 'loaded', payload: response });
+        }
+		resolve(response);
+      })
+        .catch(error => {
+          setService({ status: 'error', error });
+          reject(error);
+        });
+    });
+
+  };
+  return {service, submitComment, deleteComment, getComment};
 
 };
 

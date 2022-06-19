@@ -32,7 +32,7 @@ export interface Props{
 const ListItem: React.FC<Props> = ({ appState, comment, profile, loadComments }) => {
   const { getParameterByName } = AppUtils();
   let cssClasses = "commentDisplay";
-  if(getParameterByName("contentid") || appState.commentQuery.content_id){
+  if(getParameterByName("contentid")){
     cssClasses += " extraWide";
   }
   return (
