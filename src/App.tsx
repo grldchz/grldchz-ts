@@ -60,7 +60,7 @@ const App: React.FC<{}> = () => {
     showSearchForm(false);
     showSearchFriendForm(false);
     const commentQuery:CommentQuery={ start: 0, limit: 10 };
-    let comments = [];
+    let comments: any[] = [];
     let commentsTotal = 0;
     if(search){
       setPrevSearch(search);
