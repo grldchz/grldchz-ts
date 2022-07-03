@@ -70,7 +70,7 @@ const MediaScroller: React.FC<Props> = ({ profile, content_id, media_id }) => {
             <ProgressSpinner />
         )}
         {service.status == 'error' && (
-          <div>{service.error.message}</div>
+          <div style={{color:'red'}}>{service.error.message}</div>
         )}
         {service.status == 'loaded' && scrollerState.results.length>0 &&
           <div>

@@ -185,10 +185,10 @@ const ListItem: React.FC<Props> = ({ friend, loadFriends }) => {
           <ProgressSpinner />
         )}
         {friendService.status == 'loaded' && (
-          <div>{friendService.payload}</div>
+          <div style={{color:'green'}}>{friendService.payload}</div>
         )}
         {friendService.status == 'error' && (
-          <div>{friendService.error.message}</div>
+          <div style={{color:'red'}}>{friendService.error.message}</div>
         )}
       </div>
       )}

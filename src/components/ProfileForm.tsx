@@ -175,10 +175,10 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
           <ProgressSpinner />
       )}
       {service.status == 'loaded' && (
-        <div>Response: {service.payload}</div>
+        <div style={{color:'green'}}>{service.payload}</div>
       )}
       {service.status == 'error' && (
-        <div>
+        <div style={{color:'red'}}>
           {service.error.message}
         </div>
       )}

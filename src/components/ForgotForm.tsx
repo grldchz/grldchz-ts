@@ -94,10 +94,10 @@ const ForgotFormComponent: React.FC<{}> = () => {
         <ProgressSpinner />
       )}
       {service.status == 'loaded' && (
-        <div>{service.payload}</div>
+        <div style={{color:'green'}}>{service.payload}</div>
       )}
       {service.status == 'error' && (
-        <div>{service.error.message}</div>
+        <div style={{color:'red'}}>{service.error.message}</div>
       )}
     </div>
   );

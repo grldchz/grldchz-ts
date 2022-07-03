@@ -38,7 +38,7 @@ $ui_context=$auth->get_ui_context();
 $home=$protocol.$domain.$ui_context;
 $canonical=$home;
 $displayTitle='<a href="'.$home.'/index.php" title="Home">'.$auth->get_title().'</a>';
-$description="Grilled Cheese of the Day is a free social network where you can post text, photos, and videos to share with friends and family.";
+$description=$title." is a media management system where you can upload images and videos to share with other members of the platform.";
 if(isset($_GET["contentid"]) && $_GET["contentid"] != null && is_numeric($_GET["contentid"])
 		&& isset($_GET["mediaid"]) && $_GET["mediaid"] != null && is_numeric($_GET["mediaid"])){
 	$canonical.="/content/".$_GET["contentid"]."/".$_GET["mediaid"];
@@ -52,7 +52,7 @@ if(isset($_GET["contentid"]) && $_GET["contentid"] != null && is_numeric($_GET["
 			$html.=" > ".$mediarec->{'file'}."</p>";
 			$description=stripslashes(strip_tags($mediarec->{'title'}));
 			$description=substr($description,0,300).((strlen($description)<300)?"":"...");
-			$title=substr($description,0,60).((strlen($description)<60)?"":"...");
+			$title=substr($description,0,60).((strlen($description)<60)?"":"...")." - ".$title;
 			if($mediarec->{"is_image"}){
 				$slide = $grldservice."/getfile.php?media=media/".$mediarec->{"user_name"}."/".$mediarec->{"content_id"}."/img_slide_".$mediarec->{"file"}.".jpeg";
 				$html.="<p><img src='".$slide."' alt='".$mediarec->{"file"}."' title='".$mediarec->{"title"}."'/></p>";
@@ -81,7 +81,7 @@ else if(isset($_GET["contentid"]) && $_GET["contentid"] != null && is_numeric($_
 			$html.="<h2>".$rec->{'comment'}."</h2>".$rec->{'first_name'}." @ ".$rec->{'post_date_time'};
 			$description=stripslashes(strip_tags($rec->{'comment'}));
 			$description=substr($description,0,300).((strlen($description)<300)?"":"...");
-			$title=substr($description,0,60).((strlen($description)<60)?"":"...");
+			$title=substr($description,0,60).((strlen($description)<60)?"":"...")." - ".$title;
 			$media = new Media($auth, $_GET["contentid"]);
 			$media->getMedia();
 			$mediaobj = json_decode($media->printOutput());
@@ -106,8 +106,8 @@ else{
 	if(isset($_GET["start"]) && $_GET["start"] != null && is_numeric($_GET["start"]) && $_GET["start"] != 0){
 		$start=$_GET["start"];
 		$canonical.="/start/".$start;
-		$description="Page ".(($start/10)+1)." of ".$description;
-		$displayTitle = "Page ".(($start/10)+1)." of ".$displayTitle;
+		$description=$description." - Page ".(($start/10)+1);
+		$displayTitle = $displayTitle." - Page ".(($start/10)+1);
 	}
 	$posts = new Posts($auth, $start."", "10");
 	$posts->getPosts();

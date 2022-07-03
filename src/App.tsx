@@ -145,7 +145,7 @@ const App: React.FC<{}> = () => {
           </div>
         )}
       </div>
-      {profile && profile.name &&
+     {profile && profile.name &&
         <div>
           <Dialog key="SearchFriend" visible={searchFriendFormVisible} onHide={() => showSearchFriendForm(false)}>
             <SearchFriendForm profile={profile}/>

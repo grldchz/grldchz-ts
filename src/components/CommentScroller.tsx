@@ -95,7 +95,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
             <ProgressBar mode="indeterminate" /></div>
         )}
         {service.status == 'error' && (
-          <div>Error: {service.error.message}</div>
+          <div style={{color:'red'}}>{service.error.message}</div>
         )}
         {service.status == 'loaded' && service.payload && service.payload.length > 0 &&
             <div>

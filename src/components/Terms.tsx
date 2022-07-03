@@ -49,24 +49,19 @@ You shall upload only content (photos and videos) that were produced by you.
 You shall not upload copyrighted material that was copyrighted by someone other than you.
 </li>
 <li>
-You shall not upload content (photos or videos) that: is hateful, threatening, or 
-pornographic; incites violence; or contains nudity or graphic or gratuitous violence.
+You shall not upload content (photos or videos) that: is hateful, threatening, or pornographic; incites violence; or contains nudity or graphic or gratuitous violence.
 </li>
 <li>
 You will not upload viruses or other malicious code.
 </li>
 <li>
-You will not post unauthorized commercial communications (such as spam) on 
-{process.env.REACT_APP_TITLE}.
+You will not post unauthorized commercial communications (such as spam) on {process.env.REACT_APP_TITLE}.
 </li>
 <li>
-You will not collect users' content or information, or otherwise access 
-{process.env.REACT_APP_TITLE}, using automated means (such as harvesting bots, robots,
-spiders, or scrapers) without permission.
+You will not collect users' content or information, or otherwise access {process.env.REACT_APP_TITLE}, using automated means (such as harvesting bots, robots, spiders, or scrapers) without permission.
 </li>
 <li>
-You will not engage in unlawful multi-level marketing, such as a pyramid scheme, on 
-{process.env.REACT_APP_TITLE}.
+You will not engage in unlawful multi-level marketing, such as a pyramid scheme, on {process.env.REACT_APP_TITLE}.
 </li>
 <li>
 You will not solicit login information or access an account belonging to someone else.
@@ -75,29 +70,24 @@ You will not solicit login information or access an account belonging to someone
 You will not bully, intimidate, or harass any user.
 </li>
 <li>
-You will not publicize or offer any contest, giveaway, or sweepstakes (“promotion”) on 
-{process.env.REACT_APP_TITLE}.
+You will not publicize or offer any contest, giveaway, or sweepstakes (“promotion”) on {process.env.REACT_APP_TITLE}.
 </li>
 <li>
-You will not use {process.env.REACT_APP_TITLE} to do anything unlawful, misleading, malicious,
-or discriminatory.
+You will not use {process.env.REACT_APP_TITLE} to do anything unlawful, misleading, malicious, or discriminatory.
 </li>
 <li>
-You will not do anything that could disable, overburden, or impair the proper working of 
-{process.env.REACT_APP_TITLE}, such as a denial of service attack.
+You will not do anything that could disable, overburden, or impair the proper working of {process.env.REACT_APP_TITLE}, such as a denial of service attack.
 </li>
 <li>
 You will not facilitate or encourage any violations of these terms.
 </li><li>
-You will not provide any false personal information on {process.env.REACT_APP_TITLE}, or create an
-account for anyone other than yourself without permission.
+You will not provide any false personal information on {process.env.REACT_APP_TITLE}, or create an account for anyone other than yourself without permission.
 </li><li>
 You will not create more than one personal profile.
 </li><li>
 If we disable your account, you will not create another one without permission.
 </li><li>
-You will not use your personal profile for your own commercial gain (such as selling your 
-status update to an advertiser).
+You will not use your personal profile for your own commercial gain (such as selling your status update to an advertiser).
 </li><li>
 You will not use {process.env.REACT_APP_TITLE} if you are under 13.
 </li><li>
@@ -105,27 +95,19 @@ You will not use {process.env.REACT_APP_TITLE} if you are a convicted sex offend
 </li><li>
 You will keep your contact information accurate and up-to-date.
 </li><li>
-You will not share your password, let anyone else access your account, or do anything 
-else that might jeopardize the security of your account.
+You will not share your password, let anyone else access your account, or do anything else that might jeopardize the security of your account.
 </li><li>
-You will not post content or take any action on {process.env.REACT_APP_TITLE} that infringes
-or violates someone else's rights or otherwise violates the law.
+You will not post content or take any action on {process.env.REACT_APP_TITLE} that infringes or violates someone else's rights or otherwise violates the law.
 </li><li>
-We can remove any content or information you post on {process.env.REACT_APP_TITLE} if we believe
-that it violates this Statement.
+We can remove any content or information you post on {process.env.REACT_APP_TITLE} if we believe that it violates this Statement.
 </li><li>
-If we remove your content for infringing someone else's copyright, and you believe we removed 
-it by mistake, we will provide you with an opportunity to appeal.
+If we remove your content for infringing someone else's copyright, and you believe we removed it by mistake, we will provide you with an opportunity to appeal.
 </li><li>
-If you repeatedly infringe other people's intellectual property rights, we will disable your 
-account when appropriate.
+If you repeatedly infringe other people's intellectual property rights, we will disable your account when appropriate.
 </li><li>
-If you collect information from users, you will: obtain their consent, make it clear you (and 
-not {process.env.REACT_APP_TITLE}) are the one collecting their information, and post a privacy
-policy explaining what information you collect and how you will use it.
+If you collect information from users, you will: obtain their consent, make it clear you (and not {process.env.REACT_APP_TITLE}) are the one collecting their information, and post a privacy policy explaining what information you collect and how you will use it.
 </li><li>
-You will not post anyone's identification documents or sensitive financial information on 
-{process.env.REACT_APP_TITLE}.
+You will not post anyone's identification documents or sensitive financial information on {process.env.REACT_APP_TITLE}.
 </li>
 </ul>
 </h3>
@@ -150,10 +132,10 @@ You agree {process.env.REACT_APP_TITLE} can store a cookie on your device.  This
         <ProgressSpinner />
       )}
       {service.status == 'loaded' && (
-        <div>Accepted</div>
+        <div style={{color:'green'}}>Accepted</div>
       )}
       {service.status == 'error' && (
-        <div>
+        <div style={{color:'red'}}>
          {service.error.message}
         </div>
       )}
