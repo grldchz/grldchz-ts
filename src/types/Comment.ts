@@ -42,7 +42,8 @@ export interface CommentQuery {
   searchTerm?: string | null,
   fromDate?: string | null,
   toDate?: string | null,
-  limit: number
+  limit: number,
+  deleteComment?: boolean | null
 }
 
 export interface PostComment {

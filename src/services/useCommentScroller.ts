@@ -32,7 +32,7 @@ const useCommentScroller = (appState: AppState) => {
     status: 'loading'
   });
   const { getParameterByName, getQueryParamByName } = AppUtils();
-  
+
   useEffect(() => {
     const query: CommentQuery = appState.commentQuery;
     let queryString = 'limit='+query.limit+'&sort=[{"property":"id","direction":"desc"}]';
@@ -68,7 +68,7 @@ const useCommentScroller = (appState: AppState) => {
     if(query.toDate){
       queryString += '&toDate='+query.toDate;
     }
-      //setResult({status: 'loading'});
+    setResult({status: 'loading'});
     fetch(process.env.REACT_APP_GRLDSERVICE_URL+'service.php?get=posts&'+queryString, {
       method: "GET", // POST, PUT, DELETE, etc.
       headers: {
@@ -96,15 +96,36 @@ const useCommentScroller = (appState: AppState) => {
         }
         else{
             if(query.content_id){
+			  if(query.deleteComment){
+				  // remove comment from appState.comments
+				  appState.comments = appState.comments.filter(obj => obj.id != parseInt(query.content_id || "0"));
+				  query.deleteComment = null;
+			  }
+			  else{
                 //Replace the one in the appState.comments with the one in response.results
                 appState.comments = appState.comments.map(obj => response.results.find((o: Comment) => o.id === obj.id) || obj);
+			  }
+			  appState.commentQuery.content_id = null;
             }
             else{
-                appState.comments = appState.comments.concat(response.results);
+				/*
+				const uniqIds:any[] = [];
+				appState.comments = comments.filter((comment: Comment) => {
+					const isDupe = uniqIds.find(o => o == comment.id);
+					if(!isDupe){
+						uniqIds.push(comment.id);
+						return true;
+					}
+					return false;
+				});
+				*/
+				appState.comments = appState.comments.concat(response.results);
+                appState.commentsTotal = response.total;
             }
-            appState.commentsTotal = response.total;
             appState.loading = false;
+			//const comments = appState.comments.map(comment => {return {...comment}});
             setResult({ status: 'loaded', payload: appState.comments });
+			window.scrollTo(0, appState.scrollPosition);
         }
       })
       .catch(error => setResult({ status: 'error', error }));

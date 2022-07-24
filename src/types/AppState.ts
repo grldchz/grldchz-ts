@@ -24,6 +24,7 @@ export interface AppState {
     comments: Comment[];
     commentsTotal: number;
     loading: boolean;
+	scrollPosition: number;
 }
 export interface FriendAppState {
     friendQuery: FriendQuery;

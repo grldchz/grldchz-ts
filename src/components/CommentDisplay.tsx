@@ -36,7 +36,7 @@ export interface Props{
   appState: AppState;
   comment: Comment;
   profile: Profile;
-  loadComments(args?: any, content_id?: any): void;
+  loadComments(args?: any, content_id?: any, deleteComment?: any): void;
 }
 interface UploadResponse{
   status: "success" | "error",
@@ -154,7 +154,7 @@ const CommentDisplay: React.FC<Props> = ({ appState, comment, profile, loadComme
     showProgressBar(true);
     deleteComment(comment.id).then(() => {
       showProgressBar(false);
-      loadComments();
+      loadComments(null, comment.id, true);
     });
   };
   const onSubmit = () => {
@@ -383,7 +383,7 @@ const CommentDisplay: React.FC<Props> = ({ appState, comment, profile, loadComme
         </Dialog>
         <Dialog key={'MEDIA'+comment.id} visible={mediaScroller} appendTo={rootEl} 
           onHide={() => setMediaScroller(false)} blockScroll >
-            <MediaScroller profile={profile} content_id={comment.id} />
+            <MediaScroller profile={profile} content_id={comment.id} loadComments={onSubmit} />
         </Dialog>
         <Dialog key={'UPLOAD_DETAILS'+comment.id} visible={uploadFormVisible} appendTo={rootEl} 
           onHide={() => showUploadForm(false)} blockScroll >

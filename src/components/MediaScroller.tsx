@@ -28,8 +28,9 @@ export interface Props{
     profile: Profile;
     content_id: number;
     media_id?: number;
+    loadComments(): void;
   }
-const MediaScroller: React.FC<Props> = ({ profile, content_id, media_id }) => {
+const MediaScroller: React.FC<Props> = ({ profile, content_id, media_id, loadComments }) => {
   const defaultState = {
     query: { start: 0, limit: 5, content_id: content_id, media_id: media_id },
     results: [], total: 0, loading: true
@@ -45,7 +46,7 @@ const MediaScroller: React.FC<Props> = ({ profile, content_id, media_id }) => {
       return (<div></div>);
     }
     return (
-        <MediaContainer media={media} profile={profile} loadMedia={loadMedia} />
+        <MediaContainer media={media} profile={profile} loadMedia={loadMedia} loadComments={loadComments} />
     );
   };
   

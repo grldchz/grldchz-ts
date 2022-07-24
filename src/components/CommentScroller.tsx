@@ -63,7 +63,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
         },
         comments: [], 
         commentsTotal: appState.commentsTotal,
-        loading: true
+        loading: true, scrollPosition: window.pageYOffset
       });
     }
     else{
@@ -80,7 +80,7 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
           },
           comments: appState.comments, 
           commentsTotal: appState.commentsTotal,
-          loading: true
+          loading: true, scrollPosition: window.pageYOffset
         });
       }
     }
@@ -105,11 +105,10 @@ const CommentScroller: React.FC<Props> = ({ appState, setAppState, profile, load
 					 You are currently viewing page {(parseInt(getParameterByName("start"))/10)+1} of older posts.</div>
 				)}
               <DataScroller value={service.payload} className="centerDiv"
-                  itemTemplate={itemTemplate} rows={10}
-                  lazy={true} onLazyLoad={onScroll} loader={moreButtonRef.current}/>
-				{getParameterByName("contentid")=="" && (appState.commentsTotal > (appState.commentQuery.start+10)) && (
+                  itemTemplate={itemTemplate} rows={service.payload.length}/>
+				{getParameterByName("contentid")=="" && appState.commentsTotal > service.payload.length && (
 					<Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}
-					 title="Load older posts"/>
+					 title="Load more posts" onClick={() => onScroll({rows:10})}/>
 				)}
             </div>
         }

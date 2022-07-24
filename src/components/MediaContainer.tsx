@@ -33,8 +33,9 @@ export interface Props{
     media: Media;
     profile: Profile;
     loadMedia(): void;
+    loadComments(): void;
 }
-const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
+const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia, loadComments }) => {
     const rootEl = document.getElementById('root');    
 	const { getUnescapedText, getParameterByName, getContextRoot } = AppUtils();
     const { deleteMedia, submitCaption, setImage } = useMediaService();
@@ -77,7 +78,8 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia }) => {
             content_id:media.content_id
         };
         setImage(postData).then(() => {
-            showProgressBar(false);
+            loadComments();
+			showProgressBar(false);
         });
     };
     const setAsProfile = (e: any) => {

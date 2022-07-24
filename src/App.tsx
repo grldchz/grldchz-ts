@@ -49,13 +49,13 @@ const App: React.FC<{}> = () => {
   const [ logoutDialogVisible, showLogoutDialog ] = React.useState(false);
   const [ appState, setAppState ] = React.useState<AppState>({
     commentQuery: { start: 0, limit: 10 },
-    comments: [], commentsTotal: 0, loading: false
+    comments: [], commentsTotal: 0, loading: false, scrollPosition: window.pageYOffset
   });
   const profileService = useProfileService(setProfile);
   const [prevSearch, setPrevSearch ] = React.useState<PostSearch>({
     searchTerm: '', fromDate: '', toDate: ''
   });
-  const loadComments = (search?: PostSearch, content_id?: any) => {
+  const loadComments = (search?: PostSearch, content_id?: any, deleteComment?: any) => {
     showCommentForm(false);
     showSearchForm(false);
     showSearchFriendForm(false);
@@ -78,12 +78,15 @@ const App: React.FC<{}> = () => {
 	  commentQuery.content_id = content_id;
 	  comments = appState.comments;
 	  commentsTotal = appState.commentsTotal;
+	  if(deleteComment){
+		  commentQuery.deleteComment = true;
+	  }
 	}
     setAppState({
       commentQuery: commentQuery,
       comments: comments,
       commentsTotal: commentsTotal,
-      loading: true
+      loading: true, scrollPosition: window.pageYOffset
     });
   };
   const handleProfileFormSubmit = (profile: Profile) => {
@@ -106,7 +109,7 @@ const App: React.FC<{}> = () => {
       setProfile(undefined);
       setAppState({
         commentQuery: { start: 0, limit: 10 },
-        comments: [], commentsTotal: 0, loading: true
+        comments: [], commentsTotal: 0, loading: true, scrollPosition: window.pageYOffset
       });
     });
   };
@@ -168,7 +171,7 @@ const App: React.FC<{}> = () => {
           )}
           {getParameterByName("mediaid") && (
           <div>
-          <MediaScroller profile={profile} content_id={getParameterByName("contentid")} media_id={getParameterByName("mediaid")} />
+          <MediaScroller profile={profile} content_id={getParameterByName("contentid")} media_id={getParameterByName("mediaid")} loadComments={loadComments} />
           </div>
           )}
           {getParameterByName("mediaid") == "" && (
