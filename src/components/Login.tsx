@@ -83,7 +83,7 @@ const Login: React.FC<Props> = ({ setProfile }) => {
                 <InputText placeholder="Username"
                   name="username"
                   value={login.username}
-                  onChange={handleChange} />
+                  onChange={handleChange} autocomplete="off"/>
               </div>
             </div>
             <div className="p-col-12 p-md-6">
@@ -94,7 +94,7 @@ const Login: React.FC<Props> = ({ setProfile }) => {
                 <Password placeholder="Password"
                   name="password" feedback={false}
                   value={login.password}
-                  onChange={handleChange} />
+                  onChange={handleChange} autocomplete="off"/>
               </div>
             </div>
           </div>

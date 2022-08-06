@@ -155,11 +155,24 @@ catch(Exception $e){
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="%PUBLIC_URL%/img/grldchz-icon-144.png" />
   </head>
   <body>
+<?php
+if(preg_match('/bot|crawl|curl|dataprovider|search|get|spider|find|java|majesticsEO|google|yahoo|teoma|contaxe|yandex|libwww-perl|facebookexternalhit/i', $_SERVER['HTTP_USER_AGENT']))
+{
+?>
+	<h1><?php print $displayTitle; ?></h1>
+	<?php print $html; ?>
+<?php
+}
+else{	
+?>
     <div id="root"></div>
     <noscript>
 	<h1><?php print $displayTitle; ?></h1>
 	<?php print $html; ?>
 	</noscript>
+<?php
+}
+?>
 	<div id="copyright"><?php print $auth->get_title(); ?> &#169 2022</div>
   </body>
 </html>
