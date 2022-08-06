@@ -1,6 +1,6 @@
 # GRLDCHZ
 
-A social networking platform where you can post text, photos, and videos.
+GRLDCHZ is the UI component of a media management system where you can upload images and videos to share with other members of the platform.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
