@@ -38,7 +38,7 @@ export interface Props{
 const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia, loadComments }) => {
     const rootEl = document.getElementById('root');    
 	const { getUnescapedText, getParameterByName, getContextRoot } = AppUtils();
-    const { deleteMedia, submitCaption, setImage } = useMediaService();
+    const { deleteMedia, submitCaption, setImage, updateNumHits } = useMediaService();
     const [loading, setLoading] = React.useState(true);
     const [openImageViewer, setOpenImageViewer] = React.useState(false);
     const [ deleteFormVisible, showDeleteForm ] = React.useState(false);
@@ -109,6 +109,14 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia, loadCommen
             showProgressBar(false);
         });
       };
+    const [ played, setPlayed ] = React.useState(false);
+    const onPlay = () => {
+        if(!played){
+            updateNumHits(media.content_id, "proxy_mp4_" + media.file + ".mp4").then(() => {
+                setPlayed(true);
+            });
+        }
+    }
     const renderDeleteFooter = () => {
         return (
             <div>
@@ -189,7 +197,7 @@ const MediaContainer: React.FC<Props> = ({ media, profile, loadMedia, loadCommen
             <div>
                 <div className="embed-responsive embed-responsive-16by9" style={{ width: '100%', maxWidth: '600px' }}>
                     <video controls={true} className="embed-responsive-item" style={{ width: '100%', maxWidth: '600px' }}
-						 title={media.title}>
+						 title={media.title} onPlay={() => onPlay()}>
                         <source src={media.mp4} type="video/mp4" />
                     </video>
                 </div>					
