@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 **/
-import React from 'react';
+import React, { useRef } from 'react';
 import './App.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -92,6 +92,7 @@ const App: React.FC<{}> = () => {
   const handleProfileFormSubmit = (profile: Profile) => {
     setProfile(profile);
     showProfileForm(false);
+    loadComments();
   };
   const renderLogoutFooter = () => {
     return (
@@ -127,6 +128,7 @@ const App: React.FC<{}> = () => {
       </>
     )
   }
+  const searchFriendFormDialogRef = useRef(null);
   return (
     <div><ThemeSelector/>
       <div className="menu-bar">
@@ -150,8 +152,8 @@ const App: React.FC<{}> = () => {
       </div>
      {profile && profile.name &&
         <div>
-          <Dialog key="SearchFriend" visible={searchFriendFormVisible} onHide={() => showSearchFriendForm(false)}>
-            <SearchFriendForm profile={profile}/>
+          <Dialog ref={searchFriendFormDialogRef} key="SearchFriend" visible={searchFriendFormVisible} onHide={() => showSearchFriendForm(false)}>
+            <SearchFriendForm profile={profile} dialog={searchFriendFormDialogRef}/>
           </Dialog>
           <Dialog visible={profileFormVisible} 
             onHide={() => showProfileForm(false)} blockScroll >

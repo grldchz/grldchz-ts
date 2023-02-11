@@ -31,5 +31,6 @@ export interface FriendAppState {
     friends: Friend[];
     friendsTotal: number;
     loading: boolean;
+	dialog?: any;
 }
       

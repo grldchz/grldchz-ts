@@ -187,7 +187,15 @@ const CommentDisplay: React.FC<Props> = ({ appState, comment, profile, loadComme
       <div className="p-grid">
         <div className="p-col-4">
         <ProfileImage profile={comment} /></div>
+        {!comment.parent_id && !getParameterByName("contentid") && (
+        <div className="p-col-8"><a href={getShareUrl()} target="_blank" rel="noopener noreferrer">{comment.first_name} @ {comment.post_date_time}</a></div>
+        )}
+        {!comment.parent_id && getParameterByName("contentid") && (
         <div className="p-col-8">{comment.first_name} @ {comment.post_date_time}</div>
+        )}
+        {comment.parent_id && comment.parent_id>0 && (
+        <div className="p-col-8">{comment.first_name} @ {comment.post_date_time}</div>
+        )}
      </div>
     );
   }

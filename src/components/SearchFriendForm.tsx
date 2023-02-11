@@ -25,8 +25,9 @@ import { FriendQuery, PostSearch } from '../types/Friend';
 import FriendScroller from '../components/FriendScroller';
 export interface Props{
     profile: Profile;
+    dialog: any;
   }
-const SearchForm: React.FC<Props> = ({profile}) => {
+const SearchForm: React.FC<Props> = ({profile, dialog}) => {
     const [ appState, setAppState ] = React.useState<FriendAppState>({
         friendQuery: { start: 0, limit: 10, skilletSearchTerm: '%', skilletUserId: profile.id },
         friends: [], friendsTotal: 0, loading: false
@@ -83,7 +84,7 @@ const SearchForm: React.FC<Props> = ({profile}) => {
             <Button icon="pi pi-check" type="submit" label="Send"/>
             </div>
         </form>
-        <FriendScroller appState={appState} setAppState={setAppState} loadFriends={loadFriends}/>
+        <FriendScroller appState={appState} setAppState={setAppState} loadFriends={loadFriends} dialog={dialog}/>
         </div>
     );
 };

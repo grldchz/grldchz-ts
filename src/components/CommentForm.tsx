@@ -142,7 +142,8 @@ const CommentDialog: React.FC<Props> = ({ visible, onHide, parentId, shareId, ed
           <InputSwitch checked={postComment.openPublic} onChange={handlePublicChange} /> 
           </div>
           <div style={{float:'left',display:'flex',alignItems:'center',paddingLeft:'5px'}}>
-          {postComment.openPublic?"Public":"Friends Only"}
+          {postComment.openPublic==true && <span>Public</span>}
+          {postComment.openPublic==false && <span style={{color:'#CCCCCC'}}>Public</span>}
         </div>
         </>
         )}

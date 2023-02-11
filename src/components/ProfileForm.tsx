@@ -19,6 +19,7 @@
 import React, { useState } from 'react';
 import useSubmitProfileService from '../services/useSubmitProfileService';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { InputSwitch } from 'primereact/inputswitch';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -34,7 +35,8 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
     firstname: profile.first_name,
     lastname: profile.last_name,
     email: profile.email,
-    userdesc: profile.description 
+    userdesc: profile.description,
+    showPublic: profile.show_public
   };
   const [postProfile, setPostProfile] = React.useState<PostProfile>(
     initialPostProfileState
@@ -47,7 +49,12 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
       [event.target.name]: event.target.value
     }));
   };
-
+  const handlePublicChange = (event: any) => {
+    setPostProfile((prevProfile: any) => ({
+      ...prevProfile,
+      showPublic: event.value
+    }));
+  }
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     submitProfile(postProfile).then(() => {
@@ -56,7 +63,8 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
         "first_name": postProfile.firstname,
         "last_name": postProfile.lastname,
         "description": postProfile.userdesc,
-        "email": postProfile.email
+        "email": postProfile.email,
+        "show_public": postProfile.showPublic
         }));
       });
   };
@@ -134,6 +142,17 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
                 value={postProfile.userdesc} onChange={handleChange} />
             </div>
           </div>
+          {process.env.REACT_APP_PUBLIC_ENABLED == "true" && (
+            <>
+            <div style={{float:'left',display:'flex',alignItems:'center'}}>
+              <InputSwitch checked={postProfile.showPublic} onChange={handlePublicChange} />
+              </div>
+              <div style={{float:'left',display:'flex',alignItems:'center',paddingLeft:'5px'}}>
+              {postProfile.showPublic==true && <span>Public Posts</span>}
+              {postProfile.showPublic==false && <span style={{color:'#CCCCCC'}}>Public Posts</span>}
+            </div>
+            </>
+          )}
           <Button icon="pi pi-check" type="submit" label="Send" style={{margin: '3px'}}/>
           <Button icon="pi pi-lock" type="button" label="Change Password" onClick={() => showChangePasswordForm(true)} style={{margin: '3px'}} />
       </form>

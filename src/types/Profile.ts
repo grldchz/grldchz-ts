@@ -40,13 +40,15 @@ export interface Profile {
     img_json?: string;
     banner_json?: string;
     user_name: string;
-    cookie_policy: boolean;    
+    cookie_policy: boolean;
+    show_public: boolean;
 }
 export interface PostProfile {
     firstname: string;
     lastname: string;
     email: string;
     userdesc?: string;
+    showPublic: boolean;
 }
 
 export interface PostChangePassword {

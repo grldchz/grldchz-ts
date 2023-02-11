@@ -28,9 +28,10 @@ export interface Props{
   appState: FriendAppState;
   setAppState(appState: FriendAppState): void;
   loadFriends(): void;
+  dialog: any;
 }
 
-const FriendScroller: React.FC<Props> = ({ appState, setAppState, loadFriends }) => {
+const FriendScroller: React.FC<Props> = ({ appState, setAppState, loadFriends, dialog }) => {
   const service = useFriendScroller(appState);
   const itemTemplate = (friend: Friend) => {
     if (!friend) {
@@ -46,11 +47,12 @@ const FriendScroller: React.FC<Props> = ({ appState, setAppState, loadFriends })
         friendQuery: {
           start: start,
           limit: appState.friendQuery.limit,
-          skilletSearchTerm: appState.friendQuery.skilletSearchTerm, skilletUserId: appState.friendQuery.skilletUserId
+          skilletSearchTerm: appState.friendQuery.skilletSearchTerm,
+          skilletUserId: appState.friendQuery.skilletUserId
         },
         friends: [], 
         friendsTotal: appState.friendsTotal,
-        loading: true
+        loading: true, dialog: dialog
       });
     }
     else{
@@ -64,7 +66,7 @@ const FriendScroller: React.FC<Props> = ({ appState, setAppState, loadFriends })
           },
           friends: appState.friends, 
           friendsTotal: appState.friendsTotal,
-          loading: true
+          loading: true, dialog: dialog
         });
       }
     }
@@ -83,9 +85,11 @@ const FriendScroller: React.FC<Props> = ({ appState, setAppState, loadFriends })
         {service.status == 'loaded' && service.payload && service.payload.length > 0 &&
             <div>
               <DataScroller value={service.payload} className="centerDiv"
-                  itemTemplate={itemTemplate} rows={10}
-                  lazy={true} onLazyLoad={onScroll} loader={moreButtonRef.current}/>
-              <Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}/>
+                  itemTemplate={itemTemplate} rows={service.payload.length}/>
+                {appState.friendsTotal > service.payload.length && (
+				    <Button icon="pi pi-angle-double-down" ref={moreButtonRef} type="button" label="more" style={{margin: '3px'}}
+					  title="Load more friends" onClick={() => onScroll({rows:10})}/>
+              )}
             </div>
         }
         {service.status == 'loaded' && service.payload && service.payload.length == 0 &&

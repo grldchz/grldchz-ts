@@ -36,6 +36,7 @@ const useCommentScroller = (appState: AppState) => {
   useEffect(() => {
     const query: CommentQuery = appState.commentQuery;
     let queryString = 'limit='+query.limit+'&sort=[{"property":"id","direction":"desc"}]';
+    //let queryString = 'limit='+query.limit+'&sort=[{"property":"modify_date_time","direction":"desc"}]';
 	let start = 0;
     if(getParameterByName("start")){
       start += parseInt(getParameterByName("start"));

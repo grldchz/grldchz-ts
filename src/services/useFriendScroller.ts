@@ -36,6 +36,11 @@ const useFriendScroller = (appState: FriendAppState) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
     headers.append('Accept', 'application/json; charset=utf-8');
+    setResult({status: 'loading'});
+    let scrollTo = 0;
+    if(appState.dialog != null){
+        scrollTo += appState.dialog.current.contentElement.scrollHeight-appState.dialog.current.contentElement.offsetHeight;
+    }
     fetch(process.env.REACT_APP_GRLDSERVICE_URL+'service.php?', {
       method: "POST",
       body: qs.stringify(query),
@@ -53,6 +58,9 @@ const useFriendScroller = (appState: FriendAppState) => {
             appState.friendsTotal = response.total;
             appState.loading = false;
             setResult({ status: 'loaded', payload: appState.friends });
+            if(appState.dialog != null){
+               appState.dialog.current.contentElement.scroll(0, scrollTo);
+            }
         }
       })
       .catch(error => setResult({ status: 'error', error }));

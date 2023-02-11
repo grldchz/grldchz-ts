@@ -51,7 +51,7 @@ const CopyToClipboardDialog: React.FC<Props> = ({ key, textToCopy, visible, onHi
             <div>
                 <InputTextarea rows={2} cols={30} hidden={true}
                     value={textToCopy} onChange={handleChange}/>
-                <div className="pre-display"><a href={data} target="_blank">{data}</a></div>
+                <div className="pre-display"><a href={data} target="_blank" rel="noopener noreferrer">{data}</a></div>
             </div>
         )
     }
