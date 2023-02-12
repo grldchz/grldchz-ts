@@ -110,6 +110,3 @@ dist
 arvixe.env
 
 package-lock.json
-
-public/robots.txt
-public/sitemap.txt
