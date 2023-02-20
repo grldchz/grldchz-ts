@@ -148,8 +148,8 @@ const ProfileForm: React.FC<Props> = ({ profile, onSubmit }) => {
               <InputSwitch checked={postProfile.showPublic} onChange={handlePublicChange} />
               </div>
               <div style={{float:'left',display:'flex',alignItems:'center',paddingLeft:'5px'}}>
-              {postProfile.showPublic==true && <span>Public Posts</span>}
-              {postProfile.showPublic==false && <span style={{color:'#CCCCCC'}}>Public Posts</span>}
+              {postProfile.showPublic==true && <span>Public Feed</span>}
+              {postProfile.showPublic==false && <span style={{color:'#CCCCCC'}}>Public Feed</span>}
             </div>
             </>
           )}
