@@ -35,6 +35,8 @@ export interface Comment {
   user_name: string;
   open_public: number;
   image_title: string;
+  prev_id?: number;
+  next_id?: number;
 }
 export interface CommentQuery {
   content_id?: string | null,

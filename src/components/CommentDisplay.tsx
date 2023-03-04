@@ -343,7 +343,12 @@ const CommentDisplay: React.FC<Props> = ({ appState, comment, profile, loadComme
         <ProgressBar mode="indeterminate" /></div>
       )}
       {!comment.parent_id && getParameterByName("contentid") && (
-        <div><a href={getContextRoot()} title={process.env.REACT_APP_TITLE}>home</a> > {"content/" + getParameterByName("contentid")}</div>
+        <div>
+            <a href={getContextRoot()} title={process.env.REACT_APP_TITLE}>home</a>
+            {comment.prev_id != null && <span> > <a href={getContextRoot()+"/content/"+comment.prev_id} title={process.env.REACT_APP_TITLE}>prev</a></span>}
+            <span> > {"content/" + getParameterByName("contentid")}</span>
+            {comment.next_id != null && <span> > <a href={getContextRoot()+"/content/"+comment.next_id} title={process.env.REACT_APP_TITLE}>next</a></span>}
+        </div>
       )}
       {!comment.parent_id && comment.user_name == profile.name && process.env.REACT_APP_PUBLIC_ENABLED == "true" && (
         <div style={{color:'red'}}>
